@@ -14,9 +14,11 @@ import type { Uid } from "../../types/primitives/Uid";
 export const message = {
   /**
    * Import conversation history from Meta's Conversations API for an account
-   * — DMs that predate the account's connection (facebook/instagram only;
-   * whatsapp exposes no history). Runs only when explicitly invoked;
-   * already-imported messages dedup by platform mid.
+   * — DMs that predate the account's connection. The payload is
+   * channel-tagged and must match the account's channel — only facebook and
+   * instagram expose history, so no other channel's shape deserializes. Runs
+   * only when explicitly invoked; already-imported messages dedup by platform
+   * mid.
    *
    * Requires `ManageMessages` in the account's group.
    */
@@ -60,9 +62,11 @@ export const message = {
     endpoint: "/conversation/:conversation_uid/message/:message_uid",
   }),
   /**
-   * Edit an own sent message's text (or media caption) on the platform —
-   * whatsapp_stevo and whatsapp_native only; the platform enforces its
-   * ~15 minute edit window.
+   * Edit an own sent message's text (or media caption) on the platform. The
+   * payload is channel-tagged and must match the message's channel — only
+   * whatsapp_stevo and whatsapp_native expose an edit call, so no other
+   * channel's shape deserializes; the platform enforces its ~15 minute edit
+   * window.
    *
    * Requires `ManageMessages` in the conversation's group.
    */
@@ -109,8 +113,8 @@ export const message = {
    *
    * Requires `SendMessages` in the conversation's group.
    */
-  send: Tapi.post<{ body: SendMessageRequest; response: MessageWithContext }>()({
-    endpoint: "/message",
+  send: Tapi.post<{ path: { conversation_uid: Uid }; body: SendMessageRequest; response: MessageWithContext }>()({
+    endpoint: "/conversation/:conversation_uid/message",
   }),
   /**
    * Remove the account's reaction from a message (Instagram and the WhatsApp

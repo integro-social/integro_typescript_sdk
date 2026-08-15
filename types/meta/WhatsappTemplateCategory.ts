@@ -4,7 +4,7 @@
  * What the template is for. Meta prices and rate-limits by category, and a
  * template's category is fixed at approval.
  */
-export type WhatsappTemplateCategory = "utility" | "marketing" | "authentication";
+export type WhatsappTemplateCategory = "utility" | "marketing" | "authentication" | "unknown";
 
 /** Every `WhatsappTemplateCategory`, in declaration order. */
-export const WHATSAPP_TEMPLATE_CATEGORY = ["utility", "marketing", "authentication"] as const satisfies readonly WhatsappTemplateCategory[];
+export const WHATSAPP_TEMPLATE_CATEGORY = ["utility", "marketing", "authentication", "unknown"] as const satisfies readonly WhatsappTemplateCategory[];

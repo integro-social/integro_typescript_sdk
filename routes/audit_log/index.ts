@@ -28,6 +28,6 @@ export const auditLog = {
    * Requires `ViewAuditLogs`; platform staff aggregate every entry, any other holder only entries stamped with a group where they hold it — an entry carrying no group is staff-only.
    */
   stats: Tapi.get<{ query: AuditLogQuery; response: AuditLogStats }>()({
-    endpoint: "/audit-log/stats",
+    endpoint: "/audit-log/stat",
   }),
 };

@@ -6,6 +6,9 @@ export type WsConnectionStatus = "connecting" | "open" | "reconnecting" | "stopp
  * Lifecycle handlers for a WebSocket connection. Every handler is optional.
  *
  * - `onMessage`      fires once per received text frame, with the JSON-parsed payload.
+ * - `onBinary`       fires once per received binary frame, with the raw bytes. Only
+ *                    endpoints that carry binary alongside their typed protocol (live
+ *                    media, chunked transfers) send these; leave it unset otherwise.
  * - `onOpen`         fires every time the socket is established — including after an
  *                    automatic reconnect. Send your handshake/subscription frames here:
  *                    anything the server needs to relearn must be re-sent per open.
@@ -19,6 +22,7 @@ export type WsConnectionStatus = "connecting" | "open" | "reconnecting" | "stopp
  */
 export type WsHandlers<TReceive> = {
   onMessage?: (message: TReceive) => void;
+  onBinary?: (data: ArrayBuffer) => void;
   onOpen?: () => void;
   onClose?: (event: { code: number; reason: string }) => void;
   onError?: (error: Error) => void;
@@ -61,6 +65,12 @@ export type WsConnection<TSend> = {
    * re-establish it in `onOpen` rather than rely on queued frames.
    */
   send: (message: TSend) => boolean;
+  /**
+   * Send one raw binary frame, under the same no-buffering rule as `send`.
+   * Only meaningful on an endpoint whose protocol defines binary payloads;
+   * anywhere else the server ignores them.
+   */
+  sendBinary: (data: BufferSource) => boolean;
   status: () => WsConnectionStatus;
 };
 
@@ -164,6 +174,9 @@ export function createWsConnection<TSend, TReceive>(url: string, handlers: WsHan
     }
 
     socket = ws;
+    // Binary frames arrive as ArrayBuffer rather than Blob, so `onBinary` can
+    // read them synchronously — a media consumer cannot await a Blob per frame.
+    ws.binaryType = "arraybuffer";
     if (state !== "reconnecting") setState("connecting");
 
     ws.onopen = () => {
@@ -175,7 +188,10 @@ export function createWsConnection<TSend, TReceive>(url: string, handlers: WsHan
 
     ws.onmessage = (event: MessageEvent) => {
       if (socket !== ws) return;
-      if (typeof event.data !== "string") return; // JSON text protocol — binary frames are not part of the contract
+      if (typeof event.data !== "string") {
+        if (event.data instanceof ArrayBuffer) handlers.onBinary?.(event.data);
+        return;
+      }
       try {
         handlers.onMessage?.(JSON.parse(event.data) as TReceive);
       } catch (error) {
@@ -218,6 +234,15 @@ export function createWsConnection<TSend, TReceive>(url: string, handlers: WsHan
       if (!socket || socket.readyState !== READY_STATE_OPEN) return false;
       try {
         socket.send(JSON.stringify(message));
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    sendBinary: (data: BufferSource) => {
+      if (!socket || socket.readyState !== READY_STATE_OPEN) return false;
+      try {
+        socket.send(data);
         return true;
       } catch {
         return false;

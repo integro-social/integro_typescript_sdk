@@ -6,7 +6,7 @@
  * heuristics. `None` on inbound rows and on rows stored before the field
  * existed.
  */
-export type MessageSentBy = "api_key" | "user" | "platform";
+export type MessageSentBy = "api_key" | "user" | "platform" | "ghl";
 
 /** Every `MessageSentBy`, in declaration order. */
-export const MESSAGE_SENT_BY = ["api_key", "user", "platform"] as const satisfies readonly MessageSentBy[];
+export const MESSAGE_SENT_BY = ["api_key", "user", "platform", "ghl"] as const satisfies readonly MessageSentBy[];

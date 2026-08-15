@@ -2,11 +2,9 @@
 import type { MessengerSend } from "./MessengerSend";
 import type { NativeSend } from "./NativeSend";
 import type { StevoSend } from "./StevoSend";
-import type { Uid } from "../primitives/Uid";
 import type { WhatsappSend } from "./WhatsappSend";
 
 export type SendMessageRequest = {
-  conversation_uid: Uid,
   /**
    * Client dedup key, unique per conversation. Retrying with the same key
    * never duplicates history: a failed row is retried in place, any other

@@ -13,7 +13,9 @@ import type { Uid } from "../../types/primitives/Uid";
 export const comment = {
   /**
    * Comment on a post/media as the account named in the path (top-level
-   * comment; Facebook and Instagram only).
+   * comment). The payload is channel-tagged and must match the account's
+   * channel — only facebook and instagram carry a comment surface, so no
+   * other channel's shape deserializes.
    *
    * Requires `ReplyComments` in the account's group.
    */

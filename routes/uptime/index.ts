@@ -20,7 +20,7 @@ export const uptime = {
    * Requires `ViewPulse`, which only platform staff hold.
    */
   getStats: Tapi.get<{ query: ServerUptimeRangeQuery; response: ServerUptimeStats }>()({
-    endpoint: "/uptime/stats",
+    endpoint: "/uptime/stat",
   }),
   /**
    * List server uptime records within a time range.

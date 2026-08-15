@@ -5,7 +5,7 @@ import type { WhatsappTemplateButton } from "./WhatsappTemplateButton";
  * One block of a template *definition* — the shape Meta stores for an
  * approved template and the shape a create request submits.
  *
- * The hub's own vocabulary, snake_case like every other enum on the surface;
+ * This crate's own vocabulary, snake_case like every other enum on the surface;
  * Meta spells these uppercase, and that spelling lives at the boundary rather
  * than on the contract.
  */

@@ -4,10 +4,12 @@ import { apiKey } from "./api_key";
 import { auditLog } from "./audit_log";
 import { business } from "./business";
 import { calendar } from "./calendar";
+import { call } from "./call";
 import { comment } from "./comment";
 import { conversation } from "./conversation";
 import { event } from "./event";
 import { eventWebhook } from "./event_webhook";
+import { ghl } from "./ghl";
 import { google } from "./google";
 import { group } from "./group";
 import { groupMember } from "./group_member";
@@ -37,10 +39,12 @@ export const routes = {
   auditLog,
   business,
   calendar,
+  call,
   comment,
   conversation,
   event,
   eventWebhook,
+  ghl,
   google,
   group,
   groupMember,

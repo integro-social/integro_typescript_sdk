@@ -24,6 +24,7 @@ export type WsHookParams<T extends Types.WsConfig<any, any, any, any>> = Types.W
 export type WsHookResponse<TSend> = {
   status: Ws.WsConnectionStatus;
   send: (message: TSend) => boolean;
+  sendBinary: (data: BufferSource) => boolean;
   connect: () => void;
   stop: () => void;
 };
@@ -41,13 +42,14 @@ export function useWsHook<T extends Types.WsConfig<any, any, any, any>>(
   const handlersRef = useRef<Ws.WsHandlers<any>>({});
   handlersRef.current = {
     onMessage: params?.onMessage,
+    onBinary: params?.onBinary,
     onOpen: params?.onOpen,
     onClose: params?.onClose,
     onError: params?.onError,
     onStatusChange: params?.onStatusChange
   };
 
-  const { onMessage: _m, onOpen: _o, onClose: _c, onError: _e, onStatusChange: _s, lazy, ...connectionParams } = params ?? ({} as any);
+  const { onMessage: _m, onBinary: _b, onOpen: _o, onClose: _c, onError: _e, onStatusChange: _s, lazy, ...connectionParams } = params ?? ({} as any);
   const memoizedParams = useDeepCompareMemo(params ? connectionParams : null);
 
   useEffect(() => {
@@ -59,6 +61,7 @@ export function useWsHook<T extends Types.WsConfig<any, any, any, any>>(
       url,
       {
         onMessage: (message) => handlersRef.current.onMessage?.(message),
+        onBinary: (data) => handlersRef.current.onBinary?.(data),
         onOpen: () => handlersRef.current.onOpen?.(),
         onClose: (event) => handlersRef.current.onClose?.(event),
         onError: (error) => handlersRef.current.onError?.(error),
@@ -82,6 +85,8 @@ export function useWsHook<T extends Types.WsConfig<any, any, any, any>>(
 
   const send = useCallback((message: any) => connectionRef.current?.send(message) ?? false, []);
 
+  const sendBinary = useCallback((data: BufferSource) => connectionRef.current?.sendBinary(data) ?? false, []);
+
   const connect = useCallback(() => {
     connectionRef.current?.connect();
   }, []);
@@ -90,5 +95,5 @@ export function useWsHook<T extends Types.WsConfig<any, any, any, any>>(
     connectionRef.current?.stop();
   }, []);
 
-  return { status, send, connect, stop };
+  return { status, send, sendBinary, connect, stop };
 }

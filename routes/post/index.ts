@@ -73,8 +73,10 @@ export const post = {
     endpoint: "/post",
   }),
   /**
-   * Enable or disable comments on a published post (Instagram only — Facebook
-   * has no per-post comment toggle in the API).
+   * Enable or disable comments on a published post. The payload is
+   * channel-tagged and must match the post's channel — instagram only
+   * (Facebook has no per-post comment toggle in the API), so no other
+   * channel's shape deserializes.
    *
    * Requires `UpdatePosts` in the post's group.
    */
@@ -83,7 +85,9 @@ export const post = {
   }),
   /**
    * Hide or unhide a published post from the Page timeline — it stays
-   * reachable by direct link (Facebook only, non-video posts).
+   * reachable by direct link. The payload is channel-tagged and must match
+   * the post's channel — facebook only, non-video posts — so no other
+   * channel's shape deserializes.
    *
    * Requires `UpdatePosts` in the post's group.
    */
@@ -91,8 +95,9 @@ export const post = {
     endpoint: "/post/:post_uid/hidden",
   }),
   /**
-   * Pin or unpin a published post to the top of the Page timeline (Facebook
-   * only, non-video posts).
+   * Pin or unpin a published post to the top of the Page timeline. The
+   * payload is channel-tagged and must match the post's channel — facebook
+   * only, non-video posts — so no other channel's shape deserializes.
    *
    * Requires `UpdatePosts` in the post's group.
    */
@@ -100,8 +105,10 @@ export const post = {
     endpoint: "/post/:post_uid/pinned",
   }),
   /**
-   * Edit a published post's text on the platform (Facebook only — the
-   * Instagram API cannot edit captions; stories carry no text).
+   * Edit a published post's text on the platform. The payload is
+   * channel-tagged and must match the post's channel — only facebook can edit
+   * (the Instagram API cannot edit captions; stories carry no text), so no
+   * other channel's shape deserializes.
    *
    * Requires `UpdatePosts` in the post's group.
    */
