@@ -4,6 +4,8 @@ import Tapi from "../../runtime";
 import type { BackfillRequest } from "../../types/message/BackfillRequest";
 import type { BackfillResponse } from "../../types/message/BackfillResponse";
 import type { EditMessageRequest } from "../../types/message/EditMessageRequest";
+import type { ForwardMessageRequest } from "../../types/message/ForwardMessageRequest";
+import type { ForwardOutcome } from "../../types/message/ForwardOutcome";
 import type { ListMessagesQuery } from "../../types/message/ListMessagesQuery";
 import type { Message } from "../../types/database/Message";
 import type { MessageWithContext } from "../../types/message/MessageWithContext";
@@ -74,8 +76,29 @@ export const message = {
     endpoint: "/conversation/:conversation_uid/message/:message_uid",
   }),
   /**
+   * Forward a message into other conversations. Each target re-sends the
+   * stored content as an ordinary queued message: forwarding is the hub's own,
+   * so no channel's native forward flag is set and nothing marks the copy as
+   * forwarded — a target reads it as a message the account just wrote.
+   *
+   * The content is re-shaped per target channel, so a forward crosses channels
+   * (a whatsapp photo into an instagram thread). Targets are answered one by
+   * one and independently: a target the caller cannot send in, whose channel
+   * cannot express the content, or whose 24h window has lapsed comes back
+   * `rejected` while the rest still queue.
+   *
+   * Requires `ViewMessages` in the source conversation's group, and
+   * `SendMessages` in each target's — a target failing that is `rejected`, not
+   * an error.
+   */
+  forward: Tapi.post<{ path: { conversation_uid: Uid; message_uid: Uid }; body: ForwardMessageRequest; response: Array<ForwardOutcome> }>()({
+    endpoint: "/conversation/:conversation_uid/message/:message_uid/forward",
+  }),
+  /**
    * Poll the unified message feed across channels: messages with `id` greater
    * than `since_id`, oldest first, optionally filtered by group or account.
+   * `uids` instead returns exactly those messages (≤200, order unspecified),
+   * for resolving rows the caller already holds by uid.
    *
    * Requires `ViewMessages`; the feed covers only messages of groups where the caller holds it.
    */

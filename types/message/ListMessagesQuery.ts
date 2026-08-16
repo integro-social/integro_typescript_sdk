@@ -9,5 +9,11 @@ export type ListMessagesQuery = {
    * Poll cursor: only messages with `id` strictly greater are returned.
    */
   since_id: number,
+  /**
+   * Exact messages to return (≤200), for resolving rows a client already
+   * holds by uid — the reply targets a loaded page quotes but does not
+   * contain. Mutually exclusive with the poll cursor.
+   */
+  uids: Array<Uid> | null,
   limit: Number1_500 | null,
 };
