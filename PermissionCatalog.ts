@@ -36,7 +36,12 @@ export const PERMISSION_GROUPS: readonly PermissionGroup[] = [
   {
     id: "messages",
     label: "Conversas",
-    perms: ["view_messages", "send_messages", "manage_messages"],
+    perms: ["view_messages", "send_messages", "manage_messages", "import_contacts"],
+  },
+  {
+    id: "campaigns",
+    label: "Campanhas",
+    perms: ["view_campaigns", "manage_campaigns"],
   },
   {
     id: "posts",
@@ -108,11 +113,6 @@ export const PERMISSION_GROUPS: readonly PermissionGroup[] = [
     label: "Problemas",
     perms: ["view_issues", "manage_issues"],
   },
-  {
-    id: "platform",
-    label: "Plataforma",
-    perms: ["operate_platform_scope"],
-  },
 ];
 
 export const PERMISSION_LABEL: Record<UserPermission, string> = {
@@ -143,6 +143,9 @@ export const PERMISSION_LABEL: Record<UserPermission, string> = {
   view_messages: "Visualizar mensagens",
   send_messages: "Enviar mensagens",
   manage_messages: "Excluir conversas e histórico",
+  import_contacts: "Importar contatos",
+  view_campaigns: "Visualizar campanhas",
+  manage_campaigns: "Gerenciar campanhas",
   view_posts: "Visualizar publicações",
   publish_posts: "Publicar",
   update_posts: "Atualizar publicações",
@@ -176,7 +179,6 @@ export const PERMISSION_LABEL: Record<UserPermission, string> = {
   view_pulse: "Visualizar Pulse",
   view_issues: "Visualizar problemas",
   manage_issues: "Gerenciar problemas",
-  operate_platform_scope: "Operar escopo da plataforma",
 };
 
 /**
@@ -186,4 +188,6 @@ export const PERMISSION_LABEL: Record<UserPermission, string> = {
  * that are not closed under this relation.
  */
 export const PERMISSION_REQUIRES: Partial<Record<UserPermission, readonly UserPermission[]>> = {
+  import_contacts: ["send_messages"],
+  manage_campaigns: ["send_messages"],
 };

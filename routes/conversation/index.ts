@@ -5,10 +5,12 @@ import type { Call } from "../../types/database/Call";
 import type { Conversation } from "../../types/database/Conversation";
 import type { ConversationActionRequest } from "../../types/message/ConversationActionRequest";
 import type { ConversationCallsQuery } from "../../types/call/ConversationCallsQuery";
+import type { ConversationMessageCountQuery } from "../../types/message/ConversationMessageCountQuery";
 import type { ConversationMessagesQuery } from "../../types/message/ConversationMessagesQuery";
 import type { CreateConversationRequest } from "../../types/message/CreateConversationRequest";
 import type { ListConversationsQuery } from "../../types/message/ListConversationsQuery";
 import type { Message } from "../../types/database/Message";
+import type { SetConversationAliasRequest } from "../../types/message/SetConversationAliasRequest";
 import type { Uid } from "../../types/primitives/Uid";
 
 export const conversation = {
@@ -24,6 +26,16 @@ export const conversation = {
    */
   action: Tapi.post<{ path: { conversation_uid: Uid }; body: ConversationActionRequest; response: null }>()({
     endpoint: "/conversation/:conversation_uid/action",
+  }),
+  /**
+   * Set or clear the operator's label for the contact. Independent of the
+   * platform-fetched participant name, which profile refreshes keep updating;
+   * clearing the alias falls back to it.
+   *
+   * Requires `SendMessages` in the conversation's group.
+   */
+  alias: Tapi.put<{ path: { conversation_uid: Uid }; body: SetConversationAliasRequest; response: Conversation }>()({
+    endpoint: "/conversation/:conversation_uid/alias",
   }),
   /**
    * List a conversation's calls, newest first; `before_id` pages older history.
@@ -79,6 +91,15 @@ export const conversation = {
     endpoint: "/conversation",
   }),
   /**
+   * How many messages the conversation holds, narrowed by `kinds` like the
+   * list — what a media gallery shows as its total.
+   *
+   * Requires `ViewMessages` in the conversation's group.
+   */
+  messageCount: Tapi.get<{ path: { conversation_uid: Uid }; query: ConversationMessageCountQuery; response: number }>()({
+    endpoint: "/conversation/:conversation_uid/message/count",
+  }),
+  /**
    * List a conversation's messages, newest first; `before_id` pages older
    * history.
    *
@@ -96,5 +117,12 @@ export const conversation = {
    */
   read: Tapi.put<{ path: { conversation_uid: Uid }; response: Conversation }>()({
     endpoint: "/conversation/:conversation_uid/read",
+  }),
+  /**
+   * How many conversations hold unread messages, across every group where the
+   * caller holds `ViewMessages` — the inbox badge.
+   */
+  unreadCount: Tapi.get<{ response: number }>()({
+    endpoint: "/conversation/unread",
   }),
 };

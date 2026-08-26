@@ -50,6 +50,10 @@ export type Message = {
    */
   sent_by_uid: Uid | null,
   /**
+   * The send sequence this queued row belongs to; `None` for every send that stands alone.
+   */
+  burst: string | null,
+  /**
    * Set when the message text was edited on the platform.
    */
   edited_at: Timestamp | null,

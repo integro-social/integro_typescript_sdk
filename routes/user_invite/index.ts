@@ -5,15 +5,21 @@ import type { Uid } from "../../types/primitives/Uid";
 import type { UserInvite } from "../../types/database/UserInvite";
 import type { UserInviteAcceptRequest } from "../../types/user_invite/UserInviteAcceptRequest";
 import type { UserInviteAcceptResponse } from "../../types/user_invite/UserInviteAcceptResponse";
+import type { UserInviteDetailResponse } from "../../types/user_invite/UserInviteDetailResponse";
+import type { UserInviteJoinResponse } from "../../types/user_invite/UserInviteJoinResponse";
+import type { UserInvitePreviewResponse } from "../../types/user_invite/UserInvitePreviewResponse";
 import type { UserInviteSendRequest } from "../../types/user_invite/UserInviteSendRequest";
 import type { UserInviteSendResponse } from "../../types/user_invite/UserInviteSendResponse";
+import type { UserInviteTokenRequest } from "../../types/user_invite/UserInviteTokenRequest";
 
 export const userInvite = {
   /**
    * Accept an invitation by its token, creating the user account with the chosen
-   * password and, in the same transaction, the membership the invitation carries.
+   * name and password and, in the same transaction, the membership the
+   * invitation carries and a confirmed email MFA factor. Answers with the
+   * session the account is signed in under.
    *
-   * Public — no authentication required; authorization comes from the invitation token in the request body.
+   * Public — no authentication required; authorization comes from the invitation token in the request body, whose delivery to the address is what the email factor would otherwise re-prove.
    */
   accept: Tapi.post<{ body: UserInviteAcceptRequest; response: UserInviteAcceptResponse }>()({
     endpoint: "/user-invite/accept",
@@ -27,6 +33,23 @@ export const userInvite = {
     endpoint: "/user-invite/count",
   }),
   /**
+   * The group an invitation offers, with the role and who sent it.
+   *
+   * Authenticated, and only for the account the invitation was addressed to: a caller signed in as anybody else reads the token as not found. A POST because the token is a credential, not because it writes.
+   */
+  detail: Tapi.post<{ body: UserInviteTokenRequest; response: UserInviteDetailResponse }>()({
+    endpoint: "/user-invite/detail",
+  }),
+  /**
+   * Accept an invitation as the account it was addressed to, joining the group
+   * it offers with the role it carries.
+   *
+   * Authenticated, and only for the account the invitation was addressed to; no permission is asked for, because the invitation is the grant.
+   */
+  join: Tapi.post<{ body: UserInviteTokenRequest; response: UserInviteJoinResponse }>()({
+    endpoint: "/user-invite/join",
+  }),
+  /**
    * List pending (unaccepted) user invitations.
    *
    * Requires `ViewInvites`; the list covers only invites into groups where the caller holds it, and platform invites only for platform staff.
@@ -35,27 +58,46 @@ export const userInvite = {
     endpoint: "/user-invite",
   }),
   /**
-   * Refresh a pending user invitation's expiry and re-send its email.
+   * Serve the invited group's logo image.
    *
-   * Requires `InviteUsers` in the invitation's group plus a role there that may hand out the invited one, or `OperatePlatformScope` for an invitation naming no group.
+   * Authenticated, and only for the account the invitation was addressed to; the invitation stands in for the `ViewGroups` the recipient does not hold yet. A POST because the token is a credential, not because it writes.
+   */
+  logo: Tapi.post<{ body: UserInviteTokenRequest; response: Blob }>()({
+    endpoint: "/user-invite/logo",
+  }),
+  /**
+   * Resolve an invitation link to the address it was sent to and whether
+   * accepting it means creating an account.
+   *
+   * Public — no authentication required; the token in the body is the authorization, and the address it answers with is the one the token was mailed to. A POST because the token is a credential, not because it writes. Says nothing about the group: that is `userInvite.detail`.
+   */
+  preview: Tapi.post<{ body: UserInviteTokenRequest; response: UserInvitePreviewResponse }>()({
+    endpoint: "/user-invite/preview",
+  }),
+  /**
+   * Refresh a pending user invitation's expiry to 30 days from now and re-send its email, reusing the original link. An expired or already-accepted invitation is refused — issue a new one instead.
+   *
+   * Requires `InviteUsers` in the invitation's group plus a role there that may hand out the invited one, or `InviteUsers` at platform scope for an invitation naming no group.
    */
   resend: Tapi.post<{ path: { invite_uid: Uid }; response: null }>()({
     endpoint: "/user-invite/:invite_uid/resend",
   }),
   /**
-   * Revoke a pending user invitation so its registration link can no longer be used.
+   * Revoke a pending user invitation so its link can no longer be used.
    *
-   * Requires `InviteUsers` in the invitation's group plus a role there that may hand out the invited one, or `OperatePlatformScope` for an invitation naming no group.
+   * Requires `InviteUsers` in the invitation's group plus a role there that may hand out the invited one, or `InviteUsers` at platform scope for an invitation naming no group.
    */
   revoke: Tapi.delete<{ path: { invite_uid: Uid }; response: null }>()({
     endpoint: "/user-invite/:invite_uid",
   }),
   /**
-   * Send an invitation that lets the recipient register a user account, joining
-   * the named group with the named role once accepted. Naming neither invites to
-   * the platform alone; naming only one of the two is refused.
+   * Send an invitation to an email address; the link it mails is good for 30 days. An address with no account yet is
+   * invited to register, joining the named group with the named role once it
+   * accepts; an address that already signs in is invited to the group alone.
+   * Naming neither group nor role invites to the platform, which only an address
+   * without an account can accept; naming only one of the two is refused.
    *
-   * Requires `InviteUsers` in the named group plus a role there that may hand out the named one, or `OperatePlatformScope` when no group is named.
+   * Requires `InviteUsers` in the named group plus a role there that may hand out the named one, or `InviteUsers` at platform scope when no group is named.
    */
   send: Tapi.post<{ body: UserInviteSendRequest; response: UserInviteSendResponse }>()({
     endpoint: "/user-invite",

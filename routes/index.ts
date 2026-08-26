@@ -5,7 +5,10 @@ import { auditLog } from "./audit_log";
 import { business } from "./business";
 import { calendar } from "./calendar";
 import { call } from "./call";
+import { campaign } from "./campaign";
+import { campaignTemplate } from "./campaign_template";
 import { comment } from "./comment";
+import { contactImport } from "./contact_import";
 import { conversation } from "./conversation";
 import { event } from "./event";
 import { eventWebhook } from "./event_webhook";
@@ -40,7 +43,10 @@ export const routes = {
   business,
   calendar,
   call,
+  campaign,
+  campaignTemplate,
   comment,
+  contactImport,
   conversation,
   event,
   eventWebhook,

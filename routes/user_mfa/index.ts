@@ -12,7 +12,7 @@ export const userMfa = {
   /**
    * Dispatch a login MFA challenge for the chosen factor, emailing a one-time code for the email factor.
    *
-   * Public — no authentication required; the request is gated solely by the ephemeral login MFA token in the body.
+   * Public — no authentication required; the request is gated by the ephemeral login MFA token in the body and — when the email factor is chosen — by the per-IP and per-token code-dispatch throttle.
    */
   dispatch: Tapi.post<{ body: UserMfaDispatchRequest; response: null }>()({
     endpoint: "/user-session/mfa/dispatch",
@@ -20,7 +20,7 @@ export const userMfa = {
   /**
    * Verify a login MFA code and, on success, mint a user session token.
    *
-   * Public — no authentication required; the request is gated solely by the ephemeral login MFA token in the body.
+   * Public — no authentication required; the request is gated by the ephemeral login MFA token in the body and by the per-IP and per-token verification throttle.
    */
   verify: Tapi.post<{ body: UserMfaVerifyRequest; response: UserMfaVerifyResponse }>()({
     endpoint: "/user-session/mfa/verify",

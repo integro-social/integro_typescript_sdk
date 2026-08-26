@@ -3,7 +3,7 @@ import { check, checkAll, type Violation, type ValidationSpec } from "../validat
 
 export type Name = string & { readonly __brand: "Name" };
 
-const SPEC: ValidationSpec = { preprocess: "trim", constraints: [{ kind: "minLen", min: 3 }, { kind: "maxLen", max: 100 }, { kind: "noControlChars" }] };
+const SPEC: ValidationSpec = { preprocess: "trim", constraints: [{ kind: "minLen", min: 2 }, { kind: "maxLen", max: 100 }, { kind: "noControlChars" }] };
 
 export const Name = {
   /** The only producer of a `Name`: validates input, returns the branded value or the first violation. */

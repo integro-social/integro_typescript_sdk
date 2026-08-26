@@ -16,7 +16,7 @@ export const email = {
   /**
    * Begin self-service email-factor enrollment, emailing a one-time code and returning an enrollment token.
    *
-   * Authenticated user acting on their own factors; no permission required.
+   * Authenticated user acting on their own factors; no permission required. Rejected when the caller trips the per-IP or per-token code-dispatch throttle.
    */
   start: Tapi.post<{ response: UserMfaMgmtEmailStartResponse }>()({
     endpoint: "/user-mfa/factor/email/start",

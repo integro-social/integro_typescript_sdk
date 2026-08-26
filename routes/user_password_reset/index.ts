@@ -16,7 +16,7 @@ export const userPasswordReset = {
   /**
    * Issue a password-reset token and email a reset link to the address if it maps to an enabled account.
    *
-   * Public — no authentication required.
+   * Public — no authentication required. Rejected when the caller trips either the per-IP or the per-email password-reset throttle.
    */
   request: Tapi.post<{ body: UserPasswordResetStartRequest; response: null }>()({
     endpoint: "/user-password-reset/request",

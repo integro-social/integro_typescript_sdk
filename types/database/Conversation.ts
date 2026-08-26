@@ -3,6 +3,7 @@ import type { MessageContentKind } from "../types/MessageContentKind";
 import type { MessageDirection } from "../types/MessageDirection";
 import type { MessageSentBy } from "../types/MessageSentBy";
 import type { MessageStatus } from "../types/MessageStatus";
+import type { Name } from "../primitives/Name";
 import type { Referral } from "../types/Referral";
 import type { Timestamp } from "../primitives/Timestamp";
 import type { Uid } from "../primitives/Uid";
@@ -21,6 +22,13 @@ export type Conversation = {
   participant_name: string | null,
   participant_username: string | null,
   participant_avatar_url: string | null,
+  /**
+   * The operator's own label for the person — set by hand or by a contact
+   * import's name column. Independent of `participant_name`, which the
+   * platform owns and profile refreshes overwrite; this is never touched by
+   * them, and clearing it falls back to the platform name.
+   */
+  alias: Name | null,
   last_message_at: Timestamp,
   /**
    * Last inbound (participant) message — anchors whatsapp's 24h window.

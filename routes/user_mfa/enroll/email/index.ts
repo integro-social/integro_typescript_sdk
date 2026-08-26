@@ -17,7 +17,7 @@ export const email = {
   /**
    * Begin email-factor enrollment during forced bootstrap, emailing a one-time code.
    *
-   * Public — no authentication required; the request is gated solely by the ephemeral enrollment token in the body.
+   * Public — no authentication required; the request is gated by the ephemeral enrollment token in the body and by the per-IP and per-token code-dispatch throttle.
    */
   start: Tapi.post<{ body: UserMfaEnrollEmailStartRequest; response: null }>()({
     endpoint: "/user-session/mfa/enroll/email/start",

@@ -21,11 +21,13 @@ export const apiKey = {
   }),
   /**
    * Create an API key bound to a group or to the platform. A platform key (no
-   * group) automatically carries `operate_platform_scope`; a group-bound key may
-   * never carry it. Every granted permission must be one the caller itself holds
-   * in the key's scope, and must bring along whatever that permission requires.
+   * group) is the one that stands at platform scope — that comes from the
+   * binding itself, so nothing is added to the grant set — and a group-bound key
+   * may therefore carry no platform-scoped permission at all. Every granted
+   * permission must be one the caller itself holds in the key's scope, and must
+   * bring along whatever that permission requires.
    *
-   * Requires `CreateApiKeys` and `GrantApiKeyPermissions` in the named group, or `OperatePlatformScope` plus both when no group is named.
+   * Requires `CreateApiKeys` and `GrantApiKeyPermissions` in the named group, or both at platform scope when no group is named; every permission granted to the key must also be one the caller holds where the key lives.
    */
   create: Tapi.post<{ body: CreateApiKeyRequest; response: CreateApiKeyResponse }>()({
     endpoint: "/api-key",
@@ -33,7 +35,7 @@ export const apiKey = {
   /**
    * Fetch a single API key by uid.
    *
-   * Requires `ViewApiKeys` in the key's group, or `OperatePlatformScope` plus `ViewApiKeys` for a platform key.
+   * Requires `ViewApiKeys` in the key's group, or `ViewApiKeys` at platform scope for a platform key.
    */
   get: Tapi.get<{ path: { api_key_uid: Uid }; response: ApiKey }>()({
     endpoint: "/api-key/:api_key_uid",
@@ -49,7 +51,7 @@ export const apiKey = {
   /**
    * Revoke an API key, permanently disabling it.
    *
-   * Requires `RevokeApiKeys` in the key's group, or `OperatePlatformScope` plus `RevokeApiKeys` for a platform key.
+   * Requires `RevokeApiKeys` in the key's group, or `RevokeApiKeys` at platform scope for a platform key.
    */
   revoke: Tapi.post<{ path: { api_key_uid: Uid }; response: null }>()({
     endpoint: "/api-key/:api_key_uid/revoke",
@@ -57,7 +59,7 @@ export const apiKey = {
   /**
    * Rotate an API key's secret, returning the new key.
    *
-   * Requires `RotateApiKeys` in the key's group, or `OperatePlatformScope` plus `RotateApiKeys` for a platform key.
+   * Requires `RotateApiKeys` in the key's group, or `RotateApiKeys` at platform scope for a platform key.
    */
   rotate: Tapi.post<{ path: { api_key_uid: Uid }; response: RotateApiKeyResponse }>()({
     endpoint: "/api-key/:api_key_uid/rotate",
@@ -65,18 +67,18 @@ export const apiKey = {
   /**
    * Update an API key's name or enabled flag.
    *
-   * Requires `UpdateApiKeys` in the key's group, or `OperatePlatformScope` plus `UpdateApiKeys` for a platform key.
+   * Requires `UpdateApiKeys` in the key's group, or `UpdateApiKeys` at platform scope for a platform key.
    */
   update: Tapi.put<{ path: { api_key_uid: Uid }; body: UpdateApiKeyRequest; response: null }>()({
     endpoint: "/api-key/:api_key_uid",
   }),
   /**
-   * Replace the granted permission set of an API key. `operate_platform_scope`
-   * stays bound to the key's group binding and cannot be granted to a group key;
-   * every other granted permission must be one the caller itself holds in the
+   * Replace the granted permission set of an API key. A platform-scoped
+   * permission is refused on a group-bound key, which never stands at platform
+   * scope; every granted permission must be one the caller itself holds in the
    * key's scope, and must bring along whatever that permission requires.
    *
-   * Requires `GrantApiKeyPermissions` in the key's group, or `OperatePlatformScope` plus `GrantApiKeyPermissions` for a platform key.
+   * Requires `GrantApiKeyPermissions` in the key's group, or at platform scope for a platform key; every permission granted must also be one the caller holds where the key lives.
    */
   updatePermissions: Tapi.put<{ path: { api_key_uid: Uid }; body: UpdateApiKeyPermissionsRequest; response: null }>()({
     endpoint: "/api-key/:api_key_uid/permission",

@@ -18,6 +18,9 @@ export type OutboundContent = {
   url: string,
   caption: string | null,
 } | {
+  "kind": "sticker",
+  url: string,
+} | {
   "kind": "audio",
   url: string,
 } | {

@@ -10,7 +10,7 @@ export const groupMember = {
   /**
    * Add an existing user to the group with a role.
    *
-   * Requires `AddMembers` in the group itself, and the caller's role there must be able to manage the role being assigned; a user already in the group is a conflict, and a user who does not exist yet is invited, not added.
+   * Requires `AddMembers` in the group itself — a row platform staff alone hold — plus a role there able to manage the one being assigned; a user already in the group is a conflict, and a user who does not exist yet is invited, not added. Group administrators onboard through an invitation instead.
    */
   add: Tapi.post<{ path: { group_uid: Uid }; body: AddGroupMemberRequest; response: null }>()({
     endpoint: "/group/:group_uid/member",

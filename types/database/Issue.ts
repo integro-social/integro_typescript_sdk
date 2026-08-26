@@ -4,7 +4,7 @@ import type { IssueDetails } from "../types/IssueDetails";
 import type { IssueScreenshots } from "../types/IssueScreenshots";
 import type { IssueSeverity } from "../types/IssueSeverity";
 import type { IssueStatus } from "../types/IssueStatus";
-import type { Text8000 } from "../primitives/Text8000";
+import type { Text0_8000 } from "../primitives/Text0_8000";
 import type { Timestamp } from "../primitives/Timestamp";
 import type { Uid } from "../primitives/Uid";
 
@@ -14,7 +14,7 @@ export type Issue = {
   category: IssueCategory,
   severity: IssueSeverity,
   status: IssueStatus,
-  description: Text8000,
+  description: Text0_8000,
   details: IssueDetails,
   screenshots: IssueScreenshots,
   reported_by: Uid,

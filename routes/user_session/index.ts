@@ -20,7 +20,7 @@ export const userSession = {
   /**
    * Authenticate with email and password, returning a session token or an MFA/enrollment challenge.
    *
-   * Public — no authentication required; the caller proves identity with the supplied email and password.
+   * Public — no authentication required; the caller proves identity with the supplied email and password. Rejected before the password is checked when the caller trips either the per-IP or the per-email login throttle.
    */
   login: Tapi.post<{ body: UserSessionLoginRequest; response: UserSessionLoginResponse }>()({
     endpoint: "/user-session/login",

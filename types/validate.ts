@@ -10,6 +10,8 @@ export type Constraint =
   | { kind: "minLen"; min: number }
   | { kind: "maxLen"; max: number }
   | { kind: "exactLen"; len: number }
+  | { kind: "minBytes"; min: number }
+  | { kind: "maxBytes"; max: number }
   | { kind: "minDigits"; min: number }
   | { kind: "maxDigits"; max: number }
   | { kind: "noControlChars" }
@@ -26,6 +28,8 @@ export type Violation =
   | { kind: "tooShort"; min: number }
   | { kind: "tooLong"; max: number }
   | { kind: "exactLength"; expected: number; actual: number }
+  | { kind: "tooFewBytes"; min: number }
+  | { kind: "tooManyBytes"; max: number }
   | { kind: "tooFewDigits"; min: number }
   | { kind: "tooManyDigits"; max: number }
   | { kind: "tooFewItems"; min: number }
@@ -78,6 +82,23 @@ function charLen(s: string): number {
   return n;
 }
 
+// UTF-8 byte length, the unit a fixed-width slot is measured in. `TextEncoder`
+// allocates, so the ASCII fast path — every byte below 0x80 — answers without
+// one, which is what the bounded values this guards actually are.
+function byteLen(s: string): number {
+  let n = 0;
+  for (let i = 0; i < s.length; i++) {
+    const c = s.charCodeAt(i);
+    if (c < 0x80) n += 1;
+    else if (c < 0x800) n += 2;
+    else if (c >= 0xd800 && c <= 0xdbff && i + 1 < s.length && (s.charCodeAt(i + 1) & 0xfc00) === 0xdc00) {
+      n += 4;
+      i++;
+    } else n += 3;
+  }
+  return n;
+}
+
 function digitCount(s: string): number {
   let n = 0;
   for (let i = 0; i < s.length; i++) {
@@ -119,6 +140,10 @@ function checkOne(c: Constraint, value: Value): Violation | null {
       const actual = charLen(s);
       return actual !== c.len ? { kind: "exactLength", expected: c.len, actual } : null;
     }
+    case "minBytes":
+      return byteLen(s) < c.min ? { kind: "tooFewBytes", min: c.min } : null;
+    case "maxBytes":
+      return byteLen(s) > c.max ? { kind: "tooManyBytes", max: c.max } : null;
     case "minDigits":
       return digitCount(s) < c.min ? { kind: "tooFewDigits", min: c.min } : null;
     case "maxDigits":
@@ -179,6 +204,10 @@ export function message(v: Violation): string {
       return `muito longo (máximo ${v.max} caracteres)`;
     case "exactLength":
       return `tamanho inválido (esperado ${v.expected}, recebido ${v.actual})`;
+    case "tooFewBytes":
+      return `muito curto (mínimo ${v.min} bytes)`;
+    case "tooManyBytes":
+      return `muito longo (máximo ${v.max} bytes)`;
     case "tooFewDigits":
       return `muito curto (mínimo ${v.min} dígitos)`;
     case "tooManyDigits":
