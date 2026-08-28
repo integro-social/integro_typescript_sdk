@@ -7,6 +7,7 @@ import type { GhlCallbackQuery } from "../../types/ghl/GhlCallbackQuery";
 import type { GhlLocation } from "../../types/database/GhlLocation";
 import type { LinkGhlRequest } from "../../types/ghl/LinkGhlRequest";
 import type { ListGhlQuery } from "../../types/ghl/ListGhlQuery";
+import type { SetGhlHandoffTagRequest } from "../../types/ghl/SetGhlHandoffTagRequest";
 import type { Uid } from "../../types/primitives/Uid";
 
 export const ghl = {
@@ -53,14 +54,26 @@ export const ghl = {
     endpoint: "/ghl/:ghl_location_uid/link",
   }),
   /**
-   * List the GoHighLevel locations installed in a group, each carrying the
-   * whatsapp account it bridges (`target_account_uid`, null while unlinked) and
-   * whether its grant needs reconnecting.
+   * List the installed GoHighLevel locations, optionally filtered by group, each
+   * carrying the whatsapp account it bridges (`target_account_uid`, null while
+   * unlinked) and whether its grant needs reconnecting.
    *
-   * Requires `ViewSocialAccounts` in the named group.
+   * Requires `ViewSocialAccounts`; the list covers only locations of groups where the caller holds it.
    */
   list: Tapi.get<{ query: ListGhlQuery; response: Array<GhlLocation> }>()({
     endpoint: "/ghl",
+  }),
+  /**
+   * Set the contact tag the bridge adds on GoHighLevel's side when a human —
+   * a hub operator, or the paired phone — answers a contact, so a workflow
+   * keyed on that tag can put the location's Conversation AI bot to sleep.
+   * `null` turns the handoff off. Sends through the hub API, campaign sends and
+   * GoHighLevel's own never add it.
+   *
+   * Requires `ConnectSocialAccounts` in the location's group.
+   */
+  setHandoffTag: Tapi.put<{ path: { ghl_location_uid: Uid }; body: SetGhlHandoffTagRequest; response: GhlLocation }>()({
+    endpoint: "/ghl/:ghl_location_uid/handoff-tag",
   }),
   /**
    * Unbridge the location's whatsapp account, stopping the mirroring in both

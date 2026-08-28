@@ -2,5 +2,5 @@
 import type { Uid } from "../primitives/Uid";
 
 export type ListGhlQuery = {
-  group_uid: Uid,
+  group_uid: Uid | null,
 };

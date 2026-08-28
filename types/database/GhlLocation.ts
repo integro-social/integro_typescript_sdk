@@ -31,6 +31,12 @@ export type GhlLocation = {
    */
   target_account_uid: Uid | null,
   /**
+   * The contact tag added on GoHighLevel's side when a human answers from the
+   * hub or the paired phone — the hook a location's workflow uses to put its
+   * Conversation AI bot to sleep. `None` = the handoff is off.
+   */
+  handoff_tag: string | null,
+  /**
    * Inbound-sync cursor into `message.id`: the target account's messages
    * beyond it still owe GHL a delivery.
    */
