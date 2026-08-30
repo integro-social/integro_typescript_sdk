@@ -76,7 +76,7 @@ export const PERMISSION_GROUPS: readonly PermissionGroup[] = [
   {
     id: "media",
     label: "Mídia",
-    perms: ["upload_media", "delete_media"],
+    perms: ["upload_media"],
   },
   {
     id: "webhooks",
@@ -161,7 +161,6 @@ export const PERMISSION_LABEL: Record<UserPermission, string> = {
   view_business: "Visualizar perfil de negócio",
   manage_business: "Gerenciar perfil de negócio",
   upload_media: "Enviar mídia",
-  delete_media: "Excluir mídia",
   view_webhook: "Visualizar webhook de eventos",
   manage_webhook: "Gerenciar webhook de eventos",
   view_api_keys: "Visualizar chaves",
