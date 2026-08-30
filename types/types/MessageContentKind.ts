@@ -5,7 +5,7 @@
  * halves of [`MessageContent`]. Denormalized onto the conversation row, so a
  * chat-list line renders the right preview without loading the message.
  */
-export type MessageContentKind = "text" | "image" | "sticker" | "audio" | "video" | "file" | "location" | "contacts" | "template" | "buttons" | "cards" | "share" | "story_mention" | "story_reply" | "quick_reply" | "postback" | "unavailable" | "unsupported";
+export type MessageContentKind = "text" | "image" | "sticker" | "audio" | "video" | "gif" | "file" | "location" | "contacts" | "template" | "buttons" | "cards" | "share" | "story_mention" | "story_reply" | "quick_reply" | "postback" | "unavailable" | "unsupported";
 
 /** Every `MessageContentKind`, in declaration order. */
-export const MESSAGE_CONTENT_KIND = ["text", "image", "sticker", "audio", "video", "file", "location", "contacts", "template", "buttons", "cards", "share", "story_mention", "story_reply", "quick_reply", "postback", "unavailable", "unsupported"] as const satisfies readonly MessageContentKind[];
+export const MESSAGE_CONTENT_KIND = ["text", "image", "sticker", "audio", "video", "gif", "file", "location", "contacts", "template", "buttons", "cards", "share", "story_mention", "story_reply", "quick_reply", "postback", "unavailable", "unsupported"] as const satisfies readonly MessageContentKind[];

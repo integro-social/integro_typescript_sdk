@@ -13,6 +13,7 @@ import { conversation } from "./conversation";
 import { event } from "./event";
 import { eventWebhook } from "./event_webhook";
 import { ghl } from "./ghl";
+import { gif } from "./gif";
 import { google } from "./google";
 import { group } from "./group";
 import { groupMember } from "./group_member";
@@ -51,6 +52,7 @@ export const routes = {
   event,
   eventWebhook,
   ghl,
+  gif,
   google,
   group,
   groupMember,

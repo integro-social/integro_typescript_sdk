@@ -17,6 +17,9 @@ export type NativeContent = {
   url: string,
   caption: string | null,
 } | {
+  "kind": "gif",
+  url: string,
+} | {
   "kind": "file",
   url: string,
   caption: string | null,

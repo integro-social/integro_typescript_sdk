@@ -82,10 +82,11 @@ export const message = {
    * forwarded — a target reads it as a message the account just wrote.
    *
    * The content is re-shaped per target channel, so a forward crosses channels
-   * (a whatsapp photo into an instagram thread). Targets are answered one by
-   * one and independently: a target the caller cannot send in, whose channel
-   * cannot express the content, or whose 24h window has lapsed comes back
-   * `rejected` while the rest still queue.
+   * (a whatsapp photo into an instagram thread); a gif lands as a plain video
+   * anywhere but native whatsapp. Targets are answered one by one and
+   * independently: a target the caller cannot send in, whose channel cannot
+   * express the content, or whose 24h window has lapsed comes back `rejected`
+   * while the rest still queue.
    *
    * Requires `ViewMessages` in the source conversation's group, and
    * `SendMessages` in each target's — a target failing that is `rejected`, not

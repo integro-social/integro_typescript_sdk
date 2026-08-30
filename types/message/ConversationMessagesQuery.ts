@@ -10,8 +10,8 @@ export type ConversationMessagesQuery = {
   limit: Number1_200 | null,
   /**
    * Only messages of these content kinds. A media gallery pages
-   * `image, video, sticker, audio, file` without loading the text between
-   * them; absent or empty means every kind.
+   * `image, video, gif, sticker, audio, file` without loading the text
+   * between them; absent or empty means every kind.
    */
   kinds: Array<MessageContentKind> | null,
 };
