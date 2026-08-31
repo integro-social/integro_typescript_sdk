@@ -7,6 +7,12 @@ export type ConversationMessagesQuery = {
    * Scrollback cursor: only messages with `id` strictly smaller are returned.
    */
   before_id: number | null,
+  /**
+   * Forward cursor: the oldest `limit` messages with `id` strictly greater,
+   * returned newest-first — each page continues upward from the last.
+   * Exclusive with `before_id`.
+   */
+  after_id: number | null,
   limit: Number1_200 | null,
   /**
    * Only messages of these content kinds. A media gallery pages

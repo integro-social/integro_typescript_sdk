@@ -83,7 +83,9 @@ export const conversation = {
    * List conversations, newest activity first, optionally filtered by group or
    * social account; `before_activity_at`+`before_uid` page older activity
    * (keyset cursor). Rows carry the denormalized chat-list summary (unread
-   * badge + last-message preview).
+   * badge + last-message preview). `q` narrows to conversations whose
+   * participant (alias, name, username, phone) contains it — a term under 2
+   * characters answers with no rows; not combinable with `uids`.
    *
    * Requires `ViewMessages`; the list covers only conversations of groups where the caller holds it.
    */
@@ -101,7 +103,9 @@ export const conversation = {
   }),
   /**
    * List a conversation's messages, newest first; `before_id` pages older
-   * history.
+   * history. `after_id` pages newer history from an anchored message: each
+   * page is the oldest `limit` rows above the cursor, still newest-first on
+   * the wire (never both cursors).
    *
    * Requires `ViewMessages` in the conversation's group.
    */
