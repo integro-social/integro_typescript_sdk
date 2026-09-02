@@ -14,6 +14,8 @@ import type { ConnectStevoRequest } from "../../types/social_account/ConnectStev
 import type { ConnectStevoResponse } from "../../types/social_account/ConnectStevoResponse";
 import type { ConnectWhatsappRequest } from "../../types/social_account/ConnectWhatsappRequest";
 import type { ConnectWhatsappResponse } from "../../types/social_account/ConnectWhatsappResponse";
+import type { ExposureQuery } from "../../types/social_account/ExposureQuery";
+import type { ExposureReport } from "../../types/domain/ExposureReport";
 import type { Insight } from "../../types/meta/Insight";
 import type { InsightHistoryQuery } from "../../types/insight/InsightHistoryQuery";
 import type { InsightSeries } from "../../types/insight/InsightSeries";
@@ -23,7 +25,9 @@ import type { NativeQrResponse } from "../../types/social_account/NativeQrRespon
 import type { RefreshProfileResponse } from "../../types/social_account/RefreshProfileResponse";
 import type { SessionStatus } from "../../types/social_account/SessionStatus";
 import type { SetSocialAccountAliasRequest } from "../../types/social_account/SetSocialAccountAliasRequest";
+import type { SetSocialAccountConversationCapRequest } from "../../types/social_account/SetSocialAccountConversationCapRequest";
 import type { SetSocialAccountEnabledRequest } from "../../types/social_account/SetSocialAccountEnabledRequest";
+import type { SetSocialAccountPresenceRequest } from "../../types/social_account/SetSocialAccountPresenceRequest";
 import type { SocialAccountResponse } from "../../types/social_account/SocialAccountResponse";
 import type { StartNativePairingResponse } from "../../types/social_account/StartNativePairingResponse";
 import type { StevoPairRequest } from "../../types/social_account/StevoPairRequest";
@@ -115,6 +119,20 @@ export const socialAccount = {
     endpoint: "/social-account/:social_account_uid",
   }),
   /**
+   * Read the account's exposure telemetry, hour by hour over the requested
+   * period (at most 92 days): how many platform lookups it made (usync number
+   * checks, profile pictures, presence subscriptions), its sends by origin,
+   * first-time contacts, whatsapp 429 and 463/475 answers, slow send acks and
+   * sends still without a delivery receipt an hour later, plus the alerts the
+   * last 24 hours raise right now. Only the session-backed whatsapp channels
+   * are metered.
+   *
+   * Requires `ViewSocialAccounts` in the account's group.
+   */
+  exposure: Tapi.get<{ path: { social_account_uid: Uid }; query: ExposureQuery; response: ExposureReport }>()({
+    endpoint: "/social-account/:social_account_uid/exposure",
+  }),
+  /**
    * Fetch a single connected social account by uid, with the live session
    * status of its whatsapp session when applicable.
    *
@@ -136,9 +154,9 @@ export const socialAccount = {
   /**
    * Day-by-day history of the account's collected metrics (reach, views,
    * follower counts, …), grouped per metric — the charting companion to the
-   * live `socialAccount.insights` passthrough. History exists only from the
-   * day the account was connected. A channel that reports no insights is
-   * refused here exactly as the live endpoint refuses it.
+   * live insights passthrough. History exists only from the day the account
+   * was connected. A channel that reports no insights is refused here exactly
+   * as the live endpoint refuses it.
    *
    * Requires `ViewInsights` in the account's group.
    */
@@ -190,7 +208,8 @@ export const socialAccount = {
   }),
   /**
    * Re-establish the account's session after a drop; conflicts if the phone
-   * unpaired (re-pair with a new QR instead).
+   * unpaired (re-pair with a new QR instead) or while a whatsapp ban on the
+   * number is still in force, since logging back in during a ban lengthens it.
    *
    * Requires `ConnectSocialAccounts` in the account's group.
    */
@@ -230,13 +249,39 @@ export const socialAccount = {
     endpoint: "/social-account/:social_account_uid/alias",
   }),
   /**
+   * Cap how many conversations the hub may open on this account in any 24
+   * hours, whoever asks for them (inbox, api key, campaign, import, GoHighLevel),
+   * or lift the cap with `null`. Only the session-backed whatsapp channels enforce
+   * it; other channels are refused.
+   *
+   * Requires `UpdateSocialAccounts` in the account's group.
+   */
+  setConversationCap: Tapi.put<{ path: { social_account_uid: Uid }; body: SetSocialAccountConversationCapRequest; response: null }>()({
+    endpoint: "/social-account/:social_account_uid/conversation-cap",
+  }),
+  /**
    * Enable or disable a connected social account; disabled accounts stop
-   * ingesting webhooks and reject sends/publishes.
+   * ingesting webhooks and reject sends/publishes. Enabling clears a session
+   * incident the next connect would clear anyway, leaves a reach-out hold to
+   * expire on its own, and conflicts while a whatsapp ban is still in force. Disabling a native whatsapp account also
+   * disconnects its session, and enabling connects it again.
    *
    * Requires `UpdateSocialAccounts` in the account's group.
    */
   setEnabled: Tapi.put<{ path: { social_account_uid: Uid }; body: SetSocialAccountEnabledRequest; response: null }>()({
     endpoint: "/social-account/:social_account_uid/enabled",
+  }),
+  /**
+   * Choose how this native whatsapp account announces itself online: following
+   * the operators looking at its inbox (the default) or never. Takes effect on
+   * the live session at once. One change per account every 30 seconds; a
+   * sooner one is refused with the seconds left. Other channels have no
+   * presence to steer and are refused.
+   *
+   * Requires `UpdateSocialAccounts` in the account's group.
+   */
+  setPresence: Tapi.put<{ path: { social_account_uid: Uid }; body: SetSocialAccountPresenceRequest; response: null }>()({
+    endpoint: "/social-account/:social_account_uid/presence",
   }),
   /**
    * Start a native (whatsmeow) pairing; returns a handle to poll for the QR and
@@ -285,8 +330,9 @@ export const socialAccount = {
     endpoint: "/social-account/:social_account_uid/stevo/qr",
   }),
   /**
-   * Re-establish the instance's session after a drop. Temporarily disabled —
-   * always fails with 503.
+   * Re-establish the instance's session after a drop; conflicts while a
+   * whatsapp ban on the number is still in force, since logging back in
+   * during a ban lengthens it. Temporarily disabled — always fails with 503.
    *
    * Requires `ConnectSocialAccounts` in the account's group.
    */
@@ -295,10 +341,13 @@ export const socialAccount = {
   }),
   /**
    * Live connection status of the instance (connected = session up; logged_in
-   * = phone paired). Reading it also refreshes the account's stored name and
-   * picture from the paired profile when they changed, emitting
-   * `account_updated` — the poll is the natural refresh point, since it already
-   * runs whenever the panel is open.
+   * = phone paired). Reading it also refreshes the account's stored name from
+   * the paired profile when it changed (the picture follows the daily profile
+   * sweep, which asks for it only once the gateway has echoed the account's
+   * own number), and reads the gateway's health report: a reported reach-out
+   * hold records a `reachout_timelock` session incident on the account, and its
+   * lifting clears it. Both emit `account_updated` — the poll is the natural
+   * refresh point, since it already runs whenever the panel is open.
    *
    * Requires `ViewSocialAccounts` in the account's group.
    */

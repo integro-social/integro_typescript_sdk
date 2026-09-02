@@ -1,6 +1,6 @@
 {
   "name": "integro_sdk",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "type": "module",
   "main": "./index.ts",
   "types": "./index.ts",

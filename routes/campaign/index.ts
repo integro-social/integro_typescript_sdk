@@ -3,12 +3,12 @@
 import Tapi from "../../runtime";
 import type { AudienceRequest } from "../../types/campaign/AudienceRequest";
 import type { CampaignDetail } from "../../types/campaign/CampaignDetail";
-import type { CampaignRecipient } from "../../types/database/CampaignRecipient";
+import type { CampaignRecipient } from "../../types/domain/CampaignRecipient";
 import type { CampaignStats } from "../../types/campaign/CampaignStats";
 import type { CreateCampaignRequest } from "../../types/campaign/CreateCampaignRequest";
 import type { ListCampaignsQuery } from "../../types/campaign/ListCampaignsQuery";
 import type { ListRecipientsQuery } from "../../types/campaign/ListRecipientsQuery";
-import type { MessageWithContext } from "../../types/message/MessageWithContext";
+import type { MessageWithContext } from "../../types/domain/MessageWithContext";
 import type { PreflightReport } from "../../types/campaign/PreflightReport";
 import type { RemoveRecipientsRequest } from "../../types/campaign/RemoveRecipientsRequest";
 import type { SetAccountsRequest } from "../../types/campaign/SetAccountsRequest";

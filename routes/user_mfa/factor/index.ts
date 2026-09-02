@@ -2,7 +2,7 @@
 
 import Tapi from "../../../runtime";
 import type { UserMfaFactorRow } from "../../../types/user_mfa/UserMfaFactorRow";
-import type { UserMfaKind } from "../../../types/types/UserMfaKind";
+import type { UserMfaKind } from "../../../types/domain/UserMfaKind";
 import { email } from "./email";
 import { totp } from "./totp";
 

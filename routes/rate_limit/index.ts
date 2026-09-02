@@ -3,15 +3,19 @@
 import Tapi from "../../runtime";
 import type { CreateRateLimitRuleRequest } from "../../types/rate_limit/CreateRateLimitRuleRequest";
 import type { CreateRateLimitRuleResponse } from "../../types/rate_limit/CreateRateLimitRuleResponse";
-import type { RateLimitRule } from "../../types/database/RateLimitRule";
+import type { ListRateLimitRulesQuery } from "../../types/rate_limit/ListRateLimitRulesQuery";
+import type { RateLimitRuleResponse } from "../../types/rate_limit/RateLimitRuleResponse";
 import type { Uid } from "../../types/primitives/Uid";
 import type { UpdateRateLimitRuleRequest } from "../../types/rate_limit/UpdateRateLimitRuleRequest";
 
 export const rateLimit = {
   /**
-   * Create a rate-limit rule for any target kind (HTTP scope, action, email dispatch, or channel pacing).
+   * Create a rate-limit rule in a tier: one bucket shared by the whole
+   * platform, the per-caller global default, a staff override for one group,
+   * or a group's own (tighter) limit.
    *
-   * Requires `CreateRateLimits`, which only platform staff hold.
+   * Requires `CreateRateLimits` — platform-wide for `shared`, `global` and
+   * `override`, in the group for `own`.
    */
   create: Tapi.post<{ body: CreateRateLimitRuleRequest; response: CreateRateLimitRuleResponse }>()({
     endpoint: "/rate-limit",
@@ -19,7 +23,7 @@ export const rateLimit = {
   /**
    * Delete a rate-limit rule by uid.
    *
-   * Requires `DeleteRateLimits`, which only platform staff hold.
+   * Requires `DeleteRateLimits` in the rule's tier.
    */
   delete: Tapi.delete<{ path: { rule_uid: Uid }; response: null }>()({
     endpoint: "/rate-limit/:rule_uid",
@@ -27,23 +31,25 @@ export const rateLimit = {
   /**
    * Fetch a single rate-limit rule by uid.
    *
-   * Requires `ViewRateLimits`, which only platform staff hold.
+   * Requires `ViewRateLimits` — anywhere for a shared or global rule, in the
+   * group for a group tier.
    */
-  get: Tapi.get<{ path: { rule_uid: Uid }; response: RateLimitRule }>()({
+  get: Tapi.get<{ path: { rule_uid: Uid }; response: RateLimitRuleResponse }>()({
     endpoint: "/rate-limit/:rule_uid",
   }),
   /**
-   * List every rate-limit rule.
+   * List rate-limit rules across every tier the caller may see.
    *
-   * Requires `ViewRateLimits`, which only platform staff hold.
+   * Requires `ViewRateLimits`.
    */
-  list: Tapi.get<{ response: Array<RateLimitRule> }>()({
+  list: Tapi.get<{ query: ListRateLimitRulesQuery; response: Array<RateLimitRuleResponse> }>()({
     endpoint: "/rate-limit",
   }),
   /**
-   * Update an existing rate-limit rule's budget; the rule's target is immutable.
+   * Update an existing rate-limit rule's budget; the rule's target and tier
+   * are immutable.
    *
-   * Requires `UpdateRateLimits`, which only platform staff hold.
+   * Requires `UpdateRateLimits` in the rule's tier.
    */
   update: Tapi.put<{ path: { rule_uid: Uid }; body: UpdateRateLimitRuleRequest; response: null }>()({
     endpoint: "/rate-limit/:rule_uid",

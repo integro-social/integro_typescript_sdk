@@ -22,6 +22,7 @@ import { mailQueue } from "./mail_queue";
 import { media } from "./media";
 import { mention } from "./mention";
 import { message } from "./message";
+import { oauth } from "./oauth";
 import { post } from "./post";
 import { pulse } from "./pulse";
 import { rateLimit } from "./rate_limit";
@@ -61,6 +62,7 @@ export const routes = {
   media,
   mention,
   message,
+  oauth,
   post,
   pulse,
   rateLimit,

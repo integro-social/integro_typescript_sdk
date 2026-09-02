@@ -2,7 +2,7 @@
 
 import Tapi from "../../runtime";
 import type { ContactImportDetail } from "../../types/contact_import/ContactImportDetail";
-import type { ContactImportRow } from "../../types/database/ContactImportRow";
+import type { ContactImportRow } from "../../types/domain/ContactImportRow";
 import type { ListImportRowsQuery } from "../../types/contact_import/ListImportRowsQuery";
 import type { ListImportsQuery } from "../../types/contact_import/ListImportsQuery";
 import type { Uid } from "../../types/primitives/Uid";

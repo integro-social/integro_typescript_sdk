@@ -2,7 +2,7 @@
 
 import Tapi from "../../runtime";
 import type { ListMentionsQuery } from "../../types/engagement/ListMentionsQuery";
-import type { Mention } from "../../types/database/Mention";
+import type { Mention } from "../../types/domain/Mention";
 import type { MentionReplyRequest } from "../../types/engagement/MentionReplyRequest";
 import type { Uid } from "../../types/primitives/Uid";
 

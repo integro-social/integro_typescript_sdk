@@ -6,7 +6,7 @@ import type { Insight } from "../../types/meta/Insight";
 import type { InsightHistoryQuery } from "../../types/insight/InsightHistoryQuery";
 import type { InsightSeries } from "../../types/insight/InsightSeries";
 import type { ListPostsQuery } from "../../types/post/ListPostsQuery";
-import type { Post } from "../../types/database/Post";
+import type { Post } from "../../types/domain/Post";
 import type { PostInsightsQuery } from "../../types/post/PostInsightsQuery";
 import type { SetPostCommentsRequest } from "../../types/post/SetPostCommentsRequest";
 import type { SetPostHiddenRequest } from "../../types/post/SetPostHiddenRequest";
@@ -55,7 +55,7 @@ export const post = {
   }),
   /**
    * Day-by-day history of a post's collected metrics, grouped per metric —
-   * the charting companion to the live `post.insights` passthrough. Posts are
+   * the charting companion to the live insights passthrough. Posts are
    * collected for 30 days after publishing (stories for 48h, after which their
    * insights stop resolving), so the series flatlines after that window.
    *

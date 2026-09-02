@@ -5,7 +5,7 @@ import type { Number1000_86400000 } from "../primitives/Number1000_86400000";
 import type { Number1_100000 } from "../primitives/Number1_100000";
 import type { Number1_127 } from "../primitives/Number1_127";
 import type { Number1_365 } from "../primitives/Number1_365";
-import type { TemplateRotation } from "../types/TemplateRotation";
+import type { TemplateRotation } from "../domain/TemplateRotation";
 import type { Timestamp } from "../primitives/Timestamp";
 import type { Timezone } from "../primitives/Timezone";
 

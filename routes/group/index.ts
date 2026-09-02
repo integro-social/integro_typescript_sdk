@@ -38,7 +38,7 @@ export const group = {
   /**
    * Fetch a single group, optionally enriched with per-group counts.
    *
-   * Requires `ViewGroups` in the group itself; each count is filled only when the caller also holds that count's own permission there — `ViewApiKeys` for `api_key_count`, `ViewMembers` for `member_count` — and is `null` otherwise.
+   * Requires `ViewGroups` in the group itself; each count is filled only when the caller also holds that count's own permission there — `ViewApiKeys` for `api_key_count`, `ViewMembers` for `member_count`, `ViewSocialAccounts` for `social_account_count` — and is `null` otherwise.
    */
   get: Tapi.get<{ path: { group_uid: Uid }; query: GroupQuery; response: GroupResponse }>()({
     endpoint: "/group/:group_uid",
@@ -54,7 +54,7 @@ export const group = {
   /**
    * List groups, optionally enriched with per-group counts.
    *
-   * Requires `ViewGroups`; the list covers only groups where the caller holds it, and each count is filled only for those where it also holds that count's own permission — `ViewApiKeys` for `api_key_count`, `ViewMembers` for `member_count` — `null` everywhere else.
+   * Requires `ViewGroups`; the list covers only groups where the caller holds it, and each count is filled only for those where it also holds that count's own permission — `ViewApiKeys` for `api_key_count`, `ViewMembers` for `member_count`, `ViewSocialAccounts` for `social_account_count` — `null` everywhere else.
    */
   list: Tapi.get<{ query: GroupQuery; response: Array<GroupResponse> }>()({
     endpoint: "/group",

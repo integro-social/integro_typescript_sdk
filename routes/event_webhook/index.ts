@@ -5,7 +5,7 @@ import type { GetWebhookQuery } from "../../types/event/GetWebhookQuery";
 import type { SetWebhookRequest } from "../../types/event/SetWebhookRequest";
 import type { SetWebhookResponse } from "../../types/event/SetWebhookResponse";
 import type { Uid } from "../../types/primitives/Uid";
-import type { Webhook } from "../../types/database/Webhook";
+import type { Webhook } from "../../types/domain/Webhook";
 
 export const eventWebhook = {
   /**

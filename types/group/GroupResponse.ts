@@ -16,6 +16,12 @@ export type GroupResponse = {
    * that the group has no members.
    */
   member_count: number | null,
+  /**
+   * Present only with `with_counts`, and only for a caller holding
+   * `ViewSocialAccounts` in this group; `null` says the count is out of
+   * reach, never that the group has no accounts.
+   */
+  social_account_count: number | null,
   uid: Uid,
   name: Name,
   enabled: boolean,

@@ -7,7 +7,7 @@ import type { SetUserSuperAdminRequest } from "../../types/user/SetUserSuperAdmi
 import type { Uid } from "../../types/primitives/Uid";
 import type { UpdateUserRequest } from "../../types/user/UpdateUserRequest";
 import type { UpdateUserSelfRequest } from "../../types/user/UpdateUserSelfRequest";
-import type { User } from "../../types/database/User";
+import type { User } from "../../types/domain/User";
 import type { UserChangePasswordRequest } from "../../types/user/UserChangePasswordRequest";
 import type { UserSelfResponse } from "../../types/user/UserSelfResponse";
 

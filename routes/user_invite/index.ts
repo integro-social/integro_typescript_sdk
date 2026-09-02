@@ -2,7 +2,7 @@
 
 import Tapi from "../../runtime";
 import type { Uid } from "../../types/primitives/Uid";
-import type { UserInvite } from "../../types/database/UserInvite";
+import type { UserInvite } from "../../types/domain/UserInvite";
 import type { UserInviteAcceptRequest } from "../../types/user_invite/UserInviteAcceptRequest";
 import type { UserInviteAcceptResponse } from "../../types/user_invite/UserInviteAcceptResponse";
 import type { UserInviteDetailResponse } from "../../types/user_invite/UserInviteDetailResponse";

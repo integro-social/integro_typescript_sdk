@@ -4,7 +4,7 @@ import Tapi from "../../runtime";
 import type { ConnectGhlRequest } from "../../types/ghl/ConnectGhlRequest";
 import type { ConnectGhlResponse } from "../../types/ghl/ConnectGhlResponse";
 import type { GhlCallbackQuery } from "../../types/ghl/GhlCallbackQuery";
-import type { GhlLocation } from "../../types/database/GhlLocation";
+import type { GhlLocation } from "../../types/domain/GhlLocation";
 import type { LinkGhlRequest } from "../../types/ghl/LinkGhlRequest";
 import type { ListGhlQuery } from "../../types/ghl/ListGhlQuery";
 import type { SetGhlHandoffTagRequest } from "../../types/ghl/SetGhlHandoffTagRequest";

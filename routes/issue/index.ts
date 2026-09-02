@@ -3,7 +3,7 @@
 import Tapi from "../../runtime";
 import type { CreateIssueForm } from "../../types/issue/CreateIssueForm";
 import type { CreateIssueResponse } from "../../types/issue/CreateIssueResponse";
-import type { Issue } from "../../types/database/Issue";
+import type { Issue } from "../../types/domain/Issue";
 import type { SetIssueStatusRequest } from "../../types/issue/SetIssueStatusRequest";
 import type { Uid } from "../../types/primitives/Uid";
 

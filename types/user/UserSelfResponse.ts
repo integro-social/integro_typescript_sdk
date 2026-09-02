@@ -4,7 +4,7 @@ import type { MembershipResponse } from "./MembershipResponse";
 import type { Name } from "../primitives/Name";
 import type { Timestamp } from "../primitives/Timestamp";
 import type { Uid } from "../primitives/Uid";
-import type { UserPermission } from "../types/UserPermission";
+import type { UserPermission } from "../domain/UserPermission";
 
 /**
  * The caller's own account plus everything a gating decision reads: the
