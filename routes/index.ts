@@ -31,9 +31,11 @@ import { socialAccount } from "./social_account";
 import { test } from "./test";
 import { uptime } from "./uptime";
 import { user } from "./user";
+import { userAccountNotification } from "./user_account_notification";
 import { userInvite } from "./user_invite";
 import { userMembership } from "./user_membership";
 import { userMfa } from "./user_mfa";
+import { userNotification } from "./user_notification";
 import { userPasswordReset } from "./user_password_reset";
 import { userSession } from "./user_session";
 import { webhook } from "./webhook";
@@ -71,9 +73,11 @@ export const routes = {
   test,
   uptime,
   user,
+  userAccountNotification,
   userInvite,
   userMembership,
   userMfa,
+  userNotification,
   userPasswordReset,
   userSession,
   webhook,

@@ -20,6 +20,8 @@ export type ServerMsg = {
   "type": "error",
   message: string,
 } | {
+  "type": "ping"
+} | {
   "type": "shutdown",
   reason: string,
 };
