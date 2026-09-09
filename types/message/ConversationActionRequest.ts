@@ -14,7 +14,11 @@ export type ConversationActionRequest = {
 } & PresenceSignal | {
   "channel": "whatsapp"
 } & WhatsappPresenceSignal | {
-  "channel": "whatsapp_stevo"
-} & PresenceSignal | {
   "channel": "whatsapp_native"
-} & PresenceSignal;
+} & PresenceSignal | {
+  "channel": "facebook_alt"
+} & PresenceSignal | {
+  "channel": "instagram_alt"
+} & PresenceSignal | {
+  "channel": "whatsapp_alt"
+} & WhatsappPresenceSignal;

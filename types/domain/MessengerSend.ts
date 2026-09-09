@@ -10,8 +10,9 @@ import type { QuickReply } from "./QuickReply";
 export type MessengerSend = {
   content: MessengerContent,
   /**
-   * Lifts the standard 24h response window (`human_agent` = 7 days; the
-   * Meta app must hold the `human_agent` permission).
+   * A message tag that lifts the response window where the channel honors
+   * it (`GET /channel`, `response_window.lift`); refused on any other
+   * channel.
    */
   tag: MessageTag | null,
   /**

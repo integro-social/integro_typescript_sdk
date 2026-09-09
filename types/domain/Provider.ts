@@ -10,7 +10,7 @@
  * Adding an integration = a variant here + its connect flow + its
  * capability module; the registry (table, CRUD, listing UI) is shared.
  */
-export type Provider = "facebook" | "instagram" | "whatsapp" | "whatsapp_stevo" | "whatsapp_native" | "google";
+export type Provider = "facebook" | "instagram" | "whatsapp" | "whatsapp_native" | "facebook_alt" | "instagram_alt" | "whatsapp_alt" | "google";
 
 /** Every `Provider`, in declaration order. */
-export const PROVIDER = ["facebook", "instagram", "whatsapp", "whatsapp_stevo", "whatsapp_native", "google"] as const satisfies readonly Provider[];
+export const PROVIDER = ["facebook", "instagram", "whatsapp", "whatsapp_native", "facebook_alt", "instagram_alt", "whatsapp_alt", "google"] as const satisfies readonly Provider[];

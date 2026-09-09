@@ -134,7 +134,7 @@ export const contactImport = {
    * gets a parse verdict, and the import is created `staged` — nothing touches
    * a platform until `start`. Invalid rows stay editable while staged.
    *
-   * Requires `ImportContacts` in the accounts' group; every account must be a whatsapp session account (stevo or native) of that same group.
+   * Requires `ImportContacts` in the accounts' group; every account must be a native whatsapp account of that same group.
    */
   upload: Tapi.post<{ formData: UploadContactImportForm; response: ContactImportDetail }>()({
     endpoint: "/contact-import",

@@ -7,6 +7,7 @@ import { calendar } from "./calendar";
 import { call } from "./call";
 import { campaign } from "./campaign";
 import { campaignTemplate } from "./campaign_template";
+import { channel } from "./channel";
 import { comment } from "./comment";
 import { contactImport } from "./contact_import";
 import { conversation } from "./conversation";
@@ -49,6 +50,7 @@ export const routes = {
   call,
   campaign,
   campaignTemplate,
+  channel,
   comment,
   contactImport,
   conversation,

@@ -2,12 +2,10 @@
 import type { MessageEdit } from "./MessageEdit";
 
 /**
- * Channel-tagged edit payload — only the unofficial WhatsApp flavors expose
- * a platform edit call, so no other channel's shape deserializes. The
- * `channel` must match the message's.
+ * Channel-tagged edit payload — only native WhatsApp exposes a platform
+ * edit call, so no other channel's shape deserializes. The `channel` must
+ * match the message's.
  */
 export type EditMessageRequest = {
-  "channel": "whatsapp_stevo"
-} & MessageEdit | {
   "channel": "whatsapp_native"
 } & MessageEdit;

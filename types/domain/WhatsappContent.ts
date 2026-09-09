@@ -18,6 +18,7 @@ export type WhatsappContent = {
 } | {
   "kind": "audio",
   url: string,
+  voice: boolean,
 } | {
   "kind": "video",
   url: string,

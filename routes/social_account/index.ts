@@ -10,8 +10,6 @@ import type { ConnectReviewResponse } from "../../types/social_account/ConnectRe
 import type { ConnectSocialAccountRequest } from "../../types/social_account/ConnectSocialAccountRequest";
 import type { ConnectSocialAccountResponse } from "../../types/social_account/ConnectSocialAccountResponse";
 import type { ConnectSocialAccountsConnected } from "../../types/social_account/ConnectSocialAccountsConnected";
-import type { ConnectStevoRequest } from "../../types/social_account/ConnectStevoRequest";
-import type { ConnectStevoResponse } from "../../types/social_account/ConnectStevoResponse";
 import type { ConnectWhatsappRequest } from "../../types/social_account/ConnectWhatsappRequest";
 import type { ConnectWhatsappResponse } from "../../types/social_account/ConnectWhatsappResponse";
 import type { ExposureQuery } from "../../types/social_account/ExposureQuery";
@@ -30,18 +28,15 @@ import type { SetSocialAccountEnabledRequest } from "../../types/social_account/
 import type { SetSocialAccountPresenceRequest } from "../../types/social_account/SetSocialAccountPresenceRequest";
 import type { SocialAccountResponse } from "../../types/social_account/SocialAccountResponse";
 import type { StartNativePairingResponse } from "../../types/social_account/StartNativePairingResponse";
-import type { StevoPairRequest } from "../../types/social_account/StevoPairRequest";
-import type { StevoPairResponse } from "../../types/social_account/StevoPairResponse";
-import type { StevoQrResponse } from "../../types/social_account/StevoQrResponse";
-import type { StevoStatusResponse } from "../../types/social_account/StevoStatusResponse";
 import type { Uid } from "../../types/primitives/Uid";
 
 export const socialAccount = {
   /**
-   * Meta OAuth redirect target: consumes the state, exchanges the code, and
-   * stashes the grant snapshot for review — nothing is registered yet; always
-   * redirects the browser back to the frontend, with a review token on
-   * success.
+   * Login redirect target for both flows: consumes the state, reads the grant
+   * back (Meta: exchanges the code and lists the pages; gateway: lists the
+   * pages, instagram accounts or whatsapp numbers it covers) and stashes the
+   * snapshot for review — nothing is registered yet; always redirects the
+   * browser back to the frontend, with a review token on success.
    *
    * Public — no authentication required; authorization comes from the one-shot state token issued by `socialAccount.connect`.
    */
@@ -49,11 +44,15 @@ export const socialAccount = {
     endpoint: "/social-account/callback",
   }),
   /**
-   * Start the Meta OAuth flow for a group, returning the login dialog URL. The
-   * callback stashes the granted pages (and linked Instagram accounts) for
-   * review; `socialAccount.connectConfirm` is what registers the selection.
+   * Start a login flow for a group, returning the dialog URL: the hub's own
+   * Meta app (`meta`) or the alternate gateway's for one alt channel. The
+   * callback stashes the granted accounts for review;
+   * `socialAccount.connectConfirm` is what registers the selection. A login
+   * naming `social_account_uid` reconnects that account in place; any other
+   * registers new accounts, one per selection, however many times the same
+   * identity is already connected.
    *
-   * Requires `ConnectSocialAccounts` in the named group.
+   * Requires `ConnectSocialAccounts` in the named group; a `social_account_uid` outside it, or not an account of the login's channel, reads as not found.
    */
   connect: Tapi.post<{ body: ConnectSocialAccountRequest; response: ConnectSocialAccountResponse }>()({
     endpoint: "/social-account/connect",
@@ -61,7 +60,8 @@ export const socialAccount = {
   /**
    * Register the selected accounts from a stashed grant (one-shot). Pages and
    * instagram accounts are selected independently; unselected accounts stay in
-   * the Meta grant but out of the hub.
+   * the grant but out of the hub. A gateway selection is completed at the
+   * gateway and registered under its alt channel.
    *
    * Requires `ConnectSocialAccounts` in the group the stashed grant targets.
    */
@@ -69,9 +69,9 @@ export const socialAccount = {
     endpoint: "/social-account/connect/confirm",
   }),
   /**
-   * Load a stashed Meta grant for the selection screen: every account it
-   * covers, plus group accounts whose stored token died on the Meta side
-   * (access removed) — those are flagged for reauthorization. Repeatable;
+   * Load a stashed grant for the selection screen: every account it covers,
+   * plus (Meta grants only) group accounts whose stored token died on the Meta
+   * side (access removed) — those are flagged for reauthorization. Repeatable;
    * only confirm consumes the stash.
    *
    * Requires `ConnectSocialAccounts` in the group the stashed grant targets.
@@ -80,22 +80,12 @@ export const socialAccount = {
     endpoint: "/social-account/connect/review",
   }),
   /**
-   * Connect a Stevo instance (unofficial WhatsApp gateway) to a group: the hub
-   * validates the server + apikey and registers the account. The webhook must
-   * be set manually in the Stevo panel. Pair the phone afterwards via the
-   * `stevo/qr` or `stevo/pair` sub-routes.
-   *
-   * Requires `ConnectSocialAccounts` in the named group.
-   */
-  connectStevo: Tapi.post<{ body: ConnectStevoRequest; response: ConnectStevoResponse }>()({
-    endpoint: "/social-account/stevo",
-  }),
-  /**
    * Connect a WhatsApp Business Account to a group by manual provisioning: the
    * hub discovers the WABA's phone numbers with the supplied permanent token,
-   * subscribes webhooks, and registers one social account per number.
+   * subscribes webhooks, and registers one new social account per number — or,
+   * naming `social_account_uid`, refreshes that account from its number alone.
    *
-   * Requires `ConnectSocialAccounts` in the named group.
+   * Requires `ConnectSocialAccounts` in the named group; a `social_account_uid` outside it, or not an official whatsapp account, reads as not found.
    */
   connectWhatsapp: Tapi.post<{ body: ConnectWhatsappRequest; response: ConnectWhatsappResponse }>()({
     endpoint: "/social-account/whatsapp",
@@ -217,6 +207,16 @@ export const socialAccount = {
     endpoint: "/social-account/:social_account_uid/native/reconnect",
   }),
   /**
+   * Ask the phone for a fresh QR code on a pairing whose code expired; the
+   * next `native/qr` poll carries it. Codes never renew on their own. The
+   * pairing's ten-minute window does not restart.
+   *
+   * Requires `ConnectSocialAccounts` in the group the pairing targets; a pairing that already ended reads as not found.
+   */
+  nativeRenewQr: Tapi.post<{ path: { pairing_handle: Uid }; response: null }>()({
+    endpoint: "/social-account-pairing/:pairing_handle/qr/renew",
+  }),
+  /**
    * Live session status of a native account; a phone-side unpair reports
    * `unpaired` instead of an error.
    *
@@ -285,73 +285,14 @@ export const socialAccount = {
   }),
   /**
    * Start a native (whatsmeow) pairing; returns a handle to poll for the QR and
-   * the paired account. The account row is created only when the scan succeeds.
+   * the paired account. The account row is created only when the scan succeeds,
+   * and every scan is a new account — the same number paired twice is two
+   * accounts — unless `social_account_uid` names the one to pair again, whose
+   * number the scan must match.
    *
-   * Requires `ConnectSocialAccounts` in the named group.
+   * Requires `ConnectSocialAccounts` in the named group; a `social_account_uid` outside it, or not a native account, reads as not found.
    */
   startNativePairing: Tapi.post<{ body: ConnectNativeRequest; response: StartNativePairingResponse }>()({
     endpoint: "/social-account/native",
-  }),
-  /**
-   * Close the instance's session without unpairing the phone. Temporarily
-   * disabled — always fails with 503.
-   *
-   * Requires `ConnectSocialAccounts` in the account's group.
-   */
-  stevoDisconnect: Tapi.post<{ path: { social_account_uid: Uid }; response: null }>()({
-    endpoint: "/social-account/:social_account_uid/stevo/disconnect",
-  }),
-  /**
-   * Unpair the phone entirely (logout); re-pairing needs a new QR scan.
-   * Temporarily disabled — always fails with 503.
-   *
-   * Requires `ConnectSocialAccounts` in the account's group.
-   */
-  stevoLogout: Tapi.delete<{ path: { social_account_uid: Uid }; response: null }>()({
-    endpoint: "/social-account/:social_account_uid/stevo/session",
-  }),
-  /**
-   * Start QR-less pairing: returns the code the user types under "link with
-   * phone number" on the device. Temporarily disabled — always fails with 503.
-   *
-   * Requires `ConnectSocialAccounts` in the account's group.
-   */
-  stevoPair: Tapi.post<{ path: { social_account_uid: Uid }; body: StevoPairRequest; response: StevoPairResponse }>()({
-    endpoint: "/social-account/:social_account_uid/stevo/pair",
-  }),
-  /**
-   * Fetch the instance's pairing QR code to render for the admin (valid while
-   * the instance is connected but not yet logged in). Temporarily disabled —
-   * always fails with 503.
-   *
-   * Requires `ConnectSocialAccounts` in the account's group.
-   */
-  stevoQr: Tapi.get<{ path: { social_account_uid: Uid }; response: StevoQrResponse }>()({
-    endpoint: "/social-account/:social_account_uid/stevo/qr",
-  }),
-  /**
-   * Re-establish the instance's session after a drop; conflicts while a
-   * whatsapp ban on the number is still in force, since logging back in
-   * during a ban lengthens it. Temporarily disabled — always fails with 503.
-   *
-   * Requires `ConnectSocialAccounts` in the account's group.
-   */
-  stevoReconnect: Tapi.post<{ path: { social_account_uid: Uid }; response: null }>()({
-    endpoint: "/social-account/:social_account_uid/stevo/reconnect",
-  }),
-  /**
-   * Live connection status of the instance (connected = session up; logged_in
-   * = phone paired). Reading it also refreshes the account's stored name from
-   * the paired profile when it changed (the picture follows the daily profile
-   * sweep, which asks for it only once the gateway has echoed the account's
-   * own number), and reads the gateway's health report: a reported reach-out
-   * hold records a `reachout_timelock` session incident on the account, and its
-   * lifting clears it. Both emit `account_updated` — the poll is the natural
-   * refresh point, since it already runs whenever the panel is open.
-   *
-   * Requires `ViewSocialAccounts` in the account's group.
-   */
-  stevoStatus: Tapi.get<{ path: { social_account_uid: Uid }; response: StevoStatusResponse }>()({
-    endpoint: "/social-account/:social_account_uid/stevo/status",
   }),
 };

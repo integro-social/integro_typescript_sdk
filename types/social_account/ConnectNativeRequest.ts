@@ -3,4 +3,9 @@ import type { Uid } from "../primitives/Uid";
 
 export type ConnectNativeRequest = {
   group_uid: Uid,
+  /**
+   * The group's native account to pair again, if any: the scan must be of
+   * its number, and the new device replaces the one it had.
+   */
+  social_account_uid: Uid | null,
 };

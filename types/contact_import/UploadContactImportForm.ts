@@ -14,8 +14,8 @@ export type UploadContactImportForm = {
   filename: Text1_255,
   /**
    * The accounts the load distributes over, comma-separated uids. Every one
-   * must be a whatsapp session account (stevo or native) of one same group,
-   * which becomes the import's group.
+   * must be a native whatsapp account of one same group, which becomes the
+   * import's group.
    */
   social_account_uids: string,
   /**

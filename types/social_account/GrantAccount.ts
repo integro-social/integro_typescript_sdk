@@ -10,13 +10,9 @@ export type GrantAccount = {
   name: string,
   username: string | null,
   /**
-   * Already registered in the target group — confirming it refreshes the
-   * stored token and display fields.
+   * How many accounts of this identity the target group already holds;
+   * confirming adds another, independent one, unless the login named the
+   * account it reconnects.
    */
-  connected: boolean,
-  /**
-   * Registered in another group: shown locked, never selectable (accounts
-   * cannot be moved between groups by a connect).
-   */
-  other_group: boolean,
+  connections: number,
 };

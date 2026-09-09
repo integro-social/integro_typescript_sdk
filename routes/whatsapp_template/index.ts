@@ -28,7 +28,7 @@ export const whatsappTemplate = {
   }),
   /**
    * List the WABA's whatsapp message templates, all statuses (only APPROVED
-   * ones are sendable).
+   * ones are sendable); whatsapp and whatsapp_alt accounts alike.
    *
    * Requires `ViewTemplates` in the account's group.
    */

@@ -71,14 +71,17 @@ export const conversation = {
   }),
   /**
    * Open (or return) a conversation with a phone number — a channel-tagged
-   * request whose declared channel must match the account's; only
-   * whatsapp_stevo / whatsapp_native can verify a number on the platform,
-   * so no other channel's shape deserializes. A number the account already
-   * talks to returns its conversation with no platform lookup at all; a new
-   * one is checked first (an unrecognized number or failed check creates
-   * nothing), the platform's canonical id keys the conversation, and the
-   * initial profile (name, picture) is stored best-effort and refreshed at
-   * most every 30 days.
+   * request whose declared channel must match the account's. On
+   * whatsapp_native a number the account already talks to returns its
+   * conversation with no platform lookup at all; a new one is checked first
+   * (an unrecognized number or failed check creates nothing), the platform's
+   * canonical id keys the conversation, and the initial profile (name,
+   * picture) is stored best-effort and refreshed at most every 30 days. On
+   * whatsapp and whatsapp_alt the thread is opened by the named approved
+   * template, queued as the conversation's first send exactly like
+   * `message.send` (it becomes `sent` or `failed` moments later); nothing
+   * verifies the number ahead of the send. facebook, instagram and their alt
+   * twins cannot open conversations, so their shapes do not deserialize.
    *
    * Requires `SendMessages` in the account's group.
    */

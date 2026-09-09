@@ -4,8 +4,8 @@ import type { Uid } from "../primitives/Uid";
 
 /**
  * A group account whose stored token no longer works — access was removed
- * on the Meta side. Flagged `needs_reauth`; reconnecting (with the account
- * selected again) is the cure.
+ * on the Meta side. Flagged `needs_reauth`; a connect naming it by
+ * `social_account_uid` is the cure.
  */
 export type RemovedAccess = {
   social_account_uid: Uid,

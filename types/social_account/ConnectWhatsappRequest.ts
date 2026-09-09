@@ -12,4 +12,10 @@ export type ConnectWhatsappRequest = {
    * `whatsapp_business_management`, generated once in Business Manager.
    */
   access_token: string,
+  /**
+   * The group's official whatsapp account this provisioning reconnects, if
+   * any: only its number is refreshed, the WABA's other numbers are left
+   * alone.
+   */
+  social_account_uid: Uid | null,
 };

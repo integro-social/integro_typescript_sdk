@@ -16,7 +16,17 @@ export type MessageSearchHit = {
   id: number,
   conversation_uid: Uid,
   social_account_uid: Uid,
+  /**
+   * The conversation's alias, the contact's name or their username, in that
+   * order; `None` when the contact carries none of them.
+   */
   conversation_name: string | null,
+  /**
+   * The contact's platform id (wa_id, PSID, IGSID) and username, so a
+   * nameless conversation still reads as its phone or handle.
+   */
+  participant_id: string,
+  participant_username: string | null,
   participant_avatar_url: string | null,
   direction: MessageDirection,
   sent_at: Timestamp,
