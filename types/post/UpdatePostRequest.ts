@@ -12,4 +12,11 @@ export type UpdatePostRequest = {
    * stories carry no text.
    */
   message: string,
+} | {
+  "channel": "facebook_alt",
+  /**
+   * The new text: `message` on page posts, `description` on videos/reels;
+   * stories carry no text.
+   */
+  message: string,
 };

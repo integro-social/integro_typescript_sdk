@@ -7,6 +7,7 @@ import type { GroupQuery } from "../../types/group/GroupQuery";
 import type { GroupResponse } from "../../types/group/GroupResponse";
 import type { SetGroupEnabledRequest } from "../../types/group/SetGroupEnabledRequest";
 import type { SetGroupLogoForm } from "../../types/group/SetGroupLogoForm";
+import type { SetGroupLogoResponse } from "../../types/group/SetGroupLogoResponse";
 import type { Uid } from "../../types/primitives/Uid";
 import type { UpdateGroupRequest } from "../../types/group/UpdateGroupRequest";
 
@@ -44,14 +45,6 @@ export const group = {
     endpoint: "/group/:group_uid",
   }),
   /**
-   * Serve a group's logo image.
-   *
-   * Requires `ViewGroups` in the group itself.
-   */
-  getLogo: Tapi.get<{ path: { group_uid: Uid }; response: Blob }>()({
-    endpoint: "/group/:group_uid/logo",
-  }),
-  /**
    * List groups, optionally enriched with per-group counts.
    *
    * Requires `ViewGroups`; the list covers only groups where the caller holds it, and each count is filled only for those where it also holds that count's own permission — `ViewApiKeys` for `api_key_count`, `ViewMembers` for `member_count`, `ViewSocialAccounts` for `social_account_count` — `null` everywhere else.
@@ -76,11 +69,13 @@ export const group = {
     endpoint: "/group/:group_uid/enabled",
   }),
   /**
-   * Upload or replace a group's logo image.
+   * Upload or replace a group's logo image; the stored media's uid lands on
+   * `Group.logo_uid`, served by `media.serve` to anyone holding `ViewGroups`
+   * in the group.
    *
    * Requires `UpdateGroups` in the group itself, and is rejected when the caller trips the per-user file-upload throttle.
    */
-  setLogo: Tapi.post<{ path: { group_uid: Uid }; formData: SetGroupLogoForm; response: null }>()({
+  setLogo: Tapi.post<{ path: { group_uid: Uid }; formData: SetGroupLogoForm; response: SetGroupLogoResponse }>()({
     endpoint: "/group/:group_uid/logo",
   }),
   /**

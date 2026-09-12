@@ -58,14 +58,6 @@ export const userInvite = {
     endpoint: "/user-invite",
   }),
   /**
-   * Serve the invited group's logo image.
-   *
-   * Authenticated, and only for the account the invitation was addressed to; the invitation stands in for the `ViewGroups` the recipient does not hold yet. A POST because the token is a credential, not because it writes.
-   */
-  logo: Tapi.post<{ body: UserInviteTokenRequest; response: Blob }>()({
-    endpoint: "/user-invite/logo",
-  }),
-  /**
    * Resolve an invitation link to the address it was sent to and whether
    * accepting it means creating an account.
    *

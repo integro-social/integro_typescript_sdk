@@ -10,9 +10,10 @@ export type UserInviteDetailResponse = {
   group_uid: Uid,
   group_name: Name,
   /**
-   * Whether `userInvite.logo` has an image to serve for this group.
+   * The group's logo at a signed address the invited account may fetch
+   * before it holds `ViewGroups`; valid for 30 minutes from this answer.
    */
-  has_logo: boolean,
+  logo_url: string | null,
   role: MembershipRole,
   invited_by_name: Name,
   expires_at: Timestamp,

@@ -2,8 +2,7 @@
 import type { InstagramMedia } from "./InstagramMedia";
 
 /**
- * An Instagram post. All media URLs must be publicly reachable — Meta's
- * servers fetch them. Video-backed media (reels, video stories, video
+ * An Instagram post. Video-backed media (reels, video stories, video
  * carousel items) process asynchronously on Meta's side.
  */
 export type InstagramPostContent = {

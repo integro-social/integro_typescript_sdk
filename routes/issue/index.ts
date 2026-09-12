@@ -17,7 +17,7 @@ export const issue = {
     endpoint: "/issue/count",
   }),
   /**
-   * Report a new issue (severity, description, details, and 1–10 screenshots) recorded under the caller's own user.
+   * Report a new issue (severity, description, details, and 1–10 screenshots) recorded under the caller's own user. The screenshots become hosted media named by `Issue.screenshots`, served by `media.serve` to platform staff holding `ViewIssues`.
    *
    * Any authenticated user. Rejected when the platform is at its open-issue cap, and — when screenshots are attached — when the caller trips the per-user file-upload throttle.
    */
@@ -39,14 +39,6 @@ export const issue = {
    */
   list: Tapi.get<{ response: Array<Issue> }>()({
     endpoint: "/issue",
-  }),
-  /**
-   * Serve a screenshot file attached to an issue.
-   *
-   * Requires `ViewIssues`, which only platform staff hold.
-   */
-  screenshot: Tapi.get<{ path: { issue_uid: Uid; screenshot_uid: Uid }; response: Blob }>()({
-    endpoint: "/issue/:issue_uid/screenshot/:screenshot_uid",
   }),
   /**
    * Update the status of an issue.

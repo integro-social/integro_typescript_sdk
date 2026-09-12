@@ -4,7 +4,6 @@ import type { FacebookMedia } from "./FacebookMedia";
 /**
  * A Facebook Page publication. `message` is the post text / media caption /
  * video description; `place_id` tags a location (feed and photo posts only).
- * All media URLs must be publicly reachable — Meta fetches them.
  */
 export type FacebookPostContent = {
   media: FacebookMedia,

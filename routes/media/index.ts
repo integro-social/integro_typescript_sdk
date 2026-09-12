@@ -3,6 +3,7 @@
 import Tapi from "../../runtime";
 import type { CreateUploadUrlRequest } from "../../types/media/CreateUploadUrlRequest";
 import type { CreateUploadUrlResponse } from "../../types/media/CreateUploadUrlResponse";
+import type { MediaGrantQuery } from "../../types/media/MediaGrantQuery";
 import type { UploadMediaForm } from "../../types/media/UploadMediaForm";
 import type { UploadMediaResponse } from "../../types/media/UploadMediaResponse";
 
@@ -13,7 +14,7 @@ export const media = {
    * form. The URL carries its own unguessable token, needs no credential, and
    * expires 15 minutes after this call; the first upload consumes it whether
    * or not the bytes are accepted, and the upload answers with the stored
-   * media and its public URL.
+   * media's uid.
    *
    * Requires `UploadMedia` in the target group; group-scoped API keys upload into their own group, others must name it. A human caller is additionally rejected when they trip the per-user file-upload throttle.
    */
@@ -22,22 +23,21 @@ export const media = {
   }),
   /**
    * Serve a hub-hosted media file. The uid may carry a cosmetic extension
-   * suffix (`{uid}.m4a`) — generated URLs include one as a format signal for
-   * external fetchers; it is stripped before lookup. A uid nothing names any
-   * more answers 404: the file went with its last referrer.
+   * suffix (`{uid}.m4a`), stripped before lookup. A uid nothing names any more
+   * answers 404: the file went with its last referrer.
    *
-   * Public — no authentication required; the unguessable uid is the capability.
+   * A session cookie, a bearer session token or an API key: served when the caller may see something that names the file — `ViewMessages` in the group for a message attachment or a conversation avatar, `ViewPosts` for a post, `ViewCampaigns` for a template, `ViewSocialAccounts` for an account avatar, `ViewGroups` for a group logo, platform `ViewIssues` for a screenshot — or when the caller uploaded it from a session within the last 24 hours and nothing names it yet. A signed grant (`exp`, `sig`) minted by the hub for a platform fetch serves without a credential until it expires. Anything else answers 404, indistinguishable from an unknown uid.
    */
-  serve: Tapi.get<{ path: { media_uid: string }; response: Blob }>()({
+  serve: Tapi.get<{ path: { media_uid: string }; query: MediaGrantQuery; response: Blob }>()({
     endpoint: "/media/:media_uid",
   }),
   /**
-   * Upload a media file to the hub; the returned public URL can be used in any
-   * message or post payload (Meta fetches it from the hub). Bytes the hub
-   * already holds come back as the existing file — same uid, same URL. The
-   * URL stays valid while a message, post or campaign template names it, and
-   * for 24 hours after this upload otherwise; a third party handed the URL
-   * copies what it needs while it resolves.
+   * Upload a media file to the hub; the returned uid names it in any message,
+   * post or template payload as `{"kind":"hosted","uid":…}`. Bytes the hub
+   * already holds come back as the existing file — same uid. The file stays
+   * while a message, post, template, avatar, logo or issue names it, and for 24
+   * hours after this upload otherwise; until it is attached, only the uploader
+   * can fetch it.
    *
    * Requires `UploadMedia` in the target group; group-scoped API keys upload into their own group, others must name it. A human caller is additionally rejected when they trip the per-user file-upload throttle.
    */
@@ -50,8 +50,8 @@ export const media = {
    * themselves override, and the ticket supplies the filename. The ticket is
    * consumed by this call whether or not the bytes are accepted — an empty
    * body, or one past 100 MiB, is refused and the client asks for a new
-   * ticket. The reply is the stored media, whose public URL can be used in any
-   * message or post payload.
+   * ticket. The reply is the stored media, whose uid names it in any message
+   * or post payload.
    *
    * Public — no authentication; the unguessable ticket token is the capability, issued by `media.createUploadUrl` and valid for 15 minutes.
    */

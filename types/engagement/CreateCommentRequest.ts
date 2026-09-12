@@ -2,12 +2,16 @@
 import type { CommentCreate } from "./CommentCreate";
 
 /**
- * Channel-tagged top-level comment: only facebook and instagram carry a
- * comment surface, so no other channel's shape deserializes. The `channel`
- * must match the account's.
+ * Channel-tagged top-level comment: only facebook and instagram, official
+ * or through the alternate gateway, carry a comment surface, so no other
+ * channel's shape deserializes. The `channel` must match the account's.
  */
 export type CreateCommentRequest = {
   "channel": "facebook"
 } & CommentCreate | {
   "channel": "instagram"
+} & CommentCreate | {
+  "channel": "facebook_alt"
+} & CommentCreate | {
+  "channel": "instagram_alt"
 } & CommentCreate;

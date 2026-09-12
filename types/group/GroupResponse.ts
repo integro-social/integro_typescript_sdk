@@ -25,7 +25,10 @@ export type GroupResponse = {
   uid: Uid,
   name: Name,
   enabled: boolean,
-  logo_content_type: string | null,
+  /**
+   * The group's logo, a hosted media; `null` when the group has none.
+   */
+  logo_uid: Uid | null,
   created_at: Timestamp,
   updated_at: Timestamp,
 };

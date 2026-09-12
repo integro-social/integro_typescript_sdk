@@ -3,12 +3,11 @@ import type { MediaKind } from "../domain/MediaKind";
 import type { Uid } from "../primitives/Uid";
 
 export type UploadMediaResponse = {
-  uid: Uid,
   /**
-   * Public URL Meta (and CRMs) can fetch — usable anywhere the send/publish
-   * APIs take a media URL.
+   * Names the file everywhere a media is attached: `{"kind":"hosted","uid":…}`
+   * in a message, a post or a template. Served at `media.serve`.
    */
-  url: string,
+  uid: Uid,
   kind: MediaKind,
   content_type: string,
   size: number,

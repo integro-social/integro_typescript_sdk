@@ -14,8 +14,9 @@ export const comment = {
   /**
    * Comment on a post/media as the account named in the path (top-level
    * comment). The payload is channel-tagged and must match the account's
-   * channel — only facebook and instagram carry a comment surface, so no
-   * other channel's shape deserializes.
+   * channel — only facebook and instagram, official or through the alternate
+   * gateway, carry a comment surface, so no other channel's shape
+   * deserializes.
    *
    * Requires `ReplyComments` in the account's group.
    */
@@ -40,8 +41,8 @@ export const comment = {
     endpoint: "/social-account/:social_account_uid/comment/:comment_uid",
   }),
   /**
-   * Like a comment as the page (Facebook only — Instagram's API has no
-   * comment likes).
+   * Like a comment as the page (Facebook only, official or through the
+   * alternate gateway — Instagram's API has no comment likes).
    *
    * Requires `ReplyComments` in the account's group.
    */

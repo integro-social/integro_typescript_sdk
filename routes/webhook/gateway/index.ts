@@ -5,9 +5,10 @@ import Tapi from "../../../runtime";
 export const gateway = {
   /**
    * Alternate-gateway webhook receiver for the alt channels: verifies the
-   * payload signature, stores normalized messages (deduplicating
-   * redeliveries), applies receipts, reactions, edits and revokes, flags
-   * accounts whose grant died, and enqueues CRM fan-out events.
+   * payload signature and hands every message, receipt, reaction, edit,
+   * revoke, comment, post outcome and account event to the feature that owns
+   * it, which stores it (deduplicating redeliveries) and enqueues CRM fan-out
+   * events.
    *
    * Public — no authentication required; authorization comes from the gateway's signature header, an HMAC over the raw body.
    */

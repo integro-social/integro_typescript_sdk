@@ -22,6 +22,10 @@ export type Post = {
    * Carousel child containers (comma-separated) still processing.
    */
   container_children: string | null,
+  /**
+   * The alternate gateway's id for the post, once it accepted it.
+   */
+  gateway_post_id: string | null,
   external_id: string | null,
   permalink: string | null,
   created_by: Uid | null,
