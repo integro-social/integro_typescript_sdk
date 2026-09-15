@@ -3,7 +3,7 @@ import type { ValidationSpec } from "../validate";
 
 export type Uid = string & { readonly __brand: "Uid" };
 
-const SPEC: ValidationSpec = { preprocess: "none", constraints: [] };
+const SPEC: ValidationSpec = { preprocess: [], constraints: [] };
 
 export const Uid = {
   /** The only producer of a `Uid`. Nothing to validate — the brand names the domain, it does not prove membership. */

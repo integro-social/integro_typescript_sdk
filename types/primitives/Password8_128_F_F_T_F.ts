@@ -3,7 +3,7 @@ import { check, checkAll, type Violation, type ValidationSpec } from "../validat
 
 export type Password8_128_F_F_T_F = string & { readonly __brand: "Password8_128_F_F_T_F" };
 
-const SPEC: ValidationSpec = { preprocess: "none", constraints: [{ kind: "minLen", min: 8 }, { kind: "maxLen", max: 128 }, { kind: "requireDigit" }] };
+const SPEC: ValidationSpec = { preprocess: [], constraints: [{ kind: "minLen", min: 8 }, { kind: "maxLen", max: 128 }, { kind: "requireDigit" }] };
 
 export const Password8_128_F_F_T_F = {
   /** The only producer of a `Password8_128_F_F_T_F`: validates input, returns the branded value or the first violation. */

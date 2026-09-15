@@ -13,7 +13,7 @@ export type RosterFilter = {
   channels: Array<Channel> | null,
   /**
    * Event kinds and/or family aliases (`message`, `presence`, `comment`,
-   * `mention`, `post`, `conversation`, `account`, `review`).
+   * `post`, `conversation`, `account`, `review`).
    */
   events: Array<string> | null,
 };

@@ -10,7 +10,7 @@ export type SetWebhookRequest = {
   url: string,
   /**
    * Event kinds (and/or family aliases: `message`, `presence`, `comment`,
-   * `mention`, `post`, `conversation`, `account`, `review`) delivered to this
+   * `post`, `conversation`, `account`, `review`) delivered to this
    * subscription; omit for everything. Presence kinds are accepted but never
    * delivered here — they are live-stream-only by construction, so a webhook
    * filtered to presence alone receives nothing.

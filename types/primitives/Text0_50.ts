@@ -10,7 +10,7 @@ import { check, checkAll, type Violation, type ValidationSpec } from "../validat
  */
 export type Text0_50 = string & { readonly __brand: "Text0_50" };
 
-const SPEC: ValidationSpec = { preprocess: "trim", constraints: [{ kind: "minLen", min: 0 }, { kind: "maxLen", max: 50 }] };
+const SPEC: ValidationSpec = { preprocess: ["trim"], constraints: [{ kind: "minLen", min: 0 }, { kind: "maxLen", max: 50 }] };
 
 export const Text0_50 = {
   /** The only producer of a `Text0_50`: validates input, returns the branded value or the first violation. */

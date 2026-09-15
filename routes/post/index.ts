@@ -2,12 +2,8 @@
 
 import Tapi from "../../runtime";
 import type { CreatePostRequest } from "../../types/post/CreatePostRequest";
-import type { Insight } from "../../types/meta/Insight";
-import type { InsightHistoryQuery } from "../../types/insight/InsightHistoryQuery";
-import type { InsightSeries } from "../../types/insight/InsightSeries";
 import type { ListPostsQuery } from "../../types/post/ListPostsQuery";
 import type { Post } from "../../types/domain/Post";
-import type { PostInsightsQuery } from "../../types/post/PostInsightsQuery";
 import type { SetPostCommentsRequest } from "../../types/post/SetPostCommentsRequest";
 import type { SetPostHiddenRequest } from "../../types/post/SetPostHiddenRequest";
 import type { SetPostPinnedRequest } from "../../types/post/SetPostPinnedRequest";
@@ -44,26 +40,6 @@ export const post = {
    */
   get: Tapi.get<{ path: { post_uid: Uid }; response: Post }>()({
     endpoint: "/post/:post_uid",
-  }),
-  /**
-   * Fetch platform metrics for a published post (impressions, reach, clicks,
-   * reactions, views, … — overridable via `metrics`).
-   *
-   * Requires `ViewInsights` in the post's group.
-   */
-  insights: Tapi.get<{ path: { post_uid: Uid }; query: PostInsightsQuery; response: Array<Insight> }>()({
-    endpoint: "/post/:post_uid/insight",
-  }),
-  /**
-   * Day-by-day history of a post's collected metrics, grouped per metric —
-   * the charting companion to the live insights passthrough. Posts are
-   * collected for 30 days after publishing (stories for 48h, after which their
-   * insights stop resolving), so the series flatlines after that window.
-   *
-   * Requires `ViewInsights` in the post's group.
-   */
-  insightsHistory: Tapi.get<{ path: { post_uid: Uid }; query: InsightHistoryQuery; response: Array<InsightSeries> }>()({
-    endpoint: "/post/:post_uid/insight/history",
   }),
   /**
    * List posts, newest first, optionally filtered by group or social account.

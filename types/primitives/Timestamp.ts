@@ -3,7 +3,7 @@ import type { ValidationSpec } from "../validate";
 
 export type Timestamp = number & { readonly __brand: "Timestamp" };
 
-const SPEC: ValidationSpec = { preprocess: "none", constraints: [] };
+const SPEC: ValidationSpec = { preprocess: [], constraints: [] };
 
 export const Timestamp = {
   /** The only producer of a `Timestamp`. Nothing to validate — the brand names the domain, it does not prove membership. */

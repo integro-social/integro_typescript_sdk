@@ -3,7 +3,7 @@ import { check, checkAll, type Violation, type ValidationSpec } from "../validat
 
 export type Phone = string & { readonly __brand: "Phone" };
 
-const SPEC: ValidationSpec = { preprocess: "trim", constraints: [{ kind: "minDigits", min: 7 }, { kind: "maxDigits", max: 15 }, { kind: "regex", source: "^\\+[1-9]\\d{6,14}$", hint: "esperado E.164: +<código do país><número>" }] };
+const SPEC: ValidationSpec = { preprocess: ["trim"], constraints: [{ kind: "minDigits", min: 7 }, { kind: "maxDigits", max: 15 }, { kind: "regex", source: "^\\+[1-9]\\d{6,14}$", hint: "esperado E.164: +<código do país><número>" }] };
 
 export const Phone = {
   /** The only producer of a `Phone`: validates input, returns the branded value or the first violation. */

@@ -3,7 +3,7 @@ import { check, checkAll, type Violation, type ValidationSpec } from "../validat
 
 export type Pin6 = string & { readonly __brand: "Pin6" };
 
-const SPEC: ValidationSpec = { preprocess: "trim", constraints: [{ kind: "exactLen", len: 6 }, { kind: "asciiDigitsOnly" }] };
+const SPEC: ValidationSpec = { preprocess: ["trim"], constraints: [{ kind: "exactLen", len: 6 }, { kind: "asciiDigitsOnly" }] };
 
 export const Pin6 = {
   /** The only producer of a `Pin6`: validates input, returns the branded value or the first violation. */

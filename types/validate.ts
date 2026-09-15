@@ -4,7 +4,7 @@
 // (crates/tapir/src/validation.rs). A validated newtype bakes in its spec and
 // calls check()/checkAll() here.
 
-export type Preprocess = "none" | "trim" | "trim_lowercase";
+export type Preprocess = "trim" | "lowercase" | "uppercase";
 
 export type Constraint =
   | { kind: "minLen"; min: number }
@@ -48,7 +48,7 @@ export type Violation =
   | { kind: "missingSymbol" };
 
 export interface ValidationSpec {
-  preprocess: Preprocess;
+  preprocess: Preprocess[];
   constraints: Constraint[];
 }
 
@@ -121,10 +121,30 @@ function regexFor(source: string): RegExp {
   return re;
 }
 
+// Case steps map ASCII only: Go's strings.ToLower/ToUpper apply simple case
+// mapping while toLowerCase/toUpperCase apply full mapping, so a wider mapping
+// would normalize the same input differently in each client.
+function asciiLower(s: string): string {
+  return s.replace(/[A-Z]/g, (c) => String.fromCharCode(c.charCodeAt(0) + 32));
+}
+
+function asciiUpper(s: string): string {
+  return s.replace(/[a-z]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 32));
+}
+
+function normalizeOne(step: Preprocess, value: string): string {
+  switch (step) {
+    case "trim":
+      return value.trim();
+    case "lowercase":
+      return asciiLower(value);
+    case "uppercase":
+      return asciiUpper(value);
+  }
+}
+
 export function normalize(spec: ValidationSpec, value: string): string {
-  if (spec.preprocess === "trim") return value.trim();
-  if (spec.preprocess === "trim_lowercase") return value.trim().toLowerCase();
-  return value;
+  return spec.preprocess.reduce((current, step) => normalizeOne(step, current), value);
 }
 
 // One constraint against a value; null if satisfied. A constraint whose domain

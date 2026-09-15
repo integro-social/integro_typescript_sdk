@@ -3,7 +3,7 @@ import { check, checkAll, type Violation, type ValidationSpec } from "../validat
 
 export type Email = string & { readonly __brand: "Email" };
 
-const SPEC: ValidationSpec = { preprocess: "trim_lowercase", constraints: [{ kind: "minLen", min: 5 }, { kind: "maxLen", max: 254 }, { kind: "regex", source: "^[a-zA-Z0-9_%+-]+(\\.[a-zA-Z0-9_%+-]+)*@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*\\.[a-zA-Z]{2,}$", hint: null }] };
+const SPEC: ValidationSpec = { preprocess: ["trim", "lowercase"], constraints: [{ kind: "minLen", min: 5 }, { kind: "maxLen", max: 254 }, { kind: "regex", source: "^[a-zA-Z0-9_%+-]+(\\.[a-zA-Z0-9_%+-]+)*@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*\\.[a-zA-Z]{2,}$", hint: null }] };
 
 export const Email = {
   /** The only producer of a `Email`: validates input, returns the branded value or the first violation. */

@@ -18,10 +18,10 @@ import { gif } from "./gif";
 import { google } from "./google";
 import { group } from "./group";
 import { groupMember } from "./group_member";
+import { insight } from "./insight";
 import { issue } from "./issue";
 import { mailQueue } from "./mail_queue";
 import { media } from "./media";
-import { mention } from "./mention";
 import { message } from "./message";
 import { oauth } from "./oauth";
 import { post } from "./post";
@@ -29,6 +29,7 @@ import { pulse } from "./pulse";
 import { rateLimit } from "./rate_limit";
 import { search } from "./search";
 import { socialAccount } from "./social_account";
+import { socialPost } from "./social_post";
 import { test } from "./test";
 import { uptime } from "./uptime";
 import { user } from "./user";
@@ -61,10 +62,10 @@ export const routes = {
   google,
   group,
   groupMember,
+  insight,
   issue,
   mailQueue,
   media,
-  mention,
   message,
   oauth,
   post,
@@ -72,6 +73,7 @@ export const routes = {
   rateLimit,
   search,
   socialAccount,
+  socialPost,
   test,
   uptime,
   user,

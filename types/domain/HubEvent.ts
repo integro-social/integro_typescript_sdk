@@ -4,13 +4,13 @@ import type { CallPhase } from "./CallPhase";
 import type { Channel } from "./Channel";
 import type { Comment } from "./Comment";
 import type { Conversation } from "./Conversation";
-import type { Mention } from "./Mention";
 import type { Message } from "./Message";
 import type { Post } from "./Post";
 import type { PresenceState } from "./PresenceState";
 import type { ReactionAction } from "./ReactionAction";
 import type { Review } from "../google/Review";
 import type { SocialAccount } from "./SocialAccount";
+import type { SocialPost } from "./SocialPost";
 import type { Timestamp } from "../primitives/Timestamp";
 import type { Uid } from "../primitives/Uid";
 
@@ -126,11 +126,11 @@ export type HubEvent = {
   comment_uid: Uid,
   external_id: string,
 } | {
-  "event": "mention_received",
+  "event": "social_post_updated",
   group_uid: Uid,
   channel: Channel,
   social_account_uid: Uid,
-  mention: Mention,
+  post: SocialPost,
 } | {
   "event": "post_published",
   group_uid: Uid,

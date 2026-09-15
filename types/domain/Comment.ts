@@ -22,6 +22,15 @@ export type Comment = {
    * The account's own comments (our replies or comments made natively).
    */
   from_account: boolean,
+  /**
+   * The author's picture url on the platform, when it gave one; expires.
+   */
+  from_picture: string | null,
+  /**
+   * Whether the account liked it (Facebook only; the hub persists its own likes).
+   */
+  liked: boolean,
+  like_count: number,
   text: string,
   hidden: boolean,
   deleted: boolean,

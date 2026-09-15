@@ -9,7 +9,7 @@ import { check, checkAll, type Violation, type ValidationSpec } from "../validat
  */
 export type Number1024_107374182400 = number & { readonly __brand: "Number1024_107374182400" };
 
-const SPEC: ValidationSpec = { preprocess: "none", constraints: [{ kind: "min", value: 1024 }, { kind: "max", value: 107374182400 }] };
+const SPEC: ValidationSpec = { preprocess: [], constraints: [{ kind: "min", value: 1024 }, { kind: "max", value: 107374182400 }] };
 
 export const Number1024_107374182400 = {
   /** The only producer of a `Number1024_107374182400`: validates input, returns the branded value or the first violation. */
