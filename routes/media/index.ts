@@ -26,7 +26,7 @@ export const media = {
    * suffix (`{uid}.m4a`), stripped before lookup. A uid nothing names any more
    * answers 404: the file went with its last referrer.
    *
-   * A session cookie, a bearer session token or an API key: served when the caller may see something that names the file — `ViewMessages` in the group for a message attachment or a conversation avatar, `ViewPosts` for a post, `ViewCampaigns` for a template, `ViewSocialAccounts` for an account avatar, `ViewGroups` for a group logo, platform `ViewIssues` for a screenshot — or when the caller uploaded it from a session within the last 24 hours and nothing names it yet. A signed grant (`exp`, `sig`) minted by the hub for a platform fetch serves without a credential until it expires. Anything else answers 404, indistinguishable from an unknown uid.
+   * A session cookie, a bearer session token or an API key: served when the caller may see something that names the file — `ViewMessages` in the group for a message attachment or a conversation avatar, `ViewPosts` for a post, `ViewCampaigns` for a template, `ViewSocialAccounts` for an account avatar, `ViewGroups` for a group logo, platform `ViewIssues` for a screenshot, or the reporter's own user for a screenshot on an issue they reported — or when the caller uploaded it from a session within the last 24 hours and nothing names it yet. A signed grant (`exp`, `sig`) minted by the hub for a platform fetch serves without a credential until it expires. Anything else answers 404, indistinguishable from an unknown uid.
    */
   serve: Tapi.get<{ path: { media_uid: string }; query: MediaGrantQuery; response: Blob }>()({
     endpoint: "/media/:media_uid",

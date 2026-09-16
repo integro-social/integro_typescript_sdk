@@ -9,15 +9,15 @@ import type { Uid } from "../../types/primitives/Uid";
 
 export const issue = {
   /**
-   * Count issues.
+   * Count issues — every issue for a caller holding `ViewIssues`, and only the caller's own reports for everyone else.
    *
-   * Requires `ViewIssues`, which only platform staff hold.
+   * Any authenticated user; `ViewIssues`, which only platform staff hold, is what widens the count beyond the caller's own reports.
    */
   count: Tapi.get<{ response: number }>()({
     endpoint: "/issue/count",
   }),
   /**
-   * Report a new issue (severity, description, details, and 1–10 screenshots) recorded under the caller's own user. The screenshots become hosted media named by `Issue.screenshots`, served by `media.serve` to platform staff holding `ViewIssues`.
+   * Report a new issue (category, severity, description, an optional page url and up to 10 optional screenshots) recorded under the caller's own user. The screenshots become hosted media named by `Issue.screenshots`, served by `media.serve` to platform staff holding `ViewIssues` and to the reporter themselves.
    *
    * Any authenticated user. Rejected when the platform is at its open-issue cap, and — when screenshots are attached — when the caller trips the per-user file-upload throttle.
    */
@@ -27,15 +27,15 @@ export const issue = {
   /**
    * Fetch a single issue by uid.
    *
-   * Requires `ViewIssues`, which only platform staff hold.
+   * Any authenticated user for an issue they reported; `ViewIssues`, which only platform staff hold, reaches any issue. An issue the caller may not read reads as not found.
    */
   get: Tapi.get<{ path: { issue_uid: Uid }; response: Issue }>()({
     endpoint: "/issue/:issue_uid",
   }),
   /**
-   * List issues.
+   * List issues, newest first — every issue for a caller holding `ViewIssues`, and only the caller's own reports for everyone else.
    *
-   * Requires `ViewIssues`, which only platform staff hold.
+   * Any authenticated user; `ViewIssues`, which only platform staff hold, is what widens the result beyond the caller's own reports.
    */
   list: Tapi.get<{ response: Array<Issue> }>()({
     endpoint: "/issue",

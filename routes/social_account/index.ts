@@ -2,6 +2,7 @@
 
 import Tapi from "../../runtime";
 import type { AccountInsightHistory } from "../../types/insight/AccountInsightHistory";
+import type { AccountReferences } from "../../types/domain/AccountReferences";
 import type { ConnectCallbackQuery } from "../../types/social_account/ConnectCallbackQuery";
 import type { ConnectConfirmRequest } from "../../types/social_account/ConnectConfirmRequest";
 import type { ConnectNativeRequest } from "../../types/social_account/ConnectNativeRequest";
@@ -23,6 +24,7 @@ import type { SessionStatus } from "../../types/social_account/SessionStatus";
 import type { SetSocialAccountAliasRequest } from "../../types/social_account/SetSocialAccountAliasRequest";
 import type { SetSocialAccountConversationCapRequest } from "../../types/social_account/SetSocialAccountConversationCapRequest";
 import type { SetSocialAccountEnabledRequest } from "../../types/social_account/SetSocialAccountEnabledRequest";
+import type { SetSocialAccountGroupRequest } from "../../types/social_account/SetSocialAccountGroupRequest";
 import type { SetSocialAccountPresenceRequest } from "../../types/social_account/SetSocialAccountPresenceRequest";
 import type { SocialAccountResponse } from "../../types/social_account/SocialAccountResponse";
 import type { StartNativePairingResponse } from "../../types/social_account/StartNativePairingResponse";
@@ -128,6 +130,17 @@ export const socialAccount = {
    */
   get: Tapi.get<{ path: { social_account_uid: Uid }; response: SocialAccountResponse }>()({
     endpoint: "/social-account/:social_account_uid",
+  }),
+  /**
+   * List what still acts on this account from inside its group — GoHighLevel
+   * locations, campaigns that are not canceled and contact imports that are not
+   * finished — split into what can move with it and what other accounts of the
+   * group also use. Read it before moving the account to another group.
+   *
+   * Session users only. Requires `UpdateSocialAccounts` in the account's group.
+   */
+  groupReferences: Tapi.get<{ path: { social_account_uid: Uid }; response: AccountReferences }>()({
+    endpoint: "/social-account/:social_account_uid/group/reference",
   }),
   /**
    * Day-by-day history of the account's collected metrics, in its channel's
@@ -257,6 +270,22 @@ export const socialAccount = {
    */
   setEnabled: Tapi.put<{ path: { social_account_uid: Uid }; body: SetSocialAccountEnabledRequest; response: null }>()({
     endpoint: "/social-account/:social_account_uid/enabled",
+  }),
+  /**
+   * Move an account to another group, together with its conversations, messages,
+   * posts and calls, whose media becomes visible to the new group and stops being
+   * visible to the old one. Refused while a campaign or contact import also uses
+   * other accounts of the current group, and — unless `move_references` is set —
+   * while a GoHighLevel location, campaign or contact import acts only on this
+   * account; with it set, those move along. Canceled campaigns, and contact
+   * imports that are done or canceled, stay where they ran; a done campaign
+   * moves, since it can run again. Watchers of the old group see the account
+   * removed, and the move is recorded in the audit of both groups.
+   *
+   * Session users only. Requires `UpdateSocialAccounts` in both the account's current group and the target group.
+   */
+  setGroup: Tapi.put<{ path: { social_account_uid: Uid }; body: SetSocialAccountGroupRequest; response: null }>()({
+    endpoint: "/social-account/:social_account_uid/group",
   }),
   /**
    * Choose how this native whatsapp account announces itself online: following
