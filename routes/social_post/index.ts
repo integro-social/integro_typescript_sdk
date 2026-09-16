@@ -5,6 +5,8 @@ import type { InsightHistoryQuery } from "../../types/insight/InsightHistoryQuer
 import type { ListSocialPostsQuery } from "../../types/post/ListSocialPostsQuery";
 import type { SocialPost } from "../../types/domain/SocialPost";
 import type { SocialPostInsightHistory } from "../../types/insight/SocialPostInsightHistory";
+import type { SocialPostSummary } from "../../types/domain/SocialPostSummary";
+import type { SocialPostSummaryQuery } from "../../types/post/SocialPostSummaryQuery";
 import type { Uid } from "../../types/primitives/Uid";
 
 export const socialPost = {
@@ -39,16 +41,13 @@ export const socialPost = {
     endpoint: "/social-post",
   }),
   /**
-   * Start a re-read of the account's posts from its platform in the background
-   * and answer at once: the 25 most recent plus every post with comments, their
-   * thumbnails and, for posts seen for the first time, their whole comment
-   * thread. Every post the sync touches emits `social_post_updated`. Allowed
-   * once per account every five minutes; the hub runs it by itself once when an
-   * account connects. Only facebook_alt and instagram_alt accounts can be synced.
+   * Totals over the platform posts in scope: how many there are, their
+   * comments and the ones still unanswered. The list's pages never add up to
+   * these; this does.
    *
-   * Requires `ViewPosts` in the account's group; throttled to one call per account every five minutes.
+   * Requires `ViewPosts`; counts only posts of groups where the caller holds it, narrowed by `group_uid` / `social_account_uid` when given.
    */
-  sync: Tapi.post<{ path: { social_account_uid: Uid }; response: null }>()({
-    endpoint: "/social-account/:social_account_uid/social-post/sync",
+  summary: Tapi.get<{ query: SocialPostSummaryQuery; response: SocialPostSummary }>()({
+    endpoint: "/social-post/summary",
   }),
 };

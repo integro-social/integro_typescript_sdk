@@ -28,14 +28,28 @@ export type SocialPost = {
   permalink: string | null,
   published_at: Timestamp | null,
   /**
-   * The platform's own count, refreshed by sync and bumped by the webhook.
+   * The platform's own count or the comments the hub holds, whichever is
+   * larger: the platform's count lags behind a comment the webhook delivered.
    */
   comment_count: number,
   like_count: number,
   detail: SocialPostDetail,
+  /**
+   * When the gateway last described the post. `None` marks a post the hub
+   * knows only through its comments: the listings never reached it.
+   */
   synced_at: Timestamp | null,
+  /**
+   * When the whole comment thread of such a post was read by post id.
+   */
+  thread_imported_at: Timestamp | null,
   insight_refreshed_at: Timestamp | null,
   insight_next_at: Timestamp | null,
+  /**
+   * When the gateway found the post gone from the platform; a deleted post
+   * leaves the list and its metrics stop being read.
+   */
+  deleted_at: Timestamp | null,
   created_at: Timestamp,
   updated_at: Timestamp,
   unanswered_count: number,

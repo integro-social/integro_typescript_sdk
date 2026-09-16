@@ -61,7 +61,10 @@ export const comment = {
   /**
    * Answer a comment privately with a DM (allowed once per comment; the
    * message lands in the conversation via the echo webhook). The account's
-   * own comments are refused.
+   * own comments are refused. The response names the conversation the reply
+   * opened when the hub can tell: the recipient the official channels return,
+   * or the commenter's existing conversation by username on the gateway
+   * channels.
    *
    * Requires `SendMessages` in the account's group (the reply is a DM, not a comment).
    */
