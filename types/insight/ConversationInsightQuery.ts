@@ -6,9 +6,9 @@ import type { Uid } from "../primitives/Uid";
 
 export type ConversationInsightQuery = {
   /**
-   * Narrow to one group; omit for everything the caller may see.
+   * Narrow to these groups, each one the caller may see; omit for everything the caller may see.
    */
-  group_uid: Uid | null,
+  group_uids: Array<Uid> | null,
   /**
    * Narrow to these accounts; each must be in scope.
    */

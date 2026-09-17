@@ -12,7 +12,7 @@ import type { UpdateApiKeyRequest } from "../../types/api_key/UpdateApiKeyReques
 
 export const apiKey = {
   /**
-   * Count API keys, optionally filtered by group.
+   * Count API keys, optionally filtered by groups.
    *
    * Requires `ViewApiKeys`; the count covers only keys of groups where the caller holds it, and platform keys only for platform staff.
    */
@@ -50,7 +50,7 @@ export const apiKey = {
     endpoint: "/api-key/:api_key_uid",
   }),
   /**
-   * List API keys, optionally filtered by group.
+   * List API keys, optionally filtered by groups.
    *
    * Requires `ViewApiKeys`; the list covers only keys of groups where the caller holds it, and platform keys only for platform staff.
    */

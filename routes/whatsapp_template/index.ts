@@ -18,8 +18,7 @@ export const whatsappTemplate = {
     endpoint: "/whatsapp/template",
   }),
   /**
-   * Delete a whatsapp message template by name (all languages, or one specific
-   * `hsm_id`).
+   * Delete a whatsapp message template by name, every language of it.
    *
    * Requires `ManageTemplates` in the account's group.
    */

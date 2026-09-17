@@ -18,7 +18,7 @@ export const userSession = {
     endpoint: "/user-session",
   }),
   /**
-   * Authenticate with email and password, returning a session token or an MFA/enrollment challenge.
+   * Authenticate with email and password, returning an MFA challenge, or an enrollment challenge when the user has no confirmed factor.
    *
    * Public — no authentication required; the caller proves identity with the supplied email and password. Rejected before the password is checked when the caller trips either the per-IP or the per-email login throttle.
    */

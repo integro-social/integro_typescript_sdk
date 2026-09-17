@@ -30,7 +30,6 @@ import { rateLimit } from "./rate_limit";
 import { search } from "./search";
 import { socialAccount } from "./social_account";
 import { socialPost } from "./social_post";
-import { test } from "./test";
 import { uptime } from "./uptime";
 import { user } from "./user";
 import { userAccountNotification } from "./user_account_notification";
@@ -74,7 +73,6 @@ export const routes = {
   search,
   socialAccount,
   socialPost,
-  test,
   uptime,
   user,
   userAccountNotification,

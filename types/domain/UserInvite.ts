@@ -17,7 +17,6 @@ export type UserInvite = {
   group_uid: Uid | null,
   role: MembershipRole | null,
   expires_at: Timestamp,
-  accepted_at: Timestamp | null,
   email_status: UserInviteEmailStatus,
   created_at: Timestamp,
 };

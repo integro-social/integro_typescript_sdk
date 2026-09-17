@@ -4,8 +4,14 @@ import type { Text0_8000 } from "../primitives/Text0_8000";
 import type { Uid } from "../primitives/Uid";
 
 export type ListConversationsQuery = {
-  group_uid: Uid | null,
-  social_account_uid: Uid | null,
+  /**
+   * Narrow to these groups, each one the caller may see; omit for everything the caller may see.
+   */
+  group_uids: Array<Uid> | null,
+  /**
+   * Narrow to these accounts, each one in scope; naming any account overrides the groups.
+   */
+  social_account_uids: Array<Uid> | null,
   /**
    * Narrow to conversations whose participant matches — alias, platform
    * name, username or phone, as a substring. A term under 2 characters

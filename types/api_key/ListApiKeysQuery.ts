@@ -2,5 +2,8 @@
 import type { Uid } from "../primitives/Uid";
 
 export type ListApiKeysQuery = {
-  group_uid: Uid | null,
+  /**
+   * Narrow to these groups, each one the caller may see; omit for everything the caller may see.
+   */
+  group_uids: Array<Uid> | null,
 };

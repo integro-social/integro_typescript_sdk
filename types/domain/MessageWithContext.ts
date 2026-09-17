@@ -48,8 +48,7 @@ export type MessageWithContext = {
   /**
    * Who produced this outbound row: a machine client through the api, a hub
    * operator, or a platform echo (paired phone / whatsapp web / meta
-   * business inbox, incl. history imports). `None` on inbound rows and rows
-   * stored before the field existed.
+   * business inbox, incl. history imports). `None` on inbound rows.
    */
   sent_by: MessageSentBy | null,
   /**

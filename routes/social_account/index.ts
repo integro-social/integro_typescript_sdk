@@ -91,7 +91,7 @@ export const socialAccount = {
     endpoint: "/social-account/whatsapp",
   }),
   /**
-   * Count connected social accounts, optionally filtered by group.
+   * Count connected social accounts, optionally filtered by groups.
    *
    * Requires `ViewSocialAccounts`; the count covers only accounts of groups where the caller holds it.
    */
@@ -154,7 +154,7 @@ export const socialAccount = {
     endpoint: "/social-account/:social_account_uid/insight/history",
   }),
   /**
-   * List connected social accounts, optionally filtered by group, each with the
+   * List connected social accounts, optionally filtered by groups, each with the
    * live session status of its whatsapp session when applicable.
    *
    * Requires `ViewSocialAccounts`; the list covers only accounts of groups where the caller holds it.

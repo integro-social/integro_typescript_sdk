@@ -8,7 +8,6 @@ export type ServerMsg = {
   "type": "welcome",
   epoch: string,
   seq: number,
-  resumed: boolean,
 } | {
   "type": "event",
   seq: number,

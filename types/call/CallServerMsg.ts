@@ -12,7 +12,6 @@ export type CallServerMsg = {
   "type": "video_state",
   active: boolean,
   upgrade: boolean,
-  orientation: number,
 } | {
   "type": "orientation",
   orientation: number,

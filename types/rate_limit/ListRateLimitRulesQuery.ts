@@ -3,10 +3,10 @@ import type { Uid } from "../primitives/Uid";
 
 export type ListRateLimitRulesQuery = {
   /**
-   * Narrow to the rules that reach one group: the shared buckets, the
-   * global defaults and that group's override and own tiers. Without it, platform staff get every
-   * rule and everyone else the rules reaching the groups where they may view
-   * limits.
+   * Narrow to the rules that reach these groups, each one the caller may see:
+   * the shared buckets, the global defaults and those groups' override and
+   * own tiers. Without it, platform staff get every rule and everyone else the
+   * rules reaching the groups where they may view limits.
    */
-  group_uid: Uid | null,
+  group_uids: Array<Uid> | null,
 };

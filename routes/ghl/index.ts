@@ -54,7 +54,7 @@ export const ghl = {
     endpoint: "/ghl/:ghl_location_uid/link",
   }),
   /**
-   * List the installed GoHighLevel locations, optionally filtered by group, each
+   * List the installed GoHighLevel locations, optionally filtered by groups, each
    * carrying the whatsapp account it bridges (`target_account_uid`, null while
    * unlinked) and whether its grant needs reconnecting.
    *

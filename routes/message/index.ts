@@ -95,9 +95,10 @@ export const message = {
   }),
   /**
    * Poll the unified message feed across channels: messages with `id` greater
-   * than `since_id`, oldest first, optionally filtered by group or account.
+   * than `since_id`, oldest first, optionally filtered by groups or accounts.
    * `uids` instead returns exactly those messages (≤200, order unspecified),
-   * for resolving rows the caller already holds by uid.
+   * for resolving rows the caller already holds by uid; not combinable with
+   * `since_id`.
    *
    * Requires `ViewMessages`; the feed covers only messages of groups where the caller holds it.
    */

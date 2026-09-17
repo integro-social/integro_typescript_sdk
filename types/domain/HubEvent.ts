@@ -17,9 +17,9 @@ import type { Uid } from "../primitives/Uid";
 /**
  * Every event the hub emits, in the exact shape delivered to its outbound
  * transports: the group webhook (as the POST body) and the WebSocket stream
- * (as one frame). The `event` tag names the kind. Transient kinds
- * (`is_transient`) reach the socket only — they never enter the replay ring
- * the webhook batcher reads.
+ * (as one frame). The `event` tag names the kind ([`EventKind`]). The
+ * live-only kinds (the presence kinds) reach the socket only — they never
+ * enter the replay ring the webhook batcher reads.
  */
 export type HubEvent = {
   "event": "message_received",
@@ -59,7 +59,6 @@ export type HubEvent = {
   message_uid: Uid,
   reactor_id: string,
   action: ReactionAction,
-  reaction: string | null,
   emoji: string | null,
 } | {
   "event": "message_delivered",
@@ -124,7 +123,6 @@ export type HubEvent = {
   channel: Channel,
   social_account_uid: Uid,
   comment_uid: Uid,
-  external_id: string,
 } | {
   "event": "social_post_updated",
   group_uid: Uid,

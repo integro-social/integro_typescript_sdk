@@ -7,11 +7,8 @@
 export type MessageReaction = {
   reactor_id: string,
   /**
-   * Meta's reaction name (e.g. `love`).
-   */
-  reaction: string | null,
-  /**
-   * The unicode emoji, when Meta provides it.
+   * The unicode emoji; a Meta reaction name (e.g. `love`) is stored as its
+   * glyph. `None` when the platform sent neither a glyph nor a known name.
    */
   emoji: string | null,
 };

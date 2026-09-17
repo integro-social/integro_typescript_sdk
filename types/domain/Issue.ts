@@ -8,7 +8,6 @@ import type { Timestamp } from "../primitives/Timestamp";
 import type { Uid } from "../primitives/Uid";
 
 export type Issue = {
-  id: number,
   uid: Uid,
   category: IssueCategory,
   severity: IssueSeverity,

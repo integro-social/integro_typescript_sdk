@@ -6,5 +6,4 @@ export type PulseDiskInventoryRow = {
   mount_point: string,
   fs_type: string,
   total_bytes: number,
-  removed: boolean,
 };

@@ -24,7 +24,6 @@ export type SocialPost = {
    * The hosted thumbnail (`media.serve`).
    */
   picture_uid: Uid | null,
-  picture_source: string | null,
   permalink: string | null,
   published_at: Timestamp | null,
   /**

@@ -20,7 +20,6 @@ export type GhlLocation = {
    */
   company_id: string,
   name: string,
-  scope: string | null,
   /**
    * The grant went stale (`invalid_grant` on refresh) and only a reconnect
    * can revive it.

@@ -42,7 +42,7 @@ export const post = {
     endpoint: "/post/:post_uid",
   }),
   /**
-   * List posts, newest first, optionally filtered by group or social account.
+   * List posts, newest first, optionally filtered by groups or social accounts.
    *
    * Requires `ViewPosts`; the list covers only posts of groups where the caller holds it.
    */

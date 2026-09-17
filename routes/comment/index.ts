@@ -51,7 +51,7 @@ export const comment = {
   }),
   /**
    * Poll the unified comment feed: comments with `id` greater than `since_id`,
-   * oldest first, optionally filtered by group, account, or post.
+   * oldest first, optionally filtered by groups, accounts, or post.
    *
    * Requires `ViewComments`; the feed covers only comments of groups where the caller holds it.
    */

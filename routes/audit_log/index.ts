@@ -7,14 +7,6 @@ import type { AuditLogStats } from "../../types/domain/AuditLogStats";
 
 export const auditLog = {
   /**
-   * Count audit log entries matching the given filters and time window.
-   *
-   * Requires `ViewAuditLogs`; platform staff count every entry, any other holder only entries stamped with a group where they hold it — an entry carrying no group is staff-only.
-   */
-  count: Tapi.get<{ query: AuditLogQuery; response: number }>()({
-    endpoint: "/audit-log/count",
-  }),
-  /**
    * List audit log entries matching the given filters and time window.
    *
    * Requires `ViewAuditLogs`; platform staff read every entry, any other holder only entries stamped with a group where they hold it — an entry carrying no group is staff-only.

@@ -76,7 +76,7 @@ export const campaign = {
     endpoint: "/campaign/:campaign_uid",
   }),
   /**
-   * List campaigns, newest first, optionally one group's.
+   * List campaigns, newest first, optionally only some groups'.
    *
    * Requires `ViewCampaigns`; the list covers only campaigns of groups where the caller holds it.
    */

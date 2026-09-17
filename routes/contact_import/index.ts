@@ -48,7 +48,7 @@ export const contactImport = {
     endpoint: "/contact-import/:import_uid",
   }),
   /**
-   * List imports, newest first, optionally one group's.
+   * List imports, newest first, optionally only some groups'.
    *
    * Requires `ImportContacts`; the list covers only imports of groups where the caller holds it.
    */

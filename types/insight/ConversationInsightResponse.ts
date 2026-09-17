@@ -6,10 +6,6 @@ import type { HourOfWeek } from "./HourOfWeek";
 
 export type ConversationInsightResponse = {
   /**
-   * Accounts the query covered after every filter.
-   */
-  accounts: number,
-  /**
    * One per period, oldest first, gaps included as zeros.
    */
   buckets: Array<ConversationBucket>,

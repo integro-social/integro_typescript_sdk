@@ -3,9 +3,6 @@ import type { Uid } from "../primitives/Uid";
 import type { UserMfaKind } from "../domain/UserMfaKind";
 
 export type UserSessionLoginResponse = {
-  "outcome": "user_session",
-  token: Uid,
-} | {
   "outcome": "user_mfa_required",
   mfa_token: Uid,
   factors: Array<UserMfaKind>,

@@ -8,5 +8,4 @@ export type PulseNetworkInventoryRow = {
   ipv6_addresses: Array<string>,
   link_speed_mbps: number | null,
   is_physical: boolean,
-  removed: boolean,
 };

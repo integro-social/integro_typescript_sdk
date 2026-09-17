@@ -21,7 +21,7 @@ export const insight = {
    * message ever. Periods align to `utc_offset_minutes`; weeks start on
    * Monday.
    *
-   * Requires `ViewMessages`; covers only accounts of groups where the caller holds it, narrowed by `group_uid`, `social_account_uids` (each must be in scope) and `channels`. Hourly periods over at most 31 days, the others over at most 731 (400 beyond).
+   * Requires `ViewMessages`; covers only accounts of groups where the caller holds it, narrowed by `group_uids`, `social_account_uids` (each must be in scope) and `channels`. Hourly periods over at most 31 days, the others over at most 731 (400 beyond).
    */
   conversation: Tapi.post<{ body: ConversationInsightQuery; response: ConversationInsightResponse }>()({
     endpoint: "/insight/conversation",
@@ -31,7 +31,7 @@ export const insight = {
    * counted at their publication time; posts removed from the platform are
    * left out. Periods align to `utc_offset_minutes`; weeks start on Monday.
    *
-   * Requires `ViewPosts`; covers only accounts of groups where the caller holds it, narrowed by `group_uid`, `social_account_uids` (each must be in scope) and `channels`. Hourly periods over at most 31 days, the others over at most 731 (400 beyond).
+   * Requires `ViewPosts`; covers only accounts of groups where the caller holds it, narrowed by `group_uids`, `social_account_uids` (each must be in scope) and `channels`. Hourly periods over at most 31 days, the others over at most 731 (400 beyond).
    */
   posting: Tapi.post<{ body: PostingInsightQuery; response: PostingInsightResponse }>()({
     endpoint: "/insight/posting",

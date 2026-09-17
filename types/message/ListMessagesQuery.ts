@@ -3,16 +3,23 @@ import type { Number1_500 } from "../primitives/Number1_500";
 import type { Uid } from "../primitives/Uid";
 
 export type ListMessagesQuery = {
-  group_uid: Uid | null,
-  social_account_uid: Uid | null,
   /**
-   * Poll cursor: only messages with `id` strictly greater are returned.
+   * Narrow to these groups, each one the caller may see; omit for everything the caller may see.
    */
-  since_id: number,
+  group_uids: Array<Uid> | null,
+  /**
+   * Narrow to these accounts, each one in scope; naming any account overrides the groups.
+   */
+  social_account_uids: Array<Uid> | null,
+  /**
+   * Poll cursor: only messages with `id` strictly greater are returned;
+   * omit for every message. Not combinable with `uids`.
+   */
+  since_id: number | null,
   /**
    * Exact messages to return (≤200), for resolving rows a client already
    * holds by uid — the reply targets a loaded page quotes but does not
-   * contain. Mutually exclusive with the poll cursor.
+   * contain. Not combinable with `since_id`.
    */
   uids: Array<Uid> | null,
   limit: Number1_500 | null,

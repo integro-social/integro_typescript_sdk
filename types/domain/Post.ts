@@ -9,7 +9,6 @@ export type Post = {
   social_account_uid: Uid,
   content: PostContent,
   status: PostStatus,
-  error: string | null,
   /**
    * Hub-side schedule instant for `scheduled` posts.
    */

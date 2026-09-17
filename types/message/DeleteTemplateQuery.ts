@@ -7,8 +7,4 @@ export type DeleteTemplateQuery = {
    */
   social_account_uid: Uid,
   name: string,
-  /**
-   * Delete only this template id; omitted, every language of `name` goes.
-   */
-  hsm_id: string | null,
 };

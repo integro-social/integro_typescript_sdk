@@ -3,7 +3,7 @@
 import Tapi from "../../runtime";
 import type { MessageSearchHit } from "../../types/domain/MessageSearchHit";
 import type { MessageSearchQuery } from "../../types/search/MessageSearchQuery";
-import type { SearchHit } from "../../types/domain/SearchHit";
+import type { SearchHitKind } from "../../types/domain/SearchHitKind";
 import type { SearchQuery } from "../../types/search/SearchQuery";
 
 export const search = {
@@ -12,7 +12,7 @@ export const search = {
    *
    * Any authenticated user; groups and users cover the caller's own groups and the people sharing them (every group and user for platform staff); contacts and messages cover the accounts of every group where the caller holds `ViewMessages` (every account for platform staff, none for a caller holding it nowhere).
    */
-  global: Tapi.get<{ query: SearchQuery; response: Array<SearchHit> }>()({
+  global: Tapi.get<{ query: SearchQuery; response: Array<SearchHitKind> }>()({
     endpoint: "/search",
   }),
   /**

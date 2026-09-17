@@ -7,5 +7,4 @@ export type CreateUploadUrlRequest = {
    */
   group_uid: Uid | null,
   filename: string | null,
-  content_type: string | null,
 };

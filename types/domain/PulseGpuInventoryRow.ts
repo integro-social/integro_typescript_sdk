@@ -7,5 +7,4 @@ export type PulseGpuInventoryRow = {
   vendor: string,
   vram_total_bytes: number,
   power_limit_watts: number,
-  removed: boolean,
 };
