@@ -39,6 +39,7 @@ import { userMfa } from "./user_mfa";
 import { userNotification } from "./user_notification";
 import { userPasswordReset } from "./user_password_reset";
 import { userSession } from "./user_session";
+import { version } from "./version";
 import { webhook } from "./webhook";
 import { whatsappTemplate } from "./whatsapp_template";
 
@@ -82,6 +83,7 @@ export const routes = {
   userNotification,
   userPasswordReset,
   userSession,
+  version,
   webhook,
   whatsappTemplate,
 };
