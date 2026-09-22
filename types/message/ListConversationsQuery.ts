@@ -19,7 +19,7 @@ export type ListConversationsQuery = {
    */
   q: Text0_8000 | null,
   /**
-   * Exact conversations to return (≤200), for decorating rows a CRM already
+   * Exact conversations to return (≤200), for decorating rows a consumer already
    * holds by uid. Mutually exclusive with the keyset cursor; ordering follows
    * activity like the plain list.
    */
