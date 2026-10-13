@@ -36,6 +36,12 @@ export type GhlLocation = {
    */
   handoff_tag: string | null,
   /**
+   * Whether the bridge renders the bracket markup in a delivery's text —
+   * `[b]…[/b]`, `[br]` — into whatsapp formatting before sending it; off, the
+   * text goes out as it arrived.
+   */
+  render_markup: boolean,
+  /**
    * Inbound-sync cursor into `message.id`: the target account's messages
    * beyond it still owe GHL a delivery.
    */

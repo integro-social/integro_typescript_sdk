@@ -8,6 +8,7 @@ import type { GhlLocation } from "../../types/domain/GhlLocation";
 import type { LinkGhlRequest } from "../../types/ghl/LinkGhlRequest";
 import type { ListGhlQuery } from "../../types/ghl/ListGhlQuery";
 import type { SetGhlHandoffTagRequest } from "../../types/ghl/SetGhlHandoffTagRequest";
+import type { SetGhlMarkupRequest } from "../../types/ghl/SetGhlMarkupRequest";
 import type { Uid } from "../../types/primitives/Uid";
 
 export const ghl = {
@@ -74,6 +75,17 @@ export const ghl = {
    */
   setHandoffTag: Tapi.put<{ path: { ghl_location_uid: Uid }; body: SetGhlHandoffTagRequest; response: GhlLocation }>()({
     endpoint: "/ghl/:ghl_location_uid/handoff-tag",
+  }),
+  /**
+   * Set whether the bridge renders the bracket markup GoHighLevel's agent
+   * writes — `[b]texto[/b]` for bold, `[i]`, `[s]`, `[m]` and `[c]` likewise,
+   * `[br]` for a blank line — into whatsapp formatting before sending. On by
+   * default; off, the text goes out as it arrived.
+   *
+   * Requires `ConnectSocialAccounts` in the location's group.
+   */
+  setMarkup: Tapi.put<{ path: { ghl_location_uid: Uid }; body: SetGhlMarkupRequest; response: GhlLocation }>()({
+    endpoint: "/ghl/:ghl_location_uid/markup",
   }),
   /**
    * Unbridge the location's whatsapp account, stopping the mirroring in both
