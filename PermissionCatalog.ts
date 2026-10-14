@@ -191,3 +191,29 @@ export const PERMISSION_REQUIRES: Partial<Record<UserPermission, readonly UserPe
   import_contacts: ["send_messages"],
   manage_campaigns: ["send_messages"],
 };
+
+/**
+ * The catalog's `roles_only` rows (`Permission::api_key_grantable`): held only
+ * through a role, never granted to an API key. The backend rejects a key grant
+ * set naming any of them.
+ */
+export const PERMISSION_ROLES_ONLY: readonly UserPermission[] = [
+  "add_members",
+  "set_member_role",
+  "remove_members",
+  "provision_users",
+  "invite_users",
+  "update_users",
+  "activate_users",
+  "delete_users",
+  "view_user_sessions",
+  "revoke_user_sessions",
+  "reset_user_mfa",
+  "set_super_admin",
+  "create_api_keys",
+  "update_api_keys",
+  "grant_api_key_permissions",
+  "rotate_api_keys",
+  "revoke_api_keys",
+  "delete_api_keys",
+];

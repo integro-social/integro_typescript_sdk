@@ -8,7 +8,7 @@ export const mailQueue = {
   /**
    * List queued emails, optionally filtered by delivery status.
    *
-   * Requires `ManageEmailQueue`, which only platform staff hold.
+   * Requires `ManageEmailQueue`, which only platform staff and platform API keys can hold.
    */
   list: Tapi.get<{ query: EmailQueueListQuery; response: Array<EmailQueueItem> }>()({
     endpoint: "/mail-queue",
@@ -19,7 +19,7 @@ export const mailQueue = {
    * failed. An email already handed to the mail server is refused — it settles
    * on its own.
    *
-   * Requires `ManageEmailQueue`, which only platform staff hold.
+   * Requires `ManageEmailQueue`, which only platform staff and platform API keys can hold.
    */
   remove: Tapi.delete<{ path: { id: number }; response: null }>()({
     endpoint: "/mail-queue/:id",
@@ -28,7 +28,7 @@ export const mailQueue = {
    * Reset a failed queued email so the worker attempts delivery again. A
    * subscriber record goes back to pending-send.
    *
-   * Requires `ManageEmailQueue`, which only platform staff hold.
+   * Requires `ManageEmailQueue`, which only platform staff and platform API keys can hold.
    */
   retry: Tapi.post<{ path: { id: number }; response: null }>()({
     endpoint: "/mail-queue/:id/retry",

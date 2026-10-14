@@ -27,7 +27,7 @@ export const userInvite = {
   /**
    * Count pending (unaccepted) user invitations.
    *
-   * Requires `ViewInvites`; the count covers only invites into groups where the caller holds it, and platform invites only for platform staff.
+   * Requires `ViewInvites`; the count covers only invites into groups where the caller holds it, and platform invites only for platform staff and platform API keys.
    */
   count: Tapi.get<{ response: number }>()({
     endpoint: "/user-invite/count",
@@ -52,7 +52,7 @@ export const userInvite = {
   /**
    * List pending (unaccepted) user invitations.
    *
-   * Requires `ViewInvites`; the list covers only invites into groups where the caller holds it, and platform invites only for platform staff.
+   * Requires `ViewInvites`; the list covers only invites into groups where the caller holds it, and platform invites only for platform staff and platform API keys.
    */
   list: Tapi.get<{ response: Array<UserInvite> }>()({
     endpoint: "/user-invite",

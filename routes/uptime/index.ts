@@ -9,7 +9,7 @@ export const uptime = {
   /**
    * Get the most recent server uptime record.
    *
-   * Requires `ViewPulse`, which only platform staff hold.
+   * Requires `ViewPulse`, which only platform staff and platform API keys can hold.
    */
   getLatest: Tapi.get<{ response: ServerUptime | null }>()({
     endpoint: "/uptime/latest",
@@ -17,7 +17,7 @@ export const uptime = {
   /**
    * Compute aggregate server uptime statistics within a time range.
    *
-   * Requires `ViewPulse`, which only platform staff hold.
+   * Requires `ViewPulse`, which only platform staff and platform API keys can hold.
    */
   getStats: Tapi.get<{ query: ServerUptimeRangeQuery; response: ServerUptimeStats }>()({
     endpoint: "/uptime/stat",
@@ -25,7 +25,7 @@ export const uptime = {
   /**
    * List server uptime records within a time range.
    *
-   * Requires `ViewPulse`, which only platform staff hold.
+   * Requires `ViewPulse`, which only platform staff and platform API keys can hold.
    */
   list: Tapi.get<{ query: ServerUptimeRangeQuery; response: Array<ServerUptime> }>()({
     endpoint: "/uptime",

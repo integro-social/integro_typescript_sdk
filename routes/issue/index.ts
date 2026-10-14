@@ -9,9 +9,9 @@ import type { Uid } from "../../types/primitives/Uid";
 
 export const issue = {
   /**
-   * Count issues — every issue for a caller holding `ViewIssues`, and only the caller's own reports for everyone else.
+   * Count issues — every issue for a caller holding `ViewIssues`, only the caller's own reports for any other user, and none for any other API key.
    *
-   * Any authenticated user; `ViewIssues`, which only platform staff hold, is what widens the count beyond the caller's own reports.
+   * Any authenticated caller; `ViewIssues`, which only platform staff and platform API keys can hold, is what widens the count beyond the caller's own reports.
    */
   count: Tapi.get<{ response: number }>()({
     endpoint: "/issue/count",
@@ -27,15 +27,15 @@ export const issue = {
   /**
    * Fetch a single issue by uid.
    *
-   * Any authenticated user for an issue they reported; `ViewIssues`, which only platform staff hold, reaches any issue. An issue the caller may not read reads as not found.
+   * Any authenticated user for an issue they reported; `ViewIssues`, which only platform staff and platform API keys can hold, reaches any issue, and is the only way an API key reaches one. An issue the caller may not read reads as not found.
    */
   get: Tapi.get<{ path: { issue_uid: Uid }; response: Issue }>()({
     endpoint: "/issue/:issue_uid",
   }),
   /**
-   * List issues, newest first — every issue for a caller holding `ViewIssues`, and only the caller's own reports for everyone else.
+   * List issues, newest first — every issue for a caller holding `ViewIssues`, only the caller's own reports for any other user, and none for any other API key.
    *
-   * Any authenticated user; `ViewIssues`, which only platform staff hold, is what widens the result beyond the caller's own reports.
+   * Any authenticated caller; `ViewIssues`, which only platform staff and platform API keys can hold, is what widens the result beyond the caller's own reports.
    */
   list: Tapi.get<{ response: Array<Issue> }>()({
     endpoint: "/issue",
@@ -43,7 +43,7 @@ export const issue = {
   /**
    * Update the status of an issue.
    *
-   * Requires `ManageIssues`, which only platform staff hold.
+   * Requires `ManageIssues`, which only platform staff and platform API keys can hold.
    */
   setStatus: Tapi.put<{ path: { issue_uid: Uid }; body: SetIssueStatusRequest; response: null }>()({
     endpoint: "/issue/:issue_uid/status",

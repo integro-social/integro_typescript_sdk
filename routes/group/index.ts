@@ -23,7 +23,7 @@ export const group = {
   /**
    * Create a group, optionally with a logo image.
    *
-   * Requires `CreateGroups`, which is only ever held platform-wide — no group exists yet to scope it to. Rejected — when a logo is attached — when the caller trips the per-user file-upload throttle.
+   * Requires `CreateGroups`, which is only ever held platform-wide — by platform staff and platform API keys, since no group exists yet to scope it to. Rejected — when a logo is attached — when the caller trips the per-user file-upload throttle, an API key counting against the user who created it.
    */
   create: Tapi.post<{ formData: CreateGroupForm; response: CreateGroupResponse }>()({
     endpoint: "/group",
@@ -73,7 +73,7 @@ export const group = {
    * `Group.logo_uid`, served by `media.serve` to anyone holding `ViewGroups`
    * in the group.
    *
-   * Requires `UpdateGroups` in the group itself, and is rejected when the caller trips the per-user file-upload throttle.
+   * Requires `UpdateGroups` in the group itself, and is rejected when the caller trips the per-user file-upload throttle, an API key counting against the user who created it.
    */
   setLogo: Tapi.post<{ path: { group_uid: Uid }; formData: SetGroupLogoForm; response: SetGroupLogoResponse }>()({
     endpoint: "/group/:group_uid/logo",

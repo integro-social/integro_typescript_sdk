@@ -8,7 +8,7 @@ export const userMembership = {
   /**
    * List the groups another user belongs to, each carrying the role that membership holds there.
    *
-   * Requires `ViewUsers`, which only platform staff hold.
+   * Requires `ViewUsers`, which only platform staff and platform API keys can hold.
    */
   list: Tapi.get<{ path: { user_uid: Uid }; response: Array<UserMembershipResponse> }>()({
     endpoint: "/user/:user_uid/membership",

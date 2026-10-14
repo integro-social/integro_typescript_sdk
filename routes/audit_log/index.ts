@@ -9,7 +9,7 @@ export const auditLog = {
   /**
    * List audit log entries matching the given filters and time window.
    *
-   * Requires `ViewAuditLogs`; platform staff read every entry, any other holder only entries stamped with a group where they hold it — an entry carrying no group is staff-only.
+   * Requires `ViewAuditLogs`; platform staff and platform API keys read every entry, any other holder only entries stamped with a group where they hold it — an entry carrying no group is theirs alone.
    */
   list: Tapi.get<{ query: AuditLogQuery; response: Array<AuditLog> }>()({
     endpoint: "/audit-log",
@@ -17,7 +17,7 @@ export const auditLog = {
   /**
    * Aggregate audit log statistics for the given filters and time window.
    *
-   * Requires `ViewAuditLogs`; platform staff aggregate every entry, any other holder only entries stamped with a group where they hold it — an entry carrying no group is staff-only.
+   * Requires `ViewAuditLogs`; platform staff and platform API keys aggregate every entry, any other holder only entries stamped with a group where they hold it — an entry carrying no group is theirs alone.
    */
   stats: Tapi.get<{ query: AuditLogQuery; response: AuditLogStats }>()({
     endpoint: "/audit-log/stat",

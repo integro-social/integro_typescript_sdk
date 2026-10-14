@@ -11,7 +11,7 @@ export const history = {
   /**
    * List historical disk metrics within a time window.
    *
-   * Requires `ViewPulse`, which only platform staff hold.
+   * Requires `ViewPulse`, which only platform staff and platform API keys can hold.
    */
   disk: Tapi.get<{ query: PulseHistoryQuery; response: Array<PulseDiskMetricRow> }>()({
     endpoint: "/pulse/history/disk",
@@ -19,7 +19,7 @@ export const history = {
   /**
    * List historical GPU metrics within a time window.
    *
-   * Requires `ViewPulse`, which only platform staff hold.
+   * Requires `ViewPulse`, which only platform staff and platform API keys can hold.
    */
   gpu: Tapi.get<{ query: PulseHistoryQuery; response: Array<PulseGpuMetricRow> }>()({
     endpoint: "/pulse/history/gpu",
@@ -27,7 +27,7 @@ export const history = {
   /**
    * List historical host metrics within a time window.
    *
-   * Requires `ViewPulse`, which only platform staff hold.
+   * Requires `ViewPulse`, which only platform staff and platform API keys can hold.
    */
   host: Tapi.get<{ query: PulseHistoryQuery; response: Array<PulseHostMetricRow> }>()({
     endpoint: "/pulse/history/host",
@@ -35,7 +35,7 @@ export const history = {
   /**
    * List historical network metrics within a time window.
    *
-   * Requires `ViewPulse`, which only platform staff hold.
+   * Requires `ViewPulse`, which only platform staff and platform API keys can hold.
    */
   network: Tapi.get<{ query: PulseHistoryQuery; response: Array<PulseNetworkMetricRow> }>()({
     endpoint: "/pulse/history/network",

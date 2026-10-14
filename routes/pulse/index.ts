@@ -11,7 +11,7 @@ export const pulse = {
   /**
    * Return the most recent host metrics snapshot.
    *
-   * Requires `ViewPulse`, which only platform staff hold.
+   * Requires `ViewPulse`, which only platform staff and platform API keys can hold.
    */
   current: Tapi.get<{ response: PulseSnapshot }>()({
     endpoint: "/pulse/current",
@@ -19,7 +19,7 @@ export const pulse = {
   /**
    * Return the disk, network, and GPU hardware inventory as of a point in time.
    *
-   * Requires `ViewPulse`, which only platform staff hold.
+   * Requires `ViewPulse`, which only platform staff and platform API keys can hold.
    */
   inventory: Tapi.get<{ query: PulseInventoryQuery; response: PulseInventoryResponse }>()({
     endpoint: "/pulse/inventory",
@@ -27,7 +27,7 @@ export const pulse = {
   /**
    * Stream live host metrics snapshots over server-sent events.
    *
-   * Requires `ViewPulse`, which only platform staff hold; the stream is gated at connect.
+   * Requires `ViewPulse`, which only platform staff and platform API keys can hold; the stream is gated at connect.
    */
   stream: Tapi.sse<{ response: PulseSnapshot }>()({
     endpoint: "/pulse/stream",
@@ -35,7 +35,7 @@ export const pulse = {
   /**
    * Return static system information about the host running the backend.
    *
-   * Requires `ViewPulse`, which only platform staff hold.
+   * Requires `ViewPulse`, which only platform staff and platform API keys can hold.
    */
   systemInfo: Tapi.get<{ response: PulseSystemInfo }>()({
     endpoint: "/pulse/system-info",

@@ -10,7 +10,7 @@ export const search = {
   /**
    * Search groups, users, contacts and messages: up to `limit` hits of each requested kind, kinds in a fixed order, groups and users ranked, contacts and messages newest first. A preview — the entity lists page the full answers.
    *
-   * Any authenticated user; groups and users cover the caller's own groups and the people sharing them (every group and user for platform staff); contacts and messages cover the accounts of every group where the caller holds `ViewMessages` (every account for platform staff, none for a caller holding it nowhere).
+   * Any authenticated caller; groups and users cover the groups where the caller holds `ViewGroups` and the people in them, the caller included (every group and user for platform staff and platform API keys holding it); contacts and messages cover the accounts of every group where the caller holds `ViewMessages` (every account for platform staff and platform API keys holding it, none for a caller holding it nowhere).
    */
   global: Tapi.get<{ query: SearchQuery; response: Array<SearchHitKind> }>()({
     endpoint: "/search",

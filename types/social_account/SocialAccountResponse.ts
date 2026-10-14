@@ -112,6 +112,10 @@ export type SocialAccountResponse = {
    * enforce it.
    */
   daily_conversation_cap: Number1_100000 | null,
+  /**
+   * The user who connected the account — for one an API key connected, the
+   * user who created that key.
+   */
   connected_by: Uid,
   created_at: Timestamp,
   updated_at: Timestamp,

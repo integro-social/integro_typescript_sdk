@@ -31,7 +31,7 @@ export const user = {
   /**
    * Count all users.
    *
-   * Requires `ViewUsers`, which only platform staff hold.
+   * Requires `ViewUsers`, which only platform staff and platform API keys can hold.
    */
   count: Tapi.get<{ response: number }>()({
     endpoint: "/user/count",
@@ -63,7 +63,7 @@ export const user = {
   /**
    * Get a single user by uid.
    *
-   * Requires `ViewUsers`, which only platform staff hold.
+   * Requires `ViewUsers`, which only platform staff and platform API keys can hold.
    */
   get: Tapi.get<{ path: { user_uid: Uid }; response: User }>()({
     endpoint: "/user/:user_uid",
@@ -79,7 +79,7 @@ export const user = {
   /**
    * List all users.
    *
-   * Requires `ViewUsers`, which only platform staff hold.
+   * Requires `ViewUsers`, which only platform staff and platform API keys can hold.
    */
   list: Tapi.get<{ response: Array<User> }>()({
     endpoint: "/user",
