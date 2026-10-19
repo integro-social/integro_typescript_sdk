@@ -3,10 +3,6 @@ import type { WhatsappTemplateCurrency } from "./WhatsappTemplateCurrency";
 import type { WhatsappTemplateDateTime } from "./WhatsappTemplateDateTime";
 import type { WhatsappTemplateMedia } from "./WhatsappTemplateMedia";
 
-/**
- * One placeholder value. Media parameters carry a public URL, matching the
- * rest of the send surface (this crate never sends media ids).
- */
 export type WhatsappTemplateParameter = {
   "type": "text",
   text: string,

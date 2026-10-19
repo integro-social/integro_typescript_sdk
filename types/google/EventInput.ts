@@ -3,10 +3,6 @@ import type { EventAttendee } from "./EventAttendee";
 import type { EventDateTime } from "./EventDateTime";
 import type { ExtendedProperties } from "./ExtendedProperties";
 
-/**
- * Mutable event payload for insert/patch. Only set fields are sent — which
- * also means a PATCH can never *clear* a field.
- */
 export type EventInput = {
   summary: string | null,
   description: string | null,

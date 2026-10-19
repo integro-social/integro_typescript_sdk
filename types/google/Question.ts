@@ -3,9 +3,6 @@ import type { Answer } from "./Answer";
 import type { QandaAuthor } from "./QandaAuthor";
 
 export type Question = {
-  /**
-   * Resource name, `locations/{l}/questions/{q}`.
-   */
   name: string | null,
   text: string | null,
   author: QandaAuthor | null,

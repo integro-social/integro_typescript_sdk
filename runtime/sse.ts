@@ -8,16 +8,6 @@ export type SseConnection = {
   status: () => SseConnectionStatus;
 };
 
-/**
- * Lifecycle handlers for an SSE connection. Every handler is optional.
- *
- * - `onData`  fires once per dispatched event, with the JSON-parsed payload.
- * - `onOpen`  fires when the stream is established (response received, ok).
- * - `onError` fires on a network/HTTP failure or when an event payload can't be
- *             parsed as JSON. It does not fire for a user-initiated `stop()`.
- * - `onClose` fires when the server ends the stream. A manual `stop()` does not
- *             trigger it.
- */
 export type SseHandlers<T> = {
   onData?: (data: T) => void;
   onError?: (error: Error) => void;
@@ -51,15 +41,9 @@ export function buildSseUrl(host: string, endpoint: string, params: { path?: Rec
   return `${host}${url}${queryString}`;
 }
 
-// A blank line separates events; line terminators may be CRLF, LF, or CR.
 const EVENT_BOUNDARY = /\r\n\r\n|\n\n|\r\r/;
 const LINE_BOUNDARY = /\r\n|\n|\r/;
 
-/**
- * Open an SSE stream over `fetch` (not the native `EventSource`) so that custom
- * headers can be sent — the browser `EventSource` API cannot set them. The
- * response body is read as a stream and parsed into events per the SSE spec.
- */
 export function createConnection<T>(url: string, handlers: SseHandlers<T>, options?: SseConnectionOptions): SseConnection {
   let controller: AbortController | null = null;
   let state: SseConnectionStatus = "stopped";

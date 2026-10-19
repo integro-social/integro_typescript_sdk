@@ -2,9 +2,6 @@
 import type { Date } from "./Date";
 import type { TimeOfDay } from "./TimeOfDay";
 
-/**
- * A dated exception to regular hours — closed, or different hours.
- */
 export type SpecialHourPeriod = {
   startDate: Date | null,
   endDate: Date | null,

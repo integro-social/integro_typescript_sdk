@@ -2,9 +2,6 @@
 import type { QandaAuthor } from "./QandaAuthor";
 
 export type Answer = {
-  /**
-   * Resource name, `locations/{l}/questions/{q}/answers/{a}`.
-   */
   name: string | null,
   text: string | null,
   author: QandaAuthor | null,

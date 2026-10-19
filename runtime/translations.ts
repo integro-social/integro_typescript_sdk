@@ -2,13 +2,9 @@ export type Language = "en" | "br";
 
 export interface Translations {
   errors: {
-    /** The request never reached a response — network, DNS, abort. */
     requestFailed: string;
-    /** An error body was present but not in a shape we could read. */
     invalidErrorFormat: string;
-    /** A body arrived but could not be parsed. */
     parseFailed: string;
-    /** The server answered with an error status and no message of its own. */
     requestRejected: string;
   };
   builder: {

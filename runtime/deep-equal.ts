@@ -1,11 +1,3 @@
-/**
- * Dependency-free deep equality check.
- *
- * Used by the React hooks to memoize call params across renders so that
- * structurally-equal objects don't retrigger effects. Replaces the
- * `react-fast-compare` dependency — params are plain data (no React
- * elements), so the element-aware branches of that library aren't needed.
- */
 export default function deepEqual(a: unknown, b: unknown): boolean {
   if (a === b) return true;
 
@@ -53,6 +45,5 @@ export default function deepEqual(a: unknown, b: unknown): boolean {
     return true;
   }
 
-  // NaN === NaN
   return a !== a && b !== b;
 }

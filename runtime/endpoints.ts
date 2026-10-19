@@ -1,15 +1,9 @@
 import type { HttpMethod, RequestConfig, SseConfig, WsConfig } from "./types";
 
-/**
- * Configuration object for endpoint factories
- */
 type EndpointOptions = {
   endpoint: string;
 };
 
-/**
- * Type parameters object - only specify what you need
- */
 type EndpointTypes<TPath = undefined, TBody = undefined, TFormData = undefined, TQuery = undefined, THeaders = undefined, TResponse = unknown> = {
   path?: TPath;
   body?: TBody;
@@ -19,9 +13,6 @@ type EndpointTypes<TPath = undefined, TBody = undefined, TFormData = undefined, 
   response?: TResponse;
 };
 
-/**
- * Extract types from the config object with defaults
- */
 type ExtractPath<T> = T extends { path: infer P } ? P : undefined;
 type ExtractBody<T> = T extends { body: infer B } ? B : undefined;
 type ExtractFormData<T> = T extends { formData: infer F } ? F : undefined;
@@ -29,22 +20,6 @@ type ExtractQuery<T> = T extends { query: infer Q } ? Q : undefined;
 type ExtractHeaders<T> = T extends { headers: infer H } ? H : undefined;
 type ExtractResponse<T> = T extends { response: infer R } ? R : unknown;
 
-/**
- * Curried endpoint factory using object-based type parameters
- *
- * Usage:
- *   // Simple - just response type
- *   Tapi.get<{ response: User[] }>()({ endpoint: "/users" })
- *
- *   // With path params
- *   Tapi.get<{ path: { id: string }, response: User }>()({ endpoint: "/users/:id" })
- *
- *   // With query params
- *   Tapi.get<{ query: { limit?: number }, response: Post[] }>()({ endpoint: "/posts" })
- *
- *   // With body (for POST/PUT)
- *   Tapi.post<{ body: CreateUser, response: User }>()({ endpoint: "/users" })
- */
 function createEndpointFactory<TMethod extends HttpMethod>(method: TMethod) {
   return <T extends EndpointTypes<any, any, any, any, any, any> = {}>() =>
     (config: EndpointOptions): RequestConfig<TMethod, ExtractPath<T>, ExtractBody<T>, ExtractFormData<T>, ExtractQuery<T>, ExtractHeaders<T>, ExtractResponse<T>> => ({
@@ -101,14 +76,12 @@ function createWsEndpointFactory() {
 
 export const ws = createWsEndpointFactory();
 
-// Individual endpoint factories
 export const get = createEndpointFactory("GET");
 export const post = createEndpointFactory("POST");
 export const put = createEndpointFactory("PUT");
 export const del = createEndpointFactory("DELETE");
 export const patch = createEndpointFactory("PATCH");
 
-// Namespace export
 export const Endpoints = {
   get,
   post,

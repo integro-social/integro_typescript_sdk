@@ -4,15 +4,7 @@ import type { LocalPostEvent } from "./LocalPostEvent";
 import type { LocalPostOffer } from "./LocalPostOffer";
 import type { PostMedia } from "./PostMedia";
 
-/**
- * A local post ("What's new" card on the profile). `topic_type` is
- * `STANDARD`, `EVENT`, `OFFER` or `ALERT`; `state` and `search_url` are
- * server-set.
- */
 export type LocalPost = {
-  /**
-   * Resource name, `accounts/{a}/locations/{l}/localPosts/{p}`.
-   */
   name: string | null,
   languageCode: string | null,
   summary: string | null,

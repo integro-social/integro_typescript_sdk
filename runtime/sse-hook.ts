@@ -29,8 +29,6 @@ export function useSseHook<T extends Types.SseConfig<any, any, any, any>>(
   const [status, setStatus] = useState<Sse.SseConnectionStatus>("stopped");
   const connectionRef = useRef<Sse.SseConnection | null>(null);
 
-  // Keep the latest handlers in a ref so the connection effect doesn't re-run
-  // (and reconnect) every render just because inline callbacks changed identity.
   const handlersRef = useRef<Sse.SseHandlers<any>>({});
   handlersRef.current = {
     onData: params?.onData,

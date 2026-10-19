@@ -2,14 +2,7 @@
 import type { ReviewReply } from "./ReviewReply";
 import type { Reviewer } from "./Reviewer";
 
-/**
- * A customer review. `star_rating` is `ONE`…`FIVE`; `comment` may carry a
- * `(Translated by Google)` block alongside the original text.
- */
 export type Review = {
-  /**
-   * Resource name, `accounts/{a}/locations/{l}/reviews/{r}`.
-   */
   name: string | null,
   reviewId: string | null,
   reviewer: Reviewer | null,

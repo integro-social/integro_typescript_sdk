@@ -9,13 +9,7 @@ import type { PhoneNumbers } from "./PhoneNumbers";
 import type { PostalAddress } from "./PostalAddress";
 import type { SpecialHours } from "./SpecialHours";
 
-/**
- * A business location, thinned to the fields the read mask requests.
- */
 export type Location = {
-  /**
-   * Resource name, `locations/{location_id}` — no account prefix on v1.
-   */
   name: string | null,
   title: string | null,
   phoneNumbers: PhoneNumbers | null,

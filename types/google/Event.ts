@@ -3,10 +3,6 @@ import type { EventAttendee } from "./EventAttendee";
 import type { EventDateTime } from "./EventDateTime";
 import type { ExtendedProperties } from "./ExtendedProperties";
 
-/**
- * A Google Calendar event (response shape). Most fields are optional because
- * Google omits them depending on event kind and the caller's access.
- */
 export type Event = {
   id: string | null,
   status: string | null,

@@ -2,11 +2,6 @@
 import type { WhatsappTemplateButtonSubType } from "./WhatsappTemplateButtonSubType";
 import type { WhatsappTemplateParameter } from "./WhatsappTemplateParameter";
 
-/**
- * One substitution block of a template *send* — the values that fill an
- * approved template's placeholders. Serializes straight to the Cloud API
- * shape: Meta spells these lowercase already, so no boundary translation.
- */
 export type WhatsappTemplateSendComponent = {
   "type": "header",
   parameters: Array<WhatsappTemplateParameter>,

@@ -3,14 +3,7 @@ import type { LocationAssociation } from "./LocationAssociation";
 import type { MediaDimensions } from "./MediaDimensions";
 import type { MediaInsights } from "./MediaInsights";
 
-/**
- * A photo/video on the profile. On create, send `media_format: PHOTO` (or
- * `VIDEO`), `location_association` and a publicly fetchable `source_url`.
- */
 export type MediaItem = {
-  /**
-   * Resource name, `accounts/{a}/locations/{l}/media/{m}`.
-   */
   name: string | null,
   mediaFormat: string | null,
   locationAssociation: LocationAssociation | null,

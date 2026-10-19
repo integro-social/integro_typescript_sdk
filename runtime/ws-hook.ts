@@ -14,10 +14,6 @@ function useDeepCompareMemo<T>(value: T): T {
 
 export type WsHookParams<T extends Types.WsConfig<any, any, any, any>> = Types.WsCallSignature<T> &
   Ws.WsHandlers<ResponseSchema.InferResult<T["receive"]>> & {
-    /**
-     * Skip the automatic connect on mount; call `connect()` yourself. The
-     * connection still tears down on unmount or when params change.
-     */
     lazy?: boolean;
   };
 
@@ -37,8 +33,6 @@ export function useWsHook<T extends Types.WsConfig<any, any, any, any>>(
   const [status, setStatus] = useState<Ws.WsConnectionStatus>("stopped");
   const connectionRef = useRef<Ws.WsConnection<any> | null>(null);
 
-  // Keep the latest handlers in a ref so the connection effect doesn't re-run
-  // (and reconnect) every render just because inline callbacks changed identity.
   const handlersRef = useRef<Ws.WsHandlers<any>>({});
   handlersRef.current = {
     onMessage: params?.onMessage,
