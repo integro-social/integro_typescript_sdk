@@ -2,6 +2,8 @@
 
 import Tapi from "../../runtime";
 import type { CampaignTemplateResponse } from "../../types/campaign/CampaignTemplateResponse";
+import type { ListCampaignTemplatesQuery } from "../../types/campaign/ListCampaignTemplatesQuery";
+import type { Page } from "../../types/primitives/Page";
 import type { TemplateRequest } from "../../types/campaign/TemplateRequest";
 import type { Uid } from "../../types/primitives/Uid";
 
@@ -23,11 +25,19 @@ export const campaignTemplate = {
     endpoint: "/campaign/:campaign_uid/template/:template_uid",
   }),
   /**
-   * The template wheel, in rotation order.
+   * The template wheel one page at a time, in rotation order.
    *
    * Requires `ViewCampaigns` in the campaign's group.
    */
-  list: Tapi.get<{ path: { campaign_uid: Uid }; response: Array<CampaignTemplateResponse> }>()({
+  list: Tapi.get<{ path: { campaign_uid: Uid }; query: ListCampaignTemplatesQuery; response: Page<CampaignTemplateResponse> }>()({
+    endpoint: "/v2/campaign/:campaign_uid/template",
+  }),
+  /**
+   * The template wheel, in rotation order, all at once — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `campaignTemplate.list` instead, and this route goes away in a future major.
+   *
+   * Requires `ViewCampaigns` in the campaign's group.
+   */
+  listLegacy: Tapi.get<{ path: { campaign_uid: Uid }; response: Array<CampaignTemplateResponse> }>()({
     endpoint: "/campaign/:campaign_uid/template",
   }),
   /**

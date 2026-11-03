@@ -3,10 +3,14 @@
 import Tapi from "../../runtime";
 import type { ConnectGhlRequest } from "../../types/ghl/ConnectGhlRequest";
 import type { ConnectGhlResponse } from "../../types/ghl/ConnectGhlResponse";
+import type { CountGhlQuery } from "../../types/ghl/CountGhlQuery";
 import type { GhlCallbackQuery } from "../../types/ghl/GhlCallbackQuery";
 import type { GhlLocation } from "../../types/domain/GhlLocation";
+import type { GhlLocationCounts } from "../../types/domain/GhlLocationCounts";
+import type { LegacyListGhlQuery } from "../../types/ghl/LegacyListGhlQuery";
 import type { LinkGhlRequest } from "../../types/ghl/LinkGhlRequest";
 import type { ListGhlQuery } from "../../types/ghl/ListGhlQuery";
+import type { Page } from "../../types/primitives/Page";
 import type { SetGhlHandoffTagRequest } from "../../types/ghl/SetGhlHandoffTagRequest";
 import type { SetGhlMarkupRequest } from "../../types/ghl/SetGhlMarkupRequest";
 import type { Uid } from "../../types/primitives/Uid";
@@ -33,6 +37,15 @@ export const ghl = {
     endpoint: "/ghl/connect",
   }),
   /**
+   * Count the GoHighLevel locations the caller can see: all of them, those
+   * bridging no account yet and those whose grant needs reconnecting.
+   *
+   * Requires `ViewSocialAccounts`; the counts cover only locations of groups where the caller holds it.
+   */
+  count: Tapi.get<{ query: CountGhlQuery; response: GhlLocationCounts }>()({
+    endpoint: "/ghl/count",
+  }),
+  /**
    * Disconnect the location, deleting its stored grant and its binding.
    * Reinstalling the app from GoHighLevel is what brings it back.
    *
@@ -55,13 +68,22 @@ export const ghl = {
     endpoint: "/ghl/:ghl_location_uid/link",
   }),
   /**
-   * List the installed GoHighLevel locations, optionally filtered by groups, each
-   * carrying the whatsapp account it bridges (`target_account_uid`, null while
-   * unlinked) and whether its grant needs reconnecting.
+   * List the installed GoHighLevel locations one page at a time, most recently
+   * connected first unless `order` says otherwise, optionally filtered by groups,
+   * each carrying the whatsapp account it bridges (`target_account_uid`, null
+   * while unlinked) and whether its grant needs reconnecting.
    *
    * Requires `ViewSocialAccounts`; the list covers only locations of groups where the caller holds it.
    */
-  list: Tapi.get<{ query: ListGhlQuery; response: Array<GhlLocation> }>()({
+  list: Tapi.get<{ query: ListGhlQuery; response: Page<GhlLocation> }>()({
+    endpoint: "/v2/ghl",
+  }),
+  /**
+   * List the installed GoHighLevel locations, optionally filtered by groups, all at once — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `ghl.list` instead, and this route goes away in a future major.
+   *
+   * Requires `ViewSocialAccounts`; the list covers only locations of groups where the caller holds it.
+   */
+  listLegacy: Tapi.get<{ query: LegacyListGhlQuery; response: Array<GhlLocation> }>()({
     endpoint: "/ghl",
   }),
   /**

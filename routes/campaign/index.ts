@@ -5,10 +5,15 @@ import type { AudienceRequest } from "../../types/campaign/AudienceRequest";
 import type { CampaignDetail } from "../../types/campaign/CampaignDetail";
 import type { CampaignRecipient } from "../../types/domain/CampaignRecipient";
 import type { CampaignStats } from "../../types/campaign/CampaignStats";
+import type { CampaignStatusCounts } from "../../types/domain/CampaignStatusCounts";
+import type { CountCampaignsQuery } from "../../types/campaign/CountCampaignsQuery";
 import type { CreateCampaignRequest } from "../../types/campaign/CreateCampaignRequest";
+import type { LegacyListCampaignsQuery } from "../../types/campaign/LegacyListCampaignsQuery";
+import type { LegacyListRecipientsQuery } from "../../types/campaign/LegacyListRecipientsQuery";
 import type { ListCampaignsQuery } from "../../types/campaign/ListCampaignsQuery";
 import type { ListRecipientsQuery } from "../../types/campaign/ListRecipientsQuery";
 import type { MessageWithContext } from "../../types/domain/MessageWithContext";
+import type { Page } from "../../types/primitives/Page";
 import type { PreflightReport } from "../../types/campaign/PreflightReport";
 import type { RemoveRecipientsRequest } from "../../types/campaign/RemoveRecipientsRequest";
 import type { SetAccountsRequest } from "../../types/campaign/SetAccountsRequest";
@@ -49,6 +54,14 @@ export const campaign = {
     endpoint: "/campaign/:campaign_uid/cancel",
   }),
   /**
+   * How many campaigns stand in each status, optionally only some groups' — the totals a paged list cannot show.
+   *
+   * Requires `ViewCampaigns`; the counts cover only campaigns of groups where the caller holds it.
+   */
+  count: Tapi.get<{ query: CountCampaignsQuery; response: CampaignStatusCounts }>()({
+    endpoint: "/campaign/count",
+  }),
+  /**
    * Create a draft campaign in a group. Its accounts are the group's native
    * whatsapp accounts; nothing sends until templates,
    * accounts and an audience exist and `start` passes the preflight.
@@ -76,11 +89,19 @@ export const campaign = {
     endpoint: "/campaign/:campaign_uid",
   }),
   /**
-   * List campaigns, newest first, optionally only some groups'.
+   * List campaigns one page at a time, newest first unless `order` says otherwise, optionally only some groups', one status or a search.
    *
    * Requires `ViewCampaigns`; the list covers only campaigns of groups where the caller holds it.
    */
-  list: Tapi.get<{ query: ListCampaignsQuery; response: Array<CampaignDetail> }>()({
+  list: Tapi.get<{ query: ListCampaignsQuery; response: Page<CampaignDetail> }>()({
+    endpoint: "/v2/campaign",
+  }),
+  /**
+   * List campaigns, newest first, optionally only some groups' — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `campaign.list` instead, and this route goes away in a future major.
+   *
+   * Requires `ViewCampaigns`; the list covers only campaigns of groups where the caller holds it.
+   */
+  listLegacy: Tapi.get<{ query: LegacyListCampaignsQuery; response: Array<CampaignDetail> }>()({
     endpoint: "/campaign",
   }),
   /**
@@ -102,11 +123,19 @@ export const campaign = {
     endpoint: "/campaign/:campaign_uid/preflight",
   }),
   /**
-   * A page of the recipient ledger in drip order, optionally one status.
+   * The recipient ledger one page at a time, in drip order unless `order` says otherwise, optionally one status or a search.
    *
    * Requires `ViewCampaigns` in the campaign's group.
    */
-  recipients: Tapi.get<{ path: { campaign_uid: Uid }; query: ListRecipientsQuery; response: Array<CampaignRecipient> }>()({
+  recipients: Tapi.get<{ path: { campaign_uid: Uid }; query: ListRecipientsQuery; response: Page<CampaignRecipient> }>()({
+    endpoint: "/v2/campaign/:campaign_uid/recipient",
+  }),
+  /**
+   * A page of the recipient ledger in drip order, optionally one status, `after_id` paging forward — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `campaign.recipients` instead, and this route goes away in a future major.
+   *
+   * Requires `ViewCampaigns` in the campaign's group.
+   */
+  recipientsLegacy: Tapi.get<{ path: { campaign_uid: Uid }; query: LegacyListRecipientsQuery; response: Array<CampaignRecipient> }>()({
     endpoint: "/campaign/:campaign_uid/recipient",
   }),
   /**

@@ -13,12 +13,15 @@ import type { ConnectSocialAccountResponse } from "../../types/social_account/Co
 import type { ConnectSocialAccountsConnected } from "../../types/social_account/ConnectSocialAccountsConnected";
 import type { ConnectWhatsappRequest } from "../../types/social_account/ConnectWhatsappRequest";
 import type { ConnectWhatsappResponse } from "../../types/social_account/ConnectWhatsappResponse";
+import type { CountSocialAccountsQuery } from "../../types/social_account/CountSocialAccountsQuery";
 import type { ExposureQuery } from "../../types/social_account/ExposureQuery";
 import type { ExposureReport } from "../../types/domain/ExposureReport";
 import type { InsightHistoryQuery } from "../../types/insight/InsightHistoryQuery";
+import type { LegacyListSocialAccountsQuery } from "../../types/social_account/LegacyListSocialAccountsQuery";
 import type { ListSocialAccountsQuery } from "../../types/social_account/ListSocialAccountsQuery";
 import type { NativePairingStatusResponse } from "../../types/social_account/NativePairingStatusResponse";
 import type { NativeQrResponse } from "../../types/social_account/NativeQrResponse";
+import type { Page } from "../../types/primitives/Page";
 import type { RefreshProfileResponse } from "../../types/social_account/RefreshProfileResponse";
 import type { SessionStatus } from "../../types/social_account/SessionStatus";
 import type { SetSocialAccountAliasRequest } from "../../types/social_account/SetSocialAccountAliasRequest";
@@ -27,7 +30,9 @@ import type { SetSocialAccountEnabledRequest } from "../../types/social_account/
 import type { SetSocialAccountGroupRequest } from "../../types/social_account/SetSocialAccountGroupRequest";
 import type { SetSocialAccountPresenceRequest } from "../../types/social_account/SetSocialAccountPresenceRequest";
 import type { SocialAccountResponse } from "../../types/social_account/SocialAccountResponse";
+import type { SocialAccountSummary } from "../../types/social_account/SocialAccountSummary";
 import type { StartNativePairingResponse } from "../../types/social_account/StartNativePairingResponse";
+import type { SummarizeSocialAccountsQuery } from "../../types/social_account/SummarizeSocialAccountsQuery";
 import type { Uid } from "../../types/primitives/Uid";
 
 export const socialAccount = {
@@ -95,7 +100,7 @@ export const socialAccount = {
    *
    * Requires `ViewSocialAccounts`; the count covers only accounts of groups where the caller holds it.
    */
-  count: Tapi.get<{ query: ListSocialAccountsQuery; response: number }>()({
+  count: Tapi.get<{ query: CountSocialAccountsQuery; response: number }>()({
     endpoint: "/social-account/count",
   }),
   /**
@@ -154,12 +159,20 @@ export const socialAccount = {
     endpoint: "/social-account/:social_account_uid/insight/history",
   }),
   /**
-   * List connected social accounts, optionally filtered by groups, each with the
+   * List connected social accounts one page at a time, optionally filtered and searched, each with the
    * live session status of its whatsapp session when applicable.
    *
    * Requires `ViewSocialAccounts`; the list covers only accounts of groups where the caller holds it.
    */
-  list: Tapi.get<{ query: ListSocialAccountsQuery; response: Array<SocialAccountResponse> }>()({
+  list: Tapi.get<{ query: ListSocialAccountsQuery; response: Page<SocialAccountResponse> }>()({
+    endpoint: "/v2/social-account",
+  }),
+  /**
+   * List connected social accounts, optionally filtered by groups, all at once, each with the live session status of its whatsapp session when applicable — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `socialAccount.list` instead, and this route goes away in a future major.
+   *
+   * Requires `ViewSocialAccounts`; the list covers only accounts of groups where the caller holds it.
+   */
+  listLegacy: Tapi.get<{ query: LegacyListSocialAccountsQuery; response: Array<SocialAccountResponse> }>()({
     endpoint: "/social-account",
   }),
   /**
@@ -309,5 +322,14 @@ export const socialAccount = {
    */
   startNativePairing: Tapi.post<{ body: ConnectNativeRequest; response: StartNativePairingResponse }>()({
     endpoint: "/social-account/native",
+  }),
+  /**
+   * Summarize connected social accounts, optionally narrowed by groups and by permissions the caller holds: how many
+   * each provider has and how many need attention — session down, grant to renew, session incident, switched off.
+   *
+   * Requires `ViewSocialAccounts`; the summary covers only accounts of groups where the caller holds it.
+   */
+  summary: Tapi.get<{ query: SummarizeSocialAccountsQuery; response: SocialAccountSummary }>()({
+    endpoint: "/social-account/summary",
   }),
 };

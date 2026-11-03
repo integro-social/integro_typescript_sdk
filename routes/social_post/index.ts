@@ -2,7 +2,9 @@
 
 import Tapi from "../../runtime";
 import type { InsightHistoryQuery } from "../../types/insight/InsightHistoryQuery";
+import type { LegacyListSocialPostsQuery } from "../../types/post/LegacyListSocialPostsQuery";
 import type { ListSocialPostsQuery } from "../../types/post/ListSocialPostsQuery";
+import type { Page } from "../../types/primitives/Page";
 import type { SocialPost } from "../../types/domain/SocialPost";
 import type { SocialPostInsightHistory } from "../../types/insight/SocialPostInsightHistory";
 import type { SocialPostSummary } from "../../types/domain/SocialPostSummary";
@@ -30,14 +32,23 @@ export const socialPost = {
     endpoint: "/social-post/:social_post_uid/insight/history",
   }),
   /**
-   * List the posts that stand on the platforms, newest first: every post the
-   * hub knows about an account, published through it or not, with the
-   * platform's comment and like counts and how many third-party comments the
-   * account has not answered. `until` pages backwards.
+   * List the posts that stand on the platforms one page at a time, newest
+   * first: every post the hub knows about an account, published through it or
+   * not, with the platform's comment and like counts and how many third-party
+   * comments the account has not answered. `since`/`until` bound the
+   * publication window.
    *
    * Requires `ViewPosts`; the list covers only posts of groups where the caller holds it.
    */
-  list: Tapi.get<{ query: ListSocialPostsQuery; response: Array<SocialPost> }>()({
+  list: Tapi.get<{ query: ListSocialPostsQuery; response: Page<SocialPost> }>()({
+    endpoint: "/v2/social-post",
+  }),
+  /**
+   * List the posts that stand on the platforms, newest first, `until` paging backwards — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `socialPost.list` instead, and this route goes away in a future major.
+   *
+   * Requires `ViewPosts`; the list covers only posts of groups where the caller holds it.
+   */
+  listLegacy: Tapi.get<{ query: LegacyListSocialPostsQuery; response: Array<SocialPost> }>()({
     endpoint: "/social-post",
   }),
   /**

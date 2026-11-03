@@ -2,7 +2,10 @@
 
 import Tapi from "../../runtime";
 import type { AddGroupMemberRequest } from "../../types/group/AddGroupMemberRequest";
+import type { CountGroupMembersQuery } from "../../types/group/CountGroupMembersQuery";
 import type { GroupMemberResponse } from "../../types/group/GroupMemberResponse";
+import type { ListGroupMembersQuery } from "../../types/group/ListGroupMembersQuery";
+import type { Page } from "../../types/primitives/Page";
 import type { SetGroupMemberRoleRequest } from "../../types/group/SetGroupMemberRoleRequest";
 import type { Uid } from "../../types/primitives/Uid";
 
@@ -16,11 +19,27 @@ export const groupMember = {
     endpoint: "/group/:group_uid/member",
   }),
   /**
-   * List the group's members, each carrying the identity fields that name the person behind the membership.
+   * Count the group's members, under the same `role` and `q` filters the list takes; every member when none is given.
    *
    * Requires `ViewMembers` in the group itself.
    */
-  list: Tapi.get<{ path: { group_uid: Uid }; response: Array<GroupMemberResponse> }>()({
+  count: Tapi.get<{ path: { group_uid: Uid }; query: CountGroupMembersQuery; response: number }>()({
+    endpoint: "/group/:group_uid/member/count",
+  }),
+  /**
+   * List the group's members one page at a time — administrators first, then by name, unless `order` says otherwise — each carrying the identity fields that name the person behind the membership.
+   *
+   * Requires `ViewMembers` in the group itself.
+   */
+  list: Tapi.get<{ path: { group_uid: Uid }; query: ListGroupMembersQuery; response: Page<GroupMemberResponse> }>()({
+    endpoint: "/v2/group/:group_uid/member",
+  }),
+  /**
+   * List the group's members, each carrying the identity fields that name the person behind the membership, all at once — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `groupMember.list` instead, and this route goes away in a future major.
+   *
+   * Requires `ViewMembers` in the group itself.
+   */
+  listLegacy: Tapi.get<{ path: { group_uid: Uid }; response: Array<GroupMemberResponse> }>()({
     endpoint: "/group/:group_uid/member",
   }),
   /**

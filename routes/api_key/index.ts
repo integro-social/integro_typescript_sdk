@@ -2,9 +2,12 @@
 
 import Tapi from "../../runtime";
 import type { ApiKey } from "../../types/domain/ApiKey";
+import type { CountApiKeysQuery } from "../../types/api_key/CountApiKeysQuery";
 import type { CreateApiKeyRequest } from "../../types/api_key/CreateApiKeyRequest";
 import type { CreateApiKeyResponse } from "../../types/api_key/CreateApiKeyResponse";
+import type { LegacyListApiKeysQuery } from "../../types/api_key/LegacyListApiKeysQuery";
 import type { ListApiKeysQuery } from "../../types/api_key/ListApiKeysQuery";
+import type { Page } from "../../types/primitives/Page";
 import type { RotateApiKeyResponse } from "../../types/api_key/RotateApiKeyResponse";
 import type { Uid } from "../../types/primitives/Uid";
 import type { UpdateApiKeyPermissionsRequest } from "../../types/api_key/UpdateApiKeyPermissionsRequest";
@@ -12,11 +15,11 @@ import type { UpdateApiKeyRequest } from "../../types/api_key/UpdateApiKeyReques
 
 export const apiKey = {
   /**
-   * Count API keys, optionally filtered by groups.
+   * Count API keys, optionally narrowed by groups and by enabled and revoked state.
    *
    * Requires `ViewApiKeys`; the count covers only keys of groups where the caller holds it, and platform keys only for platform staff and platform API keys.
    */
-  count: Tapi.get<{ query: ListApiKeysQuery; response: number }>()({
+  count: Tapi.get<{ query: CountApiKeysQuery; response: number }>()({
     endpoint: "/api-key/count",
   }),
   /**
@@ -51,11 +54,19 @@ export const apiKey = {
     endpoint: "/api-key/:api_key_uid",
   }),
   /**
-   * List API keys, optionally filtered by groups.
+   * List API keys one page at a time, newest first unless `order` says otherwise, optionally narrowed by groups, enabled and revoked state, and name.
    *
    * Requires `ViewApiKeys`; the list covers only keys of groups where the caller holds it, and platform keys only for platform staff and platform API keys.
    */
-  list: Tapi.get<{ query: ListApiKeysQuery; response: Array<ApiKey> }>()({
+  list: Tapi.get<{ query: ListApiKeysQuery; response: Page<ApiKey> }>()({
+    endpoint: "/v2/api-key",
+  }),
+  /**
+   * List API keys, optionally filtered by groups, the whole list at once as before 12.0.0 — transitional, kept for consumers built against 11.x; new consumers page `apiKey.list` instead, and this route goes away in a future major.
+   *
+   * Requires `ViewApiKeys`; the list covers only keys of groups where the caller holds it, and platform keys only for platform staff and platform API keys.
+   */
+  listLegacy: Tapi.get<{ query: LegacyListApiKeysQuery; response: Array<ApiKey> }>()({
     endpoint: "/api-key",
   }),
   /**

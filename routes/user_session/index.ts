@@ -10,7 +10,7 @@ import type { UserSessionRow } from "../../types/user_session/UserSessionRow";
 
 export const userSession = {
   /**
-   * List active sessions for the caller or, when a user is specified, for another user.
+   * List active sessions for the caller or, when a user is specified, for another user — whole, since a user holds at most `max_sessions_per_user` sessions.
    *
    * Any authenticated user for their own sessions; naming another user requires `ViewUserSessions`, which only platform staff hold.
    */

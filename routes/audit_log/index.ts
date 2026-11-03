@@ -2,24 +2,35 @@
 
 import Tapi from "../../runtime";
 import type { AuditLog } from "../../types/domain/AuditLog";
-import type { AuditLogQuery } from "../../types/audit_log/AuditLogQuery";
 import type { AuditLogStats } from "../../types/domain/AuditLogStats";
+import type { AuditLogStatsQuery } from "../../types/audit_log/AuditLogStatsQuery";
+import type { LegacyAuditLogQuery } from "../../types/audit_log/LegacyAuditLogQuery";
+import type { ListAuditLogsQuery } from "../../types/audit_log/ListAuditLogsQuery";
+import type { Page } from "../../types/primitives/Page";
 
 export const auditLog = {
   /**
-   * List audit log entries matching the given filters and time window.
+   * List audit log entries matching the given filters one page at a time, most recent first.
    *
    * Requires `ViewAuditLogs`; platform staff and platform API keys read every entry, any other holder only entries stamped with a group where they hold it — an entry carrying no group is theirs alone.
    */
-  list: Tapi.get<{ query: AuditLogQuery; response: Array<AuditLog> }>()({
+  list: Tapi.get<{ query: ListAuditLogsQuery; response: Page<AuditLog> }>()({
+    endpoint: "/v2/audit-log",
+  }),
+  /**
+   * List audit log entries matching the given filters and time window, every entry of a range at once (up to 10 000) or the latest `count` — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `auditLog.list` instead, and this route goes away in a future major.
+   *
+   * Requires `ViewAuditLogs`; platform staff and platform API keys read every entry, any other holder only entries stamped with a group where they hold it — an entry carrying no group is theirs alone.
+   */
+  listLegacy: Tapi.get<{ query: LegacyAuditLogQuery; response: Array<AuditLog> }>()({
     endpoint: "/audit-log",
   }),
   /**
-   * Aggregate audit log statistics for the given filters and time window.
+   * Aggregate audit log statistics over every entry matching the given filters, not just one page of them.
    *
    * Requires `ViewAuditLogs`; platform staff and platform API keys aggregate every entry, any other holder only entries stamped with a group where they hold it — an entry carrying no group is theirs alone.
    */
-  stats: Tapi.get<{ query: AuditLogQuery; response: AuditLogStats }>()({
+  stats: Tapi.get<{ query: AuditLogStatsQuery; response: AuditLogStats }>()({
     endpoint: "/audit-log/stat",
   }),
 };

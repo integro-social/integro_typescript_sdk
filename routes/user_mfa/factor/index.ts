@@ -16,7 +16,7 @@ export const factor = {
     endpoint: "/user-mfa/factor/:kind",
   }),
   /**
-   * List the caller's own enrolled MFA factors.
+   * List the caller's own enrolled MFA factors — at most one per factor kind, so the list is whole.
    *
    * Authenticated user acting on their own factors; no permission required.
    */

@@ -2,7 +2,9 @@
 
 import Tapi from "../../runtime";
 import type { CreatePostRequest } from "../../types/post/CreatePostRequest";
+import type { LegacyListPostsQuery } from "../../types/post/LegacyListPostsQuery";
 import type { ListPostsQuery } from "../../types/post/ListPostsQuery";
+import type { Page } from "../../types/primitives/Page";
 import type { Post } from "../../types/domain/Post";
 import type { SetPostCommentsRequest } from "../../types/post/SetPostCommentsRequest";
 import type { SetPostHiddenRequest } from "../../types/post/SetPostHiddenRequest";
@@ -42,11 +44,19 @@ export const post = {
     endpoint: "/post/:post_uid",
   }),
   /**
-   * List posts, newest first, optionally filtered by groups or social accounts.
+   * List posts one page at a time, newest first, optionally filtered by groups, social accounts or statuses.
    *
    * Requires `ViewPosts`; the list covers only posts of groups where the caller holds it.
    */
-  list: Tapi.get<{ query: ListPostsQuery; response: Array<Post> }>()({
+  list: Tapi.get<{ query: ListPostsQuery; response: Page<Post> }>()({
+    endpoint: "/v2/post",
+  }),
+  /**
+   * List posts, newest first, optionally filtered by groups or social accounts — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `post.list` instead, and this route goes away in a future major.
+   *
+   * Requires `ViewPosts`; the list covers only posts of groups where the caller holds it.
+   */
+  listLegacy: Tapi.get<{ query: LegacyListPostsQuery; response: Array<Post> }>()({
     endpoint: "/post",
   }),
   /**

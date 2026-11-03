@@ -6,9 +6,11 @@ import type { BackfillResponse } from "../../types/message/BackfillResponse";
 import type { EditMessageRequest } from "../../types/message/EditMessageRequest";
 import type { ForwardMessageRequest } from "../../types/message/ForwardMessageRequest";
 import type { ForwardOutcome } from "../../types/message/ForwardOutcome";
+import type { LegacyListMessagesQuery } from "../../types/message/LegacyListMessagesQuery";
 import type { ListMessagesQuery } from "../../types/message/ListMessagesQuery";
 import type { Message } from "../../types/domain/Message";
 import type { MessageWithContext } from "../../types/domain/MessageWithContext";
+import type { Page } from "../../types/primitives/Page";
 import type { ReactToMessageRequest } from "../../types/message/ReactToMessageRequest";
 import type { SendMessageRequest } from "../../types/message/SendMessageRequest";
 import type { Uid } from "../../types/primitives/Uid";
@@ -94,15 +96,23 @@ export const message = {
     endpoint: "/conversation/:conversation_uid/message/:message_uid/forward",
   }),
   /**
-   * Poll the unified message feed across channels: messages with `id` greater
-   * than `since_id`, oldest first, optionally filtered by groups or accounts.
-   * `uids` instead returns exactly those messages (≤200, order unspecified),
-   * for resolving rows the caller already holds by uid; not combinable with
-   * `since_id`.
+   * Poll the unified message feed across channels one page at a time: messages with `id` greater
+   * than `since_id`, oldest first, optionally filtered by groups or accounts; `next` sent back as
+   * `cursor` continues the same walk. `uids` instead returns exactly those messages (≤200, order
+   * unspecified), for resolving rows the caller already holds by uid; not combinable with
+   * `since_id` or `cursor`.
    *
    * Requires `ViewMessages`; the feed covers only messages of groups where the caller holds it.
    */
-  list: Tapi.get<{ query: ListMessagesQuery; response: Array<MessageWithContext> }>()({
+  list: Tapi.get<{ query: ListMessagesQuery; response: Page<MessageWithContext> }>()({
+    endpoint: "/v2/message",
+  }),
+  /**
+   * Poll the unified message feed across channels, messages with `id` greater than `since_id` oldest first, or exactly `uids` — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `message.list` instead, and this route goes away in a future major.
+   *
+   * Requires `ViewMessages`; the feed covers only messages of groups where the caller holds it.
+   */
+  listLegacy: Tapi.get<{ query: LegacyListMessagesQuery; response: Array<MessageWithContext> }>()({
     endpoint: "/message",
   }),
   /**

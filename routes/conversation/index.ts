@@ -9,8 +9,12 @@ import type { ConversationCallsQuery } from "../../types/call/ConversationCallsQ
 import type { ConversationMessageCountQuery } from "../../types/message/ConversationMessageCountQuery";
 import type { ConversationMessagesQuery } from "../../types/message/ConversationMessagesQuery";
 import type { CreateConversationRequest } from "../../types/message/CreateConversationRequest";
+import type { LegacyConversationCallsQuery } from "../../types/call/LegacyConversationCallsQuery";
+import type { LegacyConversationMessagesQuery } from "../../types/message/LegacyConversationMessagesQuery";
+import type { LegacyListConversationsQuery } from "../../types/message/LegacyListConversationsQuery";
 import type { ListConversationsQuery } from "../../types/message/ListConversationsQuery";
 import type { Message } from "../../types/domain/Message";
+import type { Page } from "../../types/primitives/Page";
 import type { SetConversationAliasRequest } from "../../types/message/SetConversationAliasRequest";
 import type { Uid } from "../../types/primitives/Uid";
 
@@ -53,11 +57,19 @@ export const conversation = {
     endpoint: "/conversation/:conversation_uid/avatar",
   }),
   /**
-   * List a conversation's calls, newest first; `before_id` pages older history.
+   * List a conversation's calls one page at a time, newest first; `next` sent back as `cursor` reads older history.
    *
    * Requires `ViewMessages` in the conversation's group.
    */
-  calls: Tapi.get<{ path: { conversation_uid: Uid }; query: ConversationCallsQuery; response: Array<Call> }>()({
+  calls: Tapi.get<{ path: { conversation_uid: Uid }; query: ConversationCallsQuery; response: Page<Call> }>()({
+    endpoint: "/v2/conversation/:conversation_uid/call",
+  }),
+  /**
+   * List a conversation's calls, newest first, `before_id` paging older history — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `conversation.calls` instead, and this route goes away in a future major.
+   *
+   * Requires `ViewMessages` in the conversation's group.
+   */
+  callsLegacy: Tapi.get<{ path: { conversation_uid: Uid }; query: LegacyConversationCallsQuery; response: Array<Call> }>()({
     endpoint: "/conversation/:conversation_uid/call",
   }),
   /**
@@ -100,16 +112,23 @@ export const conversation = {
     endpoint: "/conversation/:conversation_uid",
   }),
   /**
-   * List conversations, newest activity first, optionally filtered by groups or
-   * social accounts; `before_activity_at`+`before_uid` page older activity
-   * (keyset cursor). Rows carry the denormalized chat-list summary (unread
-   * badge + last-message preview). `q` narrows to conversations whose
-   * participant (alias, name, username, phone) contains it — a term under 2
-   * characters answers with no rows; not combinable with `uids`.
+   * List conversations one page at a time, newest activity first, optionally filtered by groups or
+   * social accounts; `next` sent back as `cursor` reads older activity. Rows carry the denormalized
+   * chat-list summary (unread badge + last-message preview). `q` narrows to conversations whose
+   * participant (alias, name, username, phone) contains it — a term under 2 characters answers with
+   * no rows. `uids` instead returns exactly those conversations (≤200), not combinable with `q` or `cursor`.
    *
    * Requires `ViewMessages`; the list covers only conversations of groups where the caller holds it.
    */
-  list: Tapi.get<{ query: ListConversationsQuery; response: Array<Conversation> }>()({
+  list: Tapi.get<{ query: ListConversationsQuery; response: Page<Conversation> }>()({
+    endpoint: "/v2/conversation",
+  }),
+  /**
+   * List conversations, newest activity first, optionally filtered by groups or social accounts, `before_activity_at`+`before_uid` paging older activity — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `conversation.list` instead, and this route goes away in a future major.
+   *
+   * Requires `ViewMessages`; the list covers only conversations of groups where the caller holds it.
+   */
+  listLegacy: Tapi.get<{ query: LegacyListConversationsQuery; response: Array<Conversation> }>()({
     endpoint: "/conversation",
   }),
   /**
@@ -122,14 +141,23 @@ export const conversation = {
     endpoint: "/conversation/:conversation_uid/message/count",
   }),
   /**
-   * List a conversation's messages, newest first; `before_id` pages older
-   * history. `after_id` pages newer history from an anchored message: each
-   * page is the oldest `limit` rows above the cursor, still newest-first on
-   * the wire (never both cursors).
+   * List a conversation's messages one page at a time, newest first. `before_id` and `after_id` anchor the
+   * page on a message the caller already holds — strictly older, strictly newer, or both for the span between.
+   * Without `after_id` the walk runs older from the newest match; with it the walk runs newer, each page
+   * the oldest `limit` messages above the anchor, still newest first on the wire. `next` sent back as
+   * `cursor` continues that same walk.
    *
    * Requires `ViewMessages` in the conversation's group.
    */
-  messages: Tapi.get<{ path: { conversation_uid: Uid }; query: ConversationMessagesQuery; response: Array<Message> }>()({
+  messages: Tapi.get<{ path: { conversation_uid: Uid }; query: ConversationMessagesQuery; response: Page<Message> }>()({
+    endpoint: "/v2/conversation/:conversation_uid/message",
+  }),
+  /**
+   * List a conversation's messages, newest first, `before_id` paging older history and `after_id` newer — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `conversation.messages` instead, and this route goes away in a future major.
+   *
+   * Requires `ViewMessages` in the conversation's group.
+   */
+  messagesLegacy: Tapi.get<{ path: { conversation_uid: Uid }; query: LegacyConversationMessagesQuery; response: Array<Message> }>()({
     endpoint: "/conversation/:conversation_uid/message",
   }),
   /**

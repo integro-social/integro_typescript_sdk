@@ -16,7 +16,7 @@ export type InsightQueryRequest = {
    */
   social_account_uids: Array<Uid> | null,
   /**
-   * Inclusive range over snapshot days (unix ms); defaults to the last 30 days.
+   * Inclusive range over snapshot days (unix ms), at most 731 days; defaults to the last 30 days.
    */
   since: Timestamp | null,
   until: Timestamp | null,

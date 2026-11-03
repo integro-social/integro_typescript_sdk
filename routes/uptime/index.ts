@@ -23,7 +23,7 @@ export const uptime = {
     endpoint: "/uptime/stat",
   }),
   /**
-   * List server uptime records within a time range.
+   * List server uptime records within a time range; a range holding more than 20 000 records is rejected rather than cut short.
    *
    * Requires `ViewPulse`, which only platform staff and platform API keys can hold.
    */

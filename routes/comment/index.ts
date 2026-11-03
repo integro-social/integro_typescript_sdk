@@ -4,7 +4,9 @@ import Tapi from "../../runtime";
 import type { Comment } from "../../types/domain/Comment";
 import type { CommentMessageRequest } from "../../types/engagement/CommentMessageRequest";
 import type { CreateCommentRequest } from "../../types/engagement/CreateCommentRequest";
+import type { LegacyListCommentsQuery } from "../../types/engagement/LegacyListCommentsQuery";
 import type { ListCommentsQuery } from "../../types/engagement/ListCommentsQuery";
+import type { Page } from "../../types/primitives/Page";
 import type { PrivateReplyRequest } from "../../types/engagement/PrivateReplyRequest";
 import type { PrivateReplyResponse } from "../../types/engagement/PrivateReplyResponse";
 import type { SetCommentHiddenRequest } from "../../types/engagement/SetCommentHiddenRequest";
@@ -50,12 +52,20 @@ export const comment = {
     endpoint: "/social-account/:social_account_uid/comment/:comment_uid/like",
   }),
   /**
-   * Poll the unified comment feed: comments with `id` greater than `since_id`,
-   * oldest first, optionally filtered by groups, accounts, or post.
+   * Poll the unified comment feed one page at a time: comments with `id` greater than `since_id`,
+   * oldest first, optionally filtered by groups, accounts, or post; `next` sent back as `cursor` continues the same walk.
    *
    * Requires `ViewComments`; the feed covers only comments of groups where the caller holds it.
    */
-  list: Tapi.get<{ query: ListCommentsQuery; response: Array<Comment> }>()({
+  list: Tapi.get<{ query: ListCommentsQuery; response: Page<Comment> }>()({
+    endpoint: "/v2/comment",
+  }),
+  /**
+   * Poll the unified comment feed, comments with `id` greater than `since_id` oldest first, optionally filtered by groups, accounts or post — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `comment.list` instead, and this route goes away in a future major.
+   *
+   * Requires `ViewComments`; the feed covers only comments of groups where the caller holds it.
+   */
+  listLegacy: Tapi.get<{ query: LegacyListCommentsQuery; response: Array<Comment> }>()({
     endpoint: "/comment",
   }),
   /**

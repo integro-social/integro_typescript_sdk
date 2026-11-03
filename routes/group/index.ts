@@ -5,6 +5,9 @@ import type { CreateGroupForm } from "../../types/group/CreateGroupForm";
 import type { CreateGroupResponse } from "../../types/group/CreateGroupResponse";
 import type { GroupQuery } from "../../types/group/GroupQuery";
 import type { GroupResponse } from "../../types/group/GroupResponse";
+import type { LegacyGroupQuery } from "../../types/group/LegacyGroupQuery";
+import type { ListGroupsQuery } from "../../types/group/ListGroupsQuery";
+import type { Page } from "../../types/primitives/Page";
 import type { SetGroupEnabledRequest } from "../../types/group/SetGroupEnabledRequest";
 import type { SetGroupLogoForm } from "../../types/group/SetGroupLogoForm";
 import type { SetGroupLogoResponse } from "../../types/group/SetGroupLogoResponse";
@@ -45,11 +48,19 @@ export const group = {
     endpoint: "/group/:group_uid",
   }),
   /**
-   * List groups, optionally enriched with per-group counts.
+   * List groups one page at a time, optionally enriched with per-group counts.
    *
    * Requires `ViewGroups`; the list covers only groups where the caller holds it, and each count is filled only for those where it also holds that count's own permission — `ViewApiKeys` for `api_key_count`, `ViewMembers` for `member_count`, `ViewSocialAccounts` for `social_account_count` — `null` everywhere else.
    */
-  list: Tapi.get<{ query: GroupQuery; response: Array<GroupResponse> }>()({
+  list: Tapi.get<{ query: ListGroupsQuery; response: Page<GroupResponse> }>()({
+    endpoint: "/v2/group",
+  }),
+  /**
+   * List groups, optionally enriched with per-group counts, all at once — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `group.list` instead, and this route goes away in a future major.
+   *
+   * Requires `ViewGroups`; the list covers only groups where the caller holds it, and each count is filled only for those where it also holds that count's own permission — `ViewApiKeys` for `api_key_count`, `ViewMembers` for `member_count`, `ViewSocialAccounts` for `social_account_count` — `null` everywhere else.
+   */
+  listLegacy: Tapi.get<{ query: LegacyGroupQuery; response: Array<GroupResponse> }>()({
     endpoint: "/group",
   }),
   /**

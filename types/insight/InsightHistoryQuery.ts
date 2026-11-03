@@ -3,7 +3,7 @@ import type { Timestamp } from "../primitives/Timestamp";
 
 export type InsightHistoryQuery = {
   /**
-   * Inclusive range over snapshot days (unix ms); defaults to the last 30 days.
+   * Inclusive range over snapshot days (unix ms), at most 731 days; defaults to the last 30 days.
    */
   since: Timestamp | null,
   until: Timestamp | null,

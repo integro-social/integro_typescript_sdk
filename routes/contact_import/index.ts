@@ -3,8 +3,13 @@
 import Tapi from "../../runtime";
 import type { ContactImportDetail } from "../../types/contact_import/ContactImportDetail";
 import type { ContactImportRow } from "../../types/domain/ContactImportRow";
+import type { ContactImportStatusCounts } from "../../types/domain/ContactImportStatusCounts";
+import type { CountImportsQuery } from "../../types/contact_import/CountImportsQuery";
+import type { LegacyListImportRowsQuery } from "../../types/contact_import/LegacyListImportRowsQuery";
+import type { LegacyListImportsQuery } from "../../types/contact_import/LegacyListImportsQuery";
 import type { ListImportRowsQuery } from "../../types/contact_import/ListImportRowsQuery";
 import type { ListImportsQuery } from "../../types/contact_import/ListImportsQuery";
+import type { Page } from "../../types/primitives/Page";
 import type { Uid } from "../../types/primitives/Uid";
 import type { UpdateContactImportRequest } from "../../types/contact_import/UpdateContactImportRequest";
 import type { UpdateImportRowRequest } from "../../types/contact_import/UpdateImportRowRequest";
@@ -19,6 +24,14 @@ export const contactImport = {
    */
   cancel: Tapi.post<{ path: { import_uid: Uid }; response: ContactImportDetail }>()({
     endpoint: "/contact-import/:import_uid/cancel",
+  }),
+  /**
+   * How many imports stand in each status, optionally only some groups' — the totals a paged list cannot show.
+   *
+   * Requires `ImportContacts`; the counts cover only imports of groups where the caller holds it.
+   */
+  count: Tapi.get<{ query: CountImportsQuery; response: ContactImportStatusCounts }>()({
+    endpoint: "/contact-import/count",
   }),
   /**
    * Delete an import and its rows. Refused while loading — pause or cancel
@@ -48,11 +61,19 @@ export const contactImport = {
     endpoint: "/contact-import/:import_uid",
   }),
   /**
-   * List imports, newest first, optionally only some groups'.
+   * List imports one page at a time, newest first unless `order` says otherwise, optionally only some groups', one status or a search.
    *
    * Requires `ImportContacts`; the list covers only imports of groups where the caller holds it.
    */
-  list: Tapi.get<{ query: ListImportsQuery; response: Array<ContactImportDetail> }>()({
+  list: Tapi.get<{ query: ListImportsQuery; response: Page<ContactImportDetail> }>()({
+    endpoint: "/v2/contact-import",
+  }),
+  /**
+   * List imports, newest first, optionally only some groups' — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `contactImport.list` instead, and this route goes away in a future major.
+   *
+   * Requires `ImportContacts`; the list covers only imports of groups where the caller holds it.
+   */
+  listLegacy: Tapi.get<{ query: LegacyListImportsQuery; response: Array<ContactImportDetail> }>()({
     endpoint: "/contact-import",
   }),
   /**
@@ -93,12 +114,20 @@ export const contactImport = {
     endpoint: "/contact-import/:import_uid/resume",
   }),
   /**
-   * A page of the import's rows in file order, optionally one verdict only —
-   * the fix table and the verdict drill-downs.
+   * The import's rows one page at a time, in file order, optionally one verdict
+   * only or a search — the fix table and the verdict drill-downs.
    *
    * Requires `ImportContacts` in the import's group.
    */
-  rows: Tapi.get<{ path: { import_uid: Uid }; query: ListImportRowsQuery; response: Array<ContactImportRow> }>()({
+  rows: Tapi.get<{ path: { import_uid: Uid }; query: ListImportRowsQuery; response: Page<ContactImportRow> }>()({
+    endpoint: "/v2/contact-import/:import_uid/row",
+  }),
+  /**
+   * A page of the import's rows in file order, optionally one verdict only, `after_id` paging forward — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `contactImport.rows` instead, and this route goes away in a future major.
+   *
+   * Requires `ImportContacts` in the import's group.
+   */
+  rowsLegacy: Tapi.get<{ path: { import_uid: Uid }; query: LegacyListImportRowsQuery; response: Array<ContactImportRow> }>()({
     endpoint: "/contact-import/:import_uid/row",
   }),
   /**

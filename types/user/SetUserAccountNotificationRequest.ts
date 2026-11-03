@@ -6,6 +6,9 @@ import type { Uid } from "../primitives/Uid";
  * account at once; a `null` choice stays as it is.
  */
 export type SetUserAccountNotificationRequest = {
+  /**
+   * The accounts to change, at most 200 per request.
+   */
   social_account_uids: Array<Uid>,
   /**
    * New messages on these accounts ring the message sound.

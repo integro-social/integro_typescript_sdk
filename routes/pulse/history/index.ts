@@ -9,7 +9,7 @@ import type { PulseNetworkMetricRow } from "../../../types/domain/PulseNetworkMe
 
 export const history = {
   /**
-   * List historical disk metrics within a time window.
+   * List historical disk metrics within a time window; a window holding more than 20 000 points is rejected rather than cut short.
    *
    * Requires `ViewPulse`, which only platform staff and platform API keys can hold.
    */
@@ -17,7 +17,7 @@ export const history = {
     endpoint: "/pulse/history/disk",
   }),
   /**
-   * List historical GPU metrics within a time window.
+   * List historical GPU metrics within a time window; a window holding more than 20 000 points is rejected rather than cut short.
    *
    * Requires `ViewPulse`, which only platform staff and platform API keys can hold.
    */
@@ -25,7 +25,7 @@ export const history = {
     endpoint: "/pulse/history/gpu",
   }),
   /**
-   * List historical host metrics within a time window.
+   * List historical host metrics within a time window; a window holding more than 20 000 points is rejected rather than cut short.
    *
    * Requires `ViewPulse`, which only platform staff and platform API keys can hold.
    */
@@ -33,7 +33,7 @@ export const history = {
     endpoint: "/pulse/history/host",
   }),
   /**
-   * List historical network metrics within a time window.
+   * List historical network metrics within a time window; a window holding more than 20 000 points is rejected rather than cut short.
    *
    * Requires `ViewPulse`, which only platform staff and platform API keys can hold.
    */

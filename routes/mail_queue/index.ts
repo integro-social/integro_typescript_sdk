@@ -2,15 +2,35 @@
 
 import Tapi from "../../runtime";
 import type { EmailQueueItem } from "../../types/domain/EmailQueueItem";
-import type { EmailQueueListQuery } from "../../types/mailing/EmailQueueListQuery";
+import type { EmailQueueStatusCounts } from "../../types/domain/EmailQueueStatusCounts";
+import type { LegacyEmailQueueListQuery } from "../../types/mailing/LegacyEmailQueueListQuery";
+import type { ListEmailQueueQuery } from "../../types/mailing/ListEmailQueueQuery";
+import type { Page } from "../../types/primitives/Page";
 
 export const mailQueue = {
   /**
-   * List queued emails, optionally filtered by delivery status.
+   * Count every queued email per delivery status.
    *
    * Requires `ManageEmailQueue`, which only platform staff and platform API keys can hold.
    */
-  list: Tapi.get<{ query: EmailQueueListQuery; response: Array<EmailQueueItem> }>()({
+  count: Tapi.get<{ response: EmailQueueStatusCounts }>()({
+    endpoint: "/mail-queue/count",
+  }),
+  /**
+   * List queued emails one page at a time, most recently enqueued first,
+   * optionally filtered by delivery status, template and text.
+   *
+   * Requires `ManageEmailQueue`, which only platform staff and platform API keys can hold.
+   */
+  list: Tapi.get<{ query: ListEmailQueueQuery; response: Page<EmailQueueItem> }>()({
+    endpoint: "/v2/mail-queue",
+  }),
+  /**
+   * List queued emails, optionally filtered by delivery status, the latest `limit` — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `mailQueue.list` instead, and this route goes away in a future major.
+   *
+   * Requires `ManageEmailQueue`, which only platform staff and platform API keys can hold.
+   */
+  listLegacy: Tapi.get<{ query: LegacyEmailQueueListQuery; response: Array<EmailQueueItem> }>()({
     endpoint: "/mail-queue",
   }),
   /**
