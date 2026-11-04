@@ -8,7 +8,6 @@ import type { Message } from "./Message";
 import type { Post } from "./Post";
 import type { PresenceState } from "./PresenceState";
 import type { ReactionAction } from "./ReactionAction";
-import type { Review } from "../google/Review";
 import type { SocialAccount } from "./SocialAccount";
 import type { SocialPost } from "./SocialPost";
 import type { Timestamp } from "../primitives/Timestamp";
@@ -198,11 +197,4 @@ export type HubEvent = {
   "event": "account_removed",
   group_uid: Uid,
   social_account_uid: Uid,
-} | {
-  "event": "review_received",
-  group_uid: Uid,
-  social_account_uid: Uid,
-  location_name: string,
-  location_title: string,
-  review: Review,
 };

@@ -36,7 +36,7 @@ export const PERMISSION_GROUPS: readonly PermissionGroup[] = [
   {
     id: "messages",
     label: "Conversas",
-    perms: ["view_messages", "send_messages", "manage_messages", "import_contacts"],
+    perms: ["view_messages", "send_messages", "manage_messages", "manage_whatsapp_groups", "import_contacts"],
   },
   {
     id: "campaigns",
@@ -62,16 +62,6 @@ export const PERMISSION_GROUPS: readonly PermissionGroup[] = [
     id: "templates",
     label: "Modelos WhatsApp",
     perms: ["view_templates", "manage_templates"],
-  },
-  {
-    id: "calendars",
-    label: "Agendas",
-    perms: ["view_calendars", "manage_calendars"],
-  },
-  {
-    id: "business",
-    label: "Google Business",
-    perms: ["view_business", "manage_business"],
   },
   {
     id: "media",
@@ -143,6 +133,7 @@ export const PERMISSION_LABEL: Record<UserPermission, string> = {
   view_messages: "Visualizar mensagens",
   send_messages: "Enviar mensagens",
   manage_messages: "Excluir conversas e histórico",
+  manage_whatsapp_groups: "Gerenciar grupos de WhatsApp",
   import_contacts: "Importar contatos",
   view_campaigns: "Visualizar campanhas",
   manage_campaigns: "Gerenciar campanhas",
@@ -156,10 +147,6 @@ export const PERMISSION_LABEL: Record<UserPermission, string> = {
   view_insights: "Visualizar métricas",
   view_templates: "Visualizar modelos",
   manage_templates: "Gerenciar modelos",
-  view_calendars: "Visualizar agendas e eventos",
-  manage_calendars: "Gerenciar eventos de agenda",
-  view_business: "Visualizar perfil de negócio",
-  manage_business: "Gerenciar perfil de negócio",
   upload_media: "Enviar mídia",
   view_webhook: "Visualizar webhook de eventos",
   manage_webhook: "Gerenciar webhook de eventos",
@@ -188,6 +175,7 @@ export const PERMISSION_LABEL: Record<UserPermission, string> = {
  * that are not closed under this relation.
  */
 export const PERMISSION_REQUIRES: Partial<Record<UserPermission, readonly UserPermission[]>> = {
+  manage_whatsapp_groups: ["send_messages"],
   import_contacts: ["send_messages"],
   manage_campaigns: ["send_messages"],
 };

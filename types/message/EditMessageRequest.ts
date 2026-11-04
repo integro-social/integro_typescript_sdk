@@ -7,5 +7,5 @@ import type { MessageEdit } from "./MessageEdit";
  * match the message's.
  */
 export type EditMessageRequest = {
-  "channel": "whatsapp_native"
+  "channel": "whatsapp_unofficial"
 } & MessageEdit;

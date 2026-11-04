@@ -3,14 +3,13 @@
 /**
  * Every kind of account the hub connects — the account registry's axis.
  * Distinct from [`Channel`], which is the *messaging-domain* discriminator
- * carried by conversations, messages, and posts: every messaging provider
- * projects onto a channel, while non-messaging providers (calendar) have
- * none — so messaging payloads can never name them.
+ * carried by conversations, messages, and posts: every provider projects
+ * onto the channel its traffic is tagged with.
  *
  * Adding an integration = a variant here + its connect flow + its
  * capability module; the registry (table, CRUD, listing UI) is shared.
  */
-export type Provider = "facebook" | "instagram" | "whatsapp" | "whatsapp_native" | "facebook_alt" | "instagram_alt" | "whatsapp_alt" | "google";
+export type Provider = "facebook" | "instagram" | "whatsapp" | "whatsapp_unofficial" | "facebook_alt" | "instagram_alt" | "whatsapp_alt";
 
 /** Every `Provider`, in declaration order. */
-export const PROVIDER = ["facebook", "instagram", "whatsapp", "whatsapp_native", "facebook_alt", "instagram_alt", "whatsapp_alt", "google"] as const satisfies readonly Provider[];
+export const PROVIDER = ["facebook", "instagram", "whatsapp", "whatsapp_unofficial", "facebook_alt", "instagram_alt", "whatsapp_alt"] as const satisfies readonly Provider[];

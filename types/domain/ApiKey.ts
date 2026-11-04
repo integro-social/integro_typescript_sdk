@@ -13,6 +13,10 @@ export type ApiKey = {
   created_by: Uid,
   revoked_at: Timestamp | null,
   revoked_by: Uid | null,
+  /**
+   * When the key last authenticated a request, to the flush interval; `None` until its first call.
+   */
+  last_used_at: Timestamp | null,
   created_at: Timestamp,
   updated_at: Timestamp,
 };

@@ -14,7 +14,7 @@ export type ConversationActionRequest = {
 } & PresenceSignal | {
   "channel": "whatsapp"
 } & SelfClearingPresenceSignal | {
-  "channel": "whatsapp_native"
+  "channel": "whatsapp_unofficial"
 } & PresenceSignal | {
   "channel": "facebook_alt"
 } & SelfClearingPresenceSignal | {

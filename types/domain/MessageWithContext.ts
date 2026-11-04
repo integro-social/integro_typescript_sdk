@@ -24,6 +24,16 @@ export type MessageWithContext = {
   conversation_uid: Uid,
   social_account_uid: Uid,
   participant_id: string,
+  /**
+   * In a group, the member who sent an inbound message — a phone, or a
+   * `…@lid` the platform never resolved. `None` on direct conversations and
+   * on outbound rows.
+   */
+  sender_id: string | null,
+  /**
+   * The sender's push name as the platform reported it with the message.
+   */
+  sender_name: string | null,
   direction: MessageDirection,
   content: MessageContent,
   reactions: Array<MessageReaction>,
@@ -72,6 +82,20 @@ export type MessageWithContext = {
    * Set when the message was revoked on the platform; the row stays.
    */
   deleted_at: Timestamp | null,
+  /**
+   * Set while the message is pinned in the chat; cleared when it is
+   * unpinned.
+   */
+  pinned_at: Timestamp | null,
+  /**
+   * When the pin lapses on its own, as the pinner chose; the row still
+   * reads as pinned until an unpin arrives.
+   */
+  pinned_until: Timestamp | null,
+  /**
+   * Who pinned it: a member's id, or the account's own.
+   */
+  pinned_by: string | null,
   sent_at: Timestamp,
   created_at: Timestamp,
 };

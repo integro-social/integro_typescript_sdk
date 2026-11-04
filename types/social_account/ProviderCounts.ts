@@ -7,9 +7,8 @@ export type ProviderCounts = {
   facebook: number,
   instagram: number,
   whatsapp: number,
-  whatsapp_native: number,
+  whatsapp_unofficial: number,
   facebook_alt: number,
   instagram_alt: number,
   whatsapp_alt: number,
-  google: number,
 };

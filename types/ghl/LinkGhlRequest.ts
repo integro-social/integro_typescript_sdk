@@ -7,9 +7,9 @@ import type { Uid } from "../primitives/Uid";
  * location; no other channel's shape deserializes.
  */
 export type LinkGhlRequest = {
-  "channel": "whatsapp_native",
+  "channel": "whatsapp_unofficial",
   /**
-   * The whatsapp_native account to bridge — same group as the location.
+   * The whatsapp_unofficial account to bridge — same group as the location.
    */
   target_account_uid: Uid,
 };

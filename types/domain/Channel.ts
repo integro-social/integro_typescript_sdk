@@ -7,7 +7,7 @@
  * [`ChannelFamily`] (what the contact sees and what the platform allows)
  * reached through a [`Transport`] (how the hub speaks to it).
  */
-export type Channel = "facebook" | "instagram" | "whatsapp" | "whatsapp_native" | "facebook_alt" | "instagram_alt" | "whatsapp_alt";
+export type Channel = "facebook" | "instagram" | "whatsapp" | "whatsapp_unofficial" | "facebook_alt" | "instagram_alt" | "whatsapp_alt";
 
 /** Every `Channel`, in declaration order. */
-export const CHANNEL = ["facebook", "instagram", "whatsapp", "whatsapp_native", "facebook_alt", "instagram_alt", "whatsapp_alt"] as const satisfies readonly Channel[];
+export const CHANNEL = ["facebook", "instagram", "whatsapp", "whatsapp_unofficial", "facebook_alt", "instagram_alt", "whatsapp_alt"] as const satisfies readonly Channel[];

@@ -6,4 +6,8 @@ export type ConversationMessageCountQuery = {
    * Only messages of these content kinds — the same narrowing as the list.
    */
   kinds: Array<MessageContentKind> | null,
+  /**
+   * Only pinned messages — the same narrowing as the list.
+   */
+  pinned: boolean | null,
 };

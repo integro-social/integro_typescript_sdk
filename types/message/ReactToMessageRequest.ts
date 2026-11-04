@@ -24,7 +24,7 @@ export type ReactToMessageRequest = {
    */
   emoji: string | null,
 } | {
-  "channel": "whatsapp_native",
+  "channel": "whatsapp_unofficial",
   /**
    * The emoji itself; omitted or empty selects ❤️.
    */

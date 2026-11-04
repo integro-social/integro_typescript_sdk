@@ -2,6 +2,8 @@
 
 import Tapi from "../../runtime";
 import type { ApiKey } from "../../types/domain/ApiKey";
+import type { ApiKeyUsage } from "../../types/api_key/ApiKeyUsage";
+import type { ApiKeyUsageQuery } from "../../types/api_key/ApiKeyUsageQuery";
 import type { CountApiKeysQuery } from "../../types/api_key/CountApiKeysQuery";
 import type { CreateApiKeyRequest } from "../../types/api_key/CreateApiKeyRequest";
 import type { CreateApiKeyResponse } from "../../types/api_key/CreateApiKeyResponse";
@@ -104,5 +106,14 @@ export const apiKey = {
    */
   updatePermissions: Tapi.put<{ path: { api_key_uid: Uid }; body: UpdateApiKeyPermissionsRequest; response: null }>()({
     endpoint: "/api-key/:api_key_uid/permission",
+  }),
+  /**
+   * Requests per UTC day for up to 200 keys over a range of at most 20 000 key-days (default: the last 14 days), one entry per key the
+   * caller may see and one day per day the key authenticated at least one request. Counts land within about ten seconds of the request.
+   *
+   * Requires `ViewApiKeys`; a key of a group where the caller lacks it, or a platform key for a caller without platform standing, is left out.
+   */
+  usage: Tapi.get<{ query: ApiKeyUsageQuery; response: Array<ApiKeyUsage> }>()({
+    endpoint: "/api-key/usage",
   }),
 };

@@ -2,8 +2,6 @@
 
 import { apiKey } from "./api_key";
 import { auditLog } from "./audit_log";
-import { business } from "./business";
-import { calendar } from "./calendar";
 import { call } from "./call";
 import { campaign } from "./campaign";
 import { campaignTemplate } from "./campaign_template";
@@ -15,7 +13,6 @@ import { event } from "./event";
 import { eventWebhook } from "./event_webhook";
 import { ghl } from "./ghl";
 import { gif } from "./gif";
-import { google } from "./google";
 import { group } from "./group";
 import { groupMember } from "./group_member";
 import { insight } from "./insight";
@@ -24,6 +21,7 @@ import { mailQueue } from "./mail_queue";
 import { media } from "./media";
 import { message } from "./message";
 import { oauth } from "./oauth";
+import { pairingLink } from "./pairing_link";
 import { post } from "./post";
 import { pulse } from "./pulse";
 import { rateLimit } from "./rate_limit";
@@ -46,8 +44,6 @@ import { whatsappTemplate } from "./whatsapp_template";
 export const routes = {
   apiKey,
   auditLog,
-  business,
-  calendar,
   call,
   campaign,
   campaignTemplate,
@@ -59,7 +55,6 @@ export const routes = {
   eventWebhook,
   ghl,
   gif,
-  google,
   group,
   groupMember,
   insight,
@@ -68,6 +63,7 @@ export const routes = {
   media,
   message,
   oauth,
+  pairingLink,
   post,
   pulse,
   rateLimit,

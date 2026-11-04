@@ -11,6 +11,7 @@ import type { ListMessagesQuery } from "../../types/message/ListMessagesQuery";
 import type { Message } from "../../types/domain/Message";
 import type { MessageWithContext } from "../../types/domain/MessageWithContext";
 import type { Page } from "../../types/primitives/Page";
+import type { PinMessageRequest } from "../../types/message/PinMessageRequest";
 import type { ReactToMessageRequest } from "../../types/message/ReactToMessageRequest";
 import type { SendMessageRequest } from "../../types/message/SendMessageRequest";
 import type { Uid } from "../../types/primitives/Uid";
@@ -57,7 +58,7 @@ export const message = {
   }),
   /**
    * Revoke an own sent message for everyone ("apagar para todos") —
-   * whatsapp_native only; the row stays with `deleted_at` set.
+   * whatsapp_unofficial only; the row stays with `deleted_at` set.
    *
    * Requires `ManageMessages` in the conversation's group.
    */
@@ -67,7 +68,7 @@ export const message = {
   /**
    * Edit an own sent message's text (or media caption) on the platform. The
    * payload is channel-tagged and must match the message's channel — only
-   * whatsapp_native exposes an edit call, so no other channel's shape
+   * whatsapp_unofficial exposes an edit call, so no other channel's shape
    * deserializes; the platform enforces its ~15 minute edit window.
    *
    * Requires `ManageMessages` in the conversation's group.
@@ -116,6 +117,19 @@ export const message = {
     endpoint: "/message",
   }),
   /**
+   * Pin a message in the chat for everyone, for a day, a week or a month: the
+   * row carries `pinned_at` and `pinned_until` from then on, and the thread's
+   * pinned banner shows it. Pinning works in groups and in one-to-one chats
+   * on whatsapp_unofficial only; every other channel is refused (400). The
+   * platform refuses it in a group where only admins may post and the account
+   * is not one (424).
+   *
+   * Requires `SendMessages` in the conversation's group.
+   */
+  pin: Tapi.put<{ path: { conversation_uid: Uid; message_uid: Uid }; body: PinMessageRequest; response: Message }>()({
+    endpoint: "/conversation/:conversation_uid/message/:message_uid/pin",
+  }),
+  /**
    * React to a message through the platform. The payload is channel-tagged
    * and must match the message's channel; Instagram takes Meta's reaction
    * name, every other channel the emoji itself.
@@ -152,6 +166,15 @@ export const message = {
    */
   send: Tapi.post<{ path: { conversation_uid: Uid }; body: SendMessageRequest; response: MessageWithContext }>()({
     endpoint: "/conversation/:conversation_uid/message",
+  }),
+  /**
+   * Unpin a message for everyone; the row drops `pinned_at`. whatsapp_unofficial
+   * only (400 elsewhere).
+   *
+   * Requires `SendMessages` in the conversation's group.
+   */
+  unpin: Tapi.delete<{ path: { conversation_uid: Uid; message_uid: Uid }; response: Message }>()({
+    endpoint: "/conversation/:conversation_uid/message/:message_uid/pin",
   }),
   /**
    * Remove the account's reaction from a message (Instagram, the WhatsApp

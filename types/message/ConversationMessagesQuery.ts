@@ -20,6 +20,10 @@ export type ConversationMessagesQuery = {
    */
   kinds: Array<MessageContentKind> | null,
   /**
+   * Only messages pinned in the chat — what a thread's pinned banner shows.
+   */
+  pinned: boolean | null,
+  /**
    * The previous page's `next`, sent back with the same anchors and `kinds`; it continues older without `after_id`, newer with it.
    * Omit for the first page.
    */

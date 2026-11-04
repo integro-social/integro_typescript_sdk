@@ -50,7 +50,7 @@ export const call = {
   }),
   /**
    * Call the conversation's contact. The body is channel-tagged — only
-   * whatsapp_native carries calls, so no other channel's shape deserializes.
+   * whatsapp_unofficial carries calls, so no other channel's shape deserializes.
    * Returns as soon as the offer is on the wire — the contact's phone has not
    * rung yet, and the phases that follow arrive as `call_updated` events. Only
    * one call at a time per account.

@@ -17,7 +17,7 @@ export type SendMessageRequest = {
 } & MessengerSend | {
   "channel": "whatsapp"
 } & WhatsappSend | {
-  "channel": "whatsapp_native"
+  "channel": "whatsapp_unofficial"
 } & NativeSend | {
   "channel": "facebook_alt"
 } & MessengerSend | {

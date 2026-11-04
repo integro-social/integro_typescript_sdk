@@ -19,9 +19,9 @@ export type SocialAccountResponse = {
   uid: Uid,
   group_uid: Uid,
   /**
-   * The account's kind — the registry's axis. Messaging providers project
-   * onto a [`Channel`] via [`Self::channel`]; non-messaging ones (calendar)
-   * onto none.
+   * The account's kind — the registry's axis; it projects onto the
+   * [`Channel`] its conversations, messages and posts carry via
+   * [`Self::channel`].
    */
   provider: Provider,
   /**
@@ -63,14 +63,10 @@ export type SocialAccountResponse = {
   profile_refreshed_at: Timestamp | null,
   username: string | null,
   /**
-   * OAuth-refresh providers only: scopes actually granted on the last connect.
-   */
-  scope: string | null,
-  /**
    * The stored grant died (revoked or expired) — the account must be
-   * reconnected; cleared by a reconnect. Set for the OAuth-refresh providers
-   * when a refresh is rejected, and for the page-grant providers when the
-   * connect review probes a token and finds it dead.
+   * reconnected; cleared by a reconnect. Set when a connect review probes a
+   * page token and finds it dead, and when the gateway reports the account
+   * needs reconnecting.
    */
   needs_reauth: boolean,
   enabled: boolean,
