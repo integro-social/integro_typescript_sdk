@@ -259,8 +259,9 @@ export const conversation = {
     endpoint: "/conversation/:conversation_uid/group/participant/:participant_id/role",
   }),
   /**
-   * Set a group's picture from a hosted image; the conversation's avatar
-   * follows once the platform serves the new picture.
+   * Set a group's picture from an image, centre-cropped to a square and
+   * re-encoded as a 640×640 JPEG; the conversation's avatar follows once the
+   * platform serves the new picture.
    *
    * Requires `ManageWhatsappGroups` in the conversation's group; the account must still be a member (409), and the platform refuses it when the group is locked and the account is not an admin (424).
    */
