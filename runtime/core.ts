@@ -129,7 +129,7 @@ function createNestedMethods<TError = string>(
       const wsConfig = routeValue;
       const wsFunction = (params: any, handlers: Ws.WsHandlers<any>) => {
         const url = Ws.buildWsUrl(host, wsConfig.endpoint, params);
-        return Ws.createWsConnection(url, handlers, { protocols: params.protocols, reconnect: params.reconnect });
+        return Ws.createWsConnection(url, handlers, { protocols: params.protocols, reconnect: params.reconnect, headers: () => headersRef.current });
       };
       if (reactAdapter) {
         (wsFunction as any).useWs = (params: any) => reactAdapter.useWsHook(host, wsConfig, params);

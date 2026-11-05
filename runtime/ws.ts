@@ -19,6 +19,8 @@ export type WsReconnectPolicy = {
 export type WsConnectionOptions = {
   protocols?: string | string[];
   reconnect?: boolean | WsReconnectPolicy;
+  // Read on every attempt, so a rotated bearer reaches the next reconnect. Sent only where the handshake takes headers.
+  headers?: () => Record<string, string> | undefined;
 };
 
 export type WsConnection<TSend> = {
@@ -30,6 +32,26 @@ export type WsConnection<TSend> = {
 };
 
 const READY_STATE_OPEN = 1;
+
+type HeaderedWebSocket = new (url: string, init: { protocols?: string | string[]; headers: Record<string, string> }) => WebSocket;
+
+type ServerGlobals = { Bun?: unknown; process?: { versions?: { node?: string } } };
+
+// Bun and Node take handshake headers in an init object; a browser (window or worker) would read that object as a
+// subprotocol and throw, and it never sends custom upgrade headers anyway.
+const HANDSHAKE_TAKES_HEADERS = (() => {
+  const runtime = globalThis as ServerGlobals;
+  return runtime.Bun !== undefined || typeof runtime.process?.versions?.node === "string";
+})();
+
+function openSocket(url: string, options?: WsConnectionOptions): WebSocket {
+  const headers = HANDSHAKE_TAKES_HEADERS ? options?.headers?.() : undefined;
+  if (headers && Object.keys(headers).length > 0) {
+    const init = options?.protocols === undefined ? { headers } : { headers, protocols: options.protocols };
+    return new (WebSocket as unknown as HeaderedWebSocket)(url, init);
+  }
+  return options?.protocols === undefined ? new WebSocket(url) : new WebSocket(url, options.protocols);
+}
 
 function toWsScheme(url: string): string {
   if (url.startsWith("https://")) return `wss://${url.slice("https://".length)}`;
@@ -103,7 +125,7 @@ export function createWsConnection<TSend, TReceive>(url: string, handlers: WsHan
 
     let ws: WebSocket;
     try {
-      ws = options?.protocols === undefined ? new WebSocket(url) : new WebSocket(url, options.protocols);
+      ws = openSocket(url, options);
     } catch (error) {
       handlers.onError?.(error instanceof Error ? error : new Error(String(error)));
       scheduleReconnect();
