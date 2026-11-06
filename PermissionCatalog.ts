@@ -148,8 +148,8 @@ export const PERMISSION_LABEL: Record<UserPermission, string> = {
   view_templates: "Visualizar modelos",
   manage_templates: "Gerenciar modelos",
   upload_media: "Enviar mídia",
-  view_webhook: "Visualizar webhook de eventos",
-  manage_webhook: "Gerenciar webhook de eventos",
+  view_webhook: "Visualizar webhooks",
+  manage_webhook: "Gerenciar webhooks",
   view_api_keys: "Visualizar chaves",
   create_api_keys: "Criar chaves",
   update_api_keys: "Atualizar chaves",
@@ -178,6 +178,7 @@ export const PERMISSION_REQUIRES: Partial<Record<UserPermission, readonly UserPe
   manage_whatsapp_groups: ["send_messages"],
   import_contacts: ["send_messages"],
   manage_campaigns: ["send_messages"],
+  manage_webhook: ["view_webhook", "view_messages", "view_comments", "view_posts", "view_social_accounts"],
 };
 
 /**

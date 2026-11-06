@@ -48,7 +48,9 @@ token. Set it at build time with `.withDefaultHeaders(...)` or later with
 
 Inbound event webhooks are signed with `X-Integro-Signature`
 (`sha256=<hex>`, HMAC-SHA256 over the raw body with the secret shown when the
-webhook is configured).
+webhook is created or its secret rotated). A group may hold several webhooks:
+each request names its webhook in `X-Integro-Webhook` and in the body's
+`webhook_uid`.
 
 ## Layout
 
