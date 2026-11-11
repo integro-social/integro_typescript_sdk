@@ -114,6 +114,12 @@ export const conversation = {
    * verifies the number ahead of the send. facebook, instagram and their alt
    * twins cannot open conversations, so their shapes do not deserialize.
    *
+   * A brazilian mobile number with or without its ninth digit names the same
+   * conversation. On whatsapp_unofficial the account's `cold_contact` policy
+   * decides a number it never heard from: `block` refuses it (409), `hold`
+   * opens the conversation unchecked and unprofiled, and neither ever profiles
+   * a conversation whose contact has not written yet.
+   *
    * Requires `SendMessages` in the account's group.
    */
   create: Tapi.post<{ body: CreateConversationRequest; response: Conversation }>()({

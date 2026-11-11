@@ -4,7 +4,7 @@
  * Why one target was refused. A closed set the caller renders — per-target
  * prose never rides a success body.
  */
-export type ForwardRejection = "unreachable" | "account_disabled" | "unsupported_content" | "window_expired" | "failed";
+export type ForwardRejection = "unreachable" | "account_disabled" | "unsupported_content" | "window_expired" | "cold_contact" | "failed";
 
 /** Every `ForwardRejection`, in declaration order. */
-export const FORWARD_REJECTION = ["unreachable", "account_disabled", "unsupported_content", "window_expired", "failed"] as const satisfies readonly ForwardRejection[];
+export const FORWARD_REJECTION = ["unreachable", "account_disabled", "unsupported_content", "window_expired", "cold_contact", "failed"] as const satisfies readonly ForwardRejection[];

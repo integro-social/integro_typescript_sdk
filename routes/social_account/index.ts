@@ -25,6 +25,7 @@ import type { Page } from "../../types/primitives/Page";
 import type { RefreshProfileResponse } from "../../types/social_account/RefreshProfileResponse";
 import type { SessionStatus } from "../../types/social_account/SessionStatus";
 import type { SetSocialAccountAliasRequest } from "../../types/social_account/SetSocialAccountAliasRequest";
+import type { SetSocialAccountColdContactRequest } from "../../types/social_account/SetSocialAccountColdContactRequest";
 import type { SetSocialAccountConversationCapRequest } from "../../types/social_account/SetSocialAccountConversationCapRequest";
 import type { SetSocialAccountEnabledRequest } from "../../types/social_account/SetSocialAccountEnabledRequest";
 import type { SetSocialAccountGroupRequest } from "../../types/social_account/SetSocialAccountGroupRequest";
@@ -260,6 +261,22 @@ export const socialAccount = {
    */
   setAlias: Tapi.put<{ path: { social_account_uid: Uid }; body: SetSocialAccountAliasRequest; response: null }>()({
     endpoint: "/social-account/:social_account_uid/alias",
+  }),
+  /**
+   * Set how the account treats a contact who never wrote to it: `allow` sends
+   * and looks up as usual; `block` refuses sends to such a contact and never
+   * checks, profiles or watches one; `hold` does the same lookups-wise but keeps
+   * the sends as `held` (at most `limit` per contact, the oldest canceled to make
+   * room) until the contact's first message, then sends them in order. A change
+   * reaches what has not gone out yet: `allow` queues every held send at once,
+   * `block` cancels held sends and queued sends to such contacts, and `hold`
+   * holds those queued sends and trims each contact to the new limit. Only the
+   * session-backed whatsapp channels enforce it; other channels are refused.
+   *
+   * Requires `UpdateSocialAccounts` in the account's group.
+   */
+  setColdContact: Tapi.put<{ path: { social_account_uid: Uid }; body: SetSocialAccountColdContactRequest; response: null }>()({
+    endpoint: "/social-account/:social_account_uid/cold-contact",
   }),
   /**
    * Cap how many conversations the hub may open on this account in any 24

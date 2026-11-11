@@ -5,7 +5,7 @@
  * that merely *defers* a recipient (its account offline or day-capped) is
  * not here: those rows stay `pending` and come back.
  */
-export type CampaignSkipReason = "in_cooldown" | "missing_variable" | "campaign_ended";
+export type CampaignSkipReason = "in_cooldown" | "missing_variable" | "campaign_ended" | "cold_contact";
 
 /** Every `CampaignSkipReason`, in declaration order. */
-export const CAMPAIGN_SKIP_REASON = ["in_cooldown", "missing_variable", "campaign_ended"] as const satisfies readonly CampaignSkipReason[];
+export const CAMPAIGN_SKIP_REASON = ["in_cooldown", "missing_variable", "campaign_ended", "cold_contact"] as const satisfies readonly CampaignSkipReason[];
